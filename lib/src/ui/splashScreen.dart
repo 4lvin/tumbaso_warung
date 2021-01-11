@@ -1,5 +1,10 @@
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
+import 'package:tumbaso_warung/src/pref/preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -7,10 +12,51 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String _token;
+  _authCheckSession(String id, String token) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      Toast.show("Cek Internet Anda", context,
+          duration: 7, gravity: Toast.BOTTOM);
+    }
+  }
+  @override
+  void initState(){
+    getToken().then((value){
+      setState(() {
+        _token= value;
+      });
+    });
+    Timer(Duration(seconds: 2), () {
+      _token==null?Navigator.pushReplacementNamed(context, '/login'):Navigator.pushReplacementNamed(context, '/controllerPage');
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("data"),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 180,
+                height: 180,
+                child: Image.asset("assets/iconw.png"),
+              ),
+              SizedBox(height: 100,),
+              CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
