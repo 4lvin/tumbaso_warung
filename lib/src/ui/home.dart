@@ -15,18 +15,6 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Row(
-                  children: [
-                    Text('Rujak'),
-
-                  ],
-                ),
-              ),
-              Text('kedua')
-            ],
           ),
         ),
       ),
