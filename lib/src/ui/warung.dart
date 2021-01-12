@@ -16,6 +16,21 @@ class _WarungPageState extends State<WarungPage> {
     }
     return link;
   }
+  Color _open(){
+    Color link = Colors.black;
+    if(!onOff){
+      link = colorses.kuning;
+    }
+    return link;
+  }
+  Color _close(){
+    Color link = colorses.kuning;
+    print(onOff);
+    if(onOff == false){
+      link = Colors.black;
+    }
+    return link;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,20 +48,18 @@ class _WarungPageState extends State<WarungPage> {
               children: [
                 GestureDetector(
                   onTap: (){
-                    print(onOff);
-                    if(onOff == true){
-                      onOff = false;
-                      setState(() {
+                    onOff = false;
+                    setState(() {
 
-                      });
-                    } else {
-                      onOff = true;
-                      setState(() {
-
-                      });
-                    }
+                    });
                   },
-                  child: Text('Open'),
+                  child: Text(
+                      'Open',
+                    style: TextStyle(
+                      fontSize: 40,
+                        color: _open()
+                    ),
+                  ),
                 ),
                 Switch(
                     activeColor: colorses.dasar,
@@ -61,20 +74,18 @@ class _WarungPageState extends State<WarungPage> {
                 ),
                 GestureDetector(
                   onTap: (){
-                    print(onOff);
-                    if(onOff == true){
-                      onOff = false;
-                      setState(() {
+                    onOff = true;
+                    setState(() {
 
-                      });
-                    } else {
-                      onOff = true;
-                      setState(() {
-
-                      });
-                    }
+                    });
                   },
-                  child: Text('Close'),
+                  child: Text(
+                      'Close',
+                    style: TextStyle(
+                      fontSize: 40,
+                      color: _close()
+                    ),
+                  ),
                 ),
               ],
             )
