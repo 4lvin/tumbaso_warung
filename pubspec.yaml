@@ -54,6 +54,8 @@ flutter:
     - assets/iconw.png
     - assets/baru2.png
     - assets/loadingcoffee.json
+    - assets/open.png
+    - assets/close.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
