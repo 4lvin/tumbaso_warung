@@ -55,16 +55,16 @@ class _ControllerPageState extends State<ControllerPage> {
             bucket: bucket,
             child: _widgetOptions[_selectedIndex],
           ),
-          onWillPop: null),
+          onWillPop: _onWillPop),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.storefront_outlined),
+              icon: Icon(Icons.shop),
             title: Text('Warung')
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.lock_open_outlined),
+              icon: Icon(Icons.open_in_new),
             title: Text('Buka')
           )
         ],

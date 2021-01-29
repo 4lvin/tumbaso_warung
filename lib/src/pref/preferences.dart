@@ -44,3 +44,18 @@ Future rmvNama() async {
 
   return prefs.remove("nama");
 }
+
+Future setUsername(String value) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setString("username", value);
+}
+Future getUsername() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  return prefs.getString("username");
+}
+Future rmvUsername() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  return prefs.remove("username");
+}

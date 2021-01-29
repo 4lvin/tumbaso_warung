@@ -1,15 +1,11 @@
 // To parse this JSON data, do
 //
-//     final login = loginFromJson(jsonString);
+//     final resLoginModel = resLoginModelFromJson(jsonString);
 
 import 'dart:convert';
 
-Login loginFromJson(String str) => Login.fromJson(json.decode(str));
-
-String loginToJson(Login data) => json.encode(data.toJson());
-
-class Login {
-  Login({
+class ResLoginModel {
+  ResLoginModel({
     this.status,
     this.data,
     this.message,
@@ -19,7 +15,11 @@ class Login {
   Data data;
   String message;
 
-  factory Login.fromJson(Map<String, dynamic> json) => Login(
+  factory ResLoginModel.fromRawJson(String str) => ResLoginModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory ResLoginModel.fromJson(Map<String, dynamic> json) => ResLoginModel(
     status: json["status"],
     data: Data.fromJson(json["data"]),
     message: json["message"],
@@ -35,6 +35,7 @@ class Login {
 class Data {
   Data({
     this.idToken,
+    this.idPenjual,
     this.username,
     this.namaLengkap,
     this.telepone,
@@ -43,14 +44,20 @@ class Data {
   });
 
   String idToken;
+  String idPenjual;
   String username;
   String namaLengkap;
   String telepone;
   String longitude;
   String latitude;
 
+  factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     idToken: json["id_token"],
+    idPenjual: json["id_penjual"],
     username: json["username"],
     namaLengkap: json["nama_lengkap"],
     telepone: json["telepone"],
@@ -60,6 +67,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
     "id_token": idToken,
+    "id_penjual": idPenjual,
     "username": username,
     "nama_lengkap": namaLengkap,
     "telepone": telepone,

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
@@ -75,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                       Icons.lock,
                       color: colorses.dasar,
                     ),
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                       icon: Icon(passwordVisible ? Icons.visibility_off : Icons.visibility,),
                       color: colorses.dasar,
                       onPressed: (){
@@ -104,15 +105,18 @@ class _LoginPageState extends State<LoginPage> {
                   } else {
                     Dialogs.showLoading(context, "Loading");
                     blocMember.login(_username.text, _password.text);
-                    blocMember.ResLogin.listen((value) {
+                    blocMember.resLogin.listen((value) {
                       if(value.status){
                         Dialogs.dismiss(context);
                         setToken(value.data.idToken);
-                        setKdUser(value.data.username);
+                        setKdUser(value.data.idPenjual);
                         setNama(value.data.namaLengkap);
+                        setUsername(value.data.username);
                         Navigator.of(context).pushNamedAndRemoveUntil('/controllerPage', (route) => false);
-                      } else {
+                      } else{
                         Dialogs.dismiss(context);
+                        Toast.show("User atau Password salah", context,
+                            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                       }
                     });
                   }
