@@ -8,10 +8,12 @@ import 'package:tumbaso_warung/src/models/getStatusModel.dart';
 import 'dart:io';
 
 import 'package:tumbaso_warung/src/models/resLoginModel.dart';
+import 'package:tumbaso_warung/src/models/resUpdateStatusProdukModel.dart';
 import 'package:tumbaso_warung/src/models/resUpdateStatusTokoModel.dart';
 
 class ApiProviders {
-  String url = "https://jongjava.tech/tumbas/restapi";
+  // String url = "https://jongjava.tech/tumbas/restapi";
+  String url = "https://tumbasonline.com/restapi";
 
   Future login(String username, String password) async {
     var body = jsonEncode({'username': username, 'password': password, "token":""});
@@ -98,11 +100,39 @@ class ApiProviders {
       final checkid =  await client .post("$url/penjual/get_produk_penjual",
           headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
           .timeout(const Duration(seconds: 11));
-      print(checkid.body);
       if (checkid.statusCode == 200) {
         return GetProdukModel.fromJson(json.decode(checkid.body));
       } else if (checkid.statusCode == 404) {
         return GetProdukModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future updateStatusProduk(String username,String idProduk,String status,String token) async {
+    var body = jsonEncode({'username':username,'id_produk': idProduk,'status':status});
+    try {
+      final checkid =  await client .post("$url/penjual/put_status_produk",
+          headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
+          .timeout(const Duration(seconds: 11));
+      print(checkid.body);
+      print(body);
+      print(token);
+      if (checkid.statusCode == 200) {
+        return ResUpdateStatusProdukModel.fromJson(json.decode(checkid.body));
+      } else if (checkid.statusCode == 404) {
+        return ResUpdateStatusProdukModel.fromJson(json.decode(checkid.body));
       } else {
         throw Exception('Failure response');
       }

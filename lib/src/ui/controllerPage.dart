@@ -72,7 +72,7 @@ class _ControllerPageState extends State<ControllerPage> {
         unselectedItemColor: const Color(0xFFbdbfbe),
         backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
-        selectedItemColor: colorses.kuning,
+        selectedItemColor: colorses.dasar,
         onTap: _onItemTapped,
       ),
     );

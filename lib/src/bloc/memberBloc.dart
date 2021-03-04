@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
 import 'package:tumbaso_warung/src/models/resLoginModel.dart';
+import 'package:tumbaso_warung/src/models/resUpdateStatusProdukModel.dart';
 import 'package:tumbaso_warung/src/models/resUpdateStatusTokoModel.dart';
 import 'package:tumbaso_warung/src/resources/repositories.dart';
 
@@ -12,11 +13,13 @@ class MemberBloc {
   final _statusFetcher = PublishSubject<GetStatusModel>();
   final _updateStatusTokoFetcher = PublishSubject<ResUpdateStatusTokoModel>();
   final _getProdukFetcher = PublishSubject<GetProdukModel>();
+  final _updateStatusProdukFetcher = PublishSubject<ResUpdateStatusProdukModel>();
 
   PublishSubject<ResLoginModel> get resLogin => _loginFetcher.stream;
   PublishSubject<GetStatusModel> get getStatus => _statusFetcher.stream;
   PublishSubject<ResUpdateStatusTokoModel> get resStatusToko => _updateStatusTokoFetcher.stream;
   PublishSubject<GetProdukModel> get listProduk => _getProdukFetcher.stream;
+  PublishSubject<ResUpdateStatusProdukModel> get resUpdateStatusProduk => _updateStatusProdukFetcher.stream;
 
   login(String username, String password) async {
     ResLoginModel getResLogin = await _repository.login(username, password);
@@ -38,12 +41,18 @@ class MemberBloc {
     _getProdukFetcher.sink.add(getProdukModel);
   }
 
+  updateStatusProduk(String username,String idProduk,String status,String token) async {
+    ResUpdateStatusProdukModel resUpdateStatusProdukModel = await _repository.updateStatusProduk(username, idProduk, status, token);
+    _updateStatusProdukFetcher.sink.add(resUpdateStatusProdukModel);
+  }
+
 
   dispose(){
     _loginFetcher.close();
     _statusFetcher.close();
     _updateStatusTokoFetcher.close();
     _getProdukFetcher.close();
+    _updateStatusProdukFetcher.close();
   }
 }
 

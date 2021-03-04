@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -39,21 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-
-        ),
+        color: colorses.background,
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 180,
-                height: 180,
-                child: Image.asset("assets/iconw.png"),
-              ),
-              SizedBox(height: 100,),
-              CircularProgressIndicator(),
-            ],
+          child: Container(
+            width: 300,
+            height: 300,
+            child: Image.asset("assets/iconw.png"),
           ),
         ),
       ),

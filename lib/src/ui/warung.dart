@@ -43,7 +43,6 @@ class _WarungPageState extends State<WarungPage> {
   @override
   void initState() {
     getToken().then((value){
-      print(value);
       if(mounted)
       setState(() {
         token = value;
@@ -85,7 +84,26 @@ class _WarungPageState extends State<WarungPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text("$nama",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width/2,
+                    child: Text("$nama",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)),
+                Padding(
+                  padding: const EdgeInsets.only(right:16.0),
+                  child: InkWell(
+                      onTap: (){
+                        rmvUsername();
+                        rmvKdUser();
+                        rmvNama();
+                        rmvToken();
+                        Navigator.pushReplacementNamed(context, "/login");
+                      },
+                      child: Icon(Icons.exit_to_app,color: Colors.red,)),
+                )
+              ],
+            ),
             Container(
               width: 180,
               height: 180,
