@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
@@ -15,26 +14,28 @@ class _WarungPageState extends State<WarungPage> {
   String nama;
   String token;
   String username;
-  String _image(){
+  String _image() {
     String link = "assets/close.png";
-    if(onOff == false){
+    if (onOff == false) {
       link = "assets/open.png";
     }
     return link;
   }
-  Color _open(){
+
+  Color _open() {
     Color link = Colors.black;
-    if(!onOff){
+    if (!onOff) {
       link = Colors.green;
     }
     return link;
   }
-  Color _close(){
+
+  Color _close() {
     Color link = Colors.black;
     print(onOff);
-    if(onOff == false){
+    if (onOff == false) {
       link = Colors.black;
-    }else{
+    } else {
       link = Colors.red;
     }
     return link;
@@ -42,36 +43,36 @@ class _WarungPageState extends State<WarungPage> {
 
   @override
   void initState() {
-    getToken().then((value){
-      if(mounted)
-      setState(() {
-        token = value;
-      });
+    getToken().then((value) {
+      if (mounted)
+        setState(() {
+          token = value;
+        });
     });
-    getUsername().then((value){
-      if(mounted)
+    getUsername().then((value) {
+      if (mounted)
         setState(() {
           username = value;
         });
     });
-    getKdUser().then((value){
+    getKdUser().then((value) {
       blocMember.status(value);
     });
     blocMember.getStatus.listen((event) {
-      if(mounted)
-      setState(() {
-        nama = event.data[0].nama;
-      });
-      if(event.data[0].aktif=="1"){
-        if(mounted)
+      if (mounted)
         setState(() {
-          onOff = false;
+          nama = event.data[0].nama;
         });
-      }else{
-        if(mounted)
-        setState(() {
-          onOff = true;
-        });
+      if (event.data[0].aktif == "1") {
+        if (mounted)
+          setState(() {
+            onOff = false;
+          });
+      } else {
+        if (mounted)
+          setState(() {
+            onOff = true;
+          });
       }
     });
     super.initState();
@@ -80,110 +81,114 @@ class _WarungPageState extends State<WarungPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: nama == null? Center(child: CircularProgressIndicator()):Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width/2,
-                    child: Text("$nama",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)),
-                Padding(
-                  padding: const EdgeInsets.only(right:16.0),
-                  child: InkWell(
-                      onTap: (){
-                        rmvUsername();
-                        rmvKdUser();
-                        rmvNama();
-                        rmvToken();
-                        Navigator.pushReplacementNamed(context, "/login");
-                      },
-                      child: Icon(Icons.exit_to_app,color: Colors.red,)),
-                )
-              ],
-            ),
-            Container(
-              width: 180,
-              height: 180,
-              child: Image.asset(_image(),color: onOff?Colors.red:Colors.green,),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: (){
-
-                    blocMember.updateStatusToko(username, "1", token);
-                    blocMember.resStatusToko.listen((event) {
-                      if(event.status){
-                        setState(() {
-                          onOff = false;
-                        });
-                      }
-                    });
-                  },
-                  child: Text(
-                      'Buka',
-                    style: TextStyle(
-                      fontSize: 40,
-                        color: _open()
+      body: nama == null
+          ? Center(child: CircularProgressIndicator())
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Text(
+                            "$nama",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 28),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: InkWell(
+                            onTap: () {
+                              rmvUsername();
+                              rmvKdUser();
+                              rmvNama();
+                              rmvToken();
+                              Navigator.pushReplacementNamed(context, "/login");
+                            },
+                            child: Icon(
+                              Icons.exit_to_app,
+                              color: Colors.red,
+                            )),
+                      )
+                    ],
+                  ),
+                  Container(
+                    width: 180,
+                    height: 180,
+                    child: Image.asset(
+                      _image(),
+                      color: onOff ? Colors.red : Colors.green,
                     ),
                   ),
-                ),
-                Switch(
-                    activeColor: colorses.dasar,
-                    inactiveTrackColor: colorses.kuning,
-                    value: onOff,
-                    onChanged: (newValue){
-                      onOff = newValue;
-                      if(newValue){
-                        blocMember.updateStatusToko(username, "0", token);
-                        blocMember.resStatusToko.listen((event) {
-                          if(event.status){
-                            Toast.show("Toko berhasil di Tutup", context,
-                                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                          }
-                        });
-                      }else{
-                        blocMember.updateStatusToko(username, "1", token);
-                        blocMember.resStatusToko.listen((event) {
-                          if(event.status){
-                            Toast.show("Toko berhasil di Buka", context,
-                                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                          }
-                        });
-                      }
-                      setState(() {
-
-                      });
-                    }
-                ),
-                GestureDetector(
-                  onTap: (){
-                    blocMember.updateStatusToko(username, "0", token);
-                    blocMember.resStatusToko.listen((event) {
-                      if(event.status){
-                        setState(() {
-                          onOff = true;
-                        });
-                      }
-                    });
-                  },
-                  child: Text(
-                      'Tutup',
-                    style: TextStyle(
-                      fontSize: 40,
-                      color: _close()
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          blocMember.updateStatusToko(username, "1", token);
+                          blocMember.resStatusToko.listen((event) {
+                            if (event.status) {
+                              setState(() {
+                                onOff = false;
+                              });
+                            }
+                          });
+                        },
+                        child: Text(
+                          'Buka',
+                          style: TextStyle(fontSize: 40, color: _open()),
+                        ),
+                      ),
+                      Switch(
+                          activeColor: colorses.dasar,
+                          inactiveTrackColor: colorses.kuning,
+                          value: onOff,
+                          onChanged: (newValue) {
+                            onOff = newValue;
+                            if (newValue) {
+                              blocMember.updateStatusToko(username, "0", token);
+                              blocMember.resStatusToko.listen((event) {
+                                if (event.status) {
+                                  Toast.show("Toko berhasil di Tutup", context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                }
+                              });
+                            } else {
+                              blocMember.updateStatusToko(username, "1", token);
+                              blocMember.resStatusToko.listen((event) {
+                                if (event.status) {
+                                  Toast.show("Toko berhasil di Buka", context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                }
+                              });
+                            }
+                            setState(() {});
+                          }),
+                      GestureDetector(
+                        onTap: () {
+                          blocMember.updateStatusToko(username, "0", token);
+                          blocMember.resStatusToko.listen((event) {
+                            if (event.status) {
+                              setState(() {
+                                onOff = true;
+                              });
+                            }
+                          });
+                        },
+                        child: Text(
+                          'Tutup',
+                          style: TextStyle(fontSize: 40, color: _close()),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
     );
   }
 }
