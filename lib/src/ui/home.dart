@@ -184,37 +184,38 @@ class _HomePageState extends State<HomePage> {
                                             child: ListTile(
                                               leading: Stack(
                                                 children: <Widget>[
-                                                  Container(
-                                                    // margin: EdgeInsets.only(top: 5),
-                                                    width: 80,
-                                                    height: 120,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(
-                                                              "http://jongjava.tech/tumbas/assets/foto_produk/" +
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[i]
-                                                                      .gambar
-                                                                      .gambar1,
-                                                            ),
-                                                            // image: NetworkImage(
-                                                            //     "https://tumbasonline.com/assets/foto_produk/" +
-                                                            //         snapshot
-                                                            //             .data
-                                                            //             .data[i]
-                                                            //             .gambar
-                                                            //             .gambar1,
-                                                            //     ),
-                                                            fit: BoxFit.cover)),
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      // margin: EdgeInsets.only(top: 5),
+                                                      width: 80,
+                                                      height: 120,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(
+                                                                "http://jongjava.tech/tumbas/assets/foto_produk/" +
+                                                                    snapshot
+                                                                        .data
+                                                                        .data[i]
+                                                                        .gambar
+                                                                        .gambar1,
+                                                              ),
+                                                              // image: NetworkImage(
+                                                              //     "https://tumbasonline.com/assets/foto_produk/" +
+                                                              //         snapshot
+                                                              //             .data
+                                                              //             .data[i]
+                                                              //             .gambar
+                                                              //             .gambar1,
+                                                              //     ),
+                                                              fit: BoxFit.cover)),
+                                                    ),
                                                   ),
-                                                  status == "habis" ||
-                                                          snapshot.data.data[i]
-                                                                  .aktif ==
-                                                              "0"
+                                                  snapshot.data.data[i].aktif ==
+                                                          "0"
                                                       ? Container(
                                                           // margin: EdgeInsets.only(top: 5),
                                                           width: 80,
@@ -292,114 +293,108 @@ class _HomePageState extends State<HomePage> {
                                                   // ),
                                                 ],
                                               ),
-                                              trailing: status == "habis"
-                                                  ? Container(
-                                                      height: 50,
-                                                      width: 50,
-                                                    )
-                                                  : Switch(
-                                                      activeColor:
-                                                          colorses.dasar,
-                                                      inactiveTrackColor:
-                                                          colorses.kuning,
-                                                      value: onOff[i],
-                                                      onChanged: (newValue) {
-                                                        onOff[i] = newValue;
-                                                        if (newValue) {
-                                                          getUsername()
-                                                              .then((user) {
-                                                            getToken()
-                                                                .then((token) {
-                                                              blocMember
-                                                                  .updateStatusProduk(
-                                                                      user,
-                                                                      snapshot
-                                                                          .data
-                                                                          .data[
-                                                                              i]
-                                                                          .idProduk,
-                                                                      "0",
-                                                                      token);
-                                                            });
-                                                          });
+                                              trailing: Switch(
+                                                  activeColor: colorses.dasar,
+                                                  inactiveTrackColor:
+                                                      colorses.kuning,
+                                                  value: onOff[i],
+                                                  onChanged: (newValue) {
+                                                    onOff[i] = newValue;
+                                                    if (newValue) {
+                                                      getUsername()
+                                                          .then((user) {
+                                                        getToken()
+                                                            .then((token) {
                                                           blocMember
-                                                              .resUpdateStatusProduk
-                                                              .listen((event) {
-                                                            if (event.status) {
-                                                              getToken().then(
-                                                                  (token) {
-                                                                getUsername().then(
-                                                                    (username) {
-                                                                  getKdUser().then(
-                                                                      (kduser) {
-                                                                    blocMember
-                                                                        .status(
-                                                                            kduser);
-                                                                    blocMember.getProduk(
+                                                              .updateStatusProduk(
+                                                                  user,
+                                                                  snapshot
+                                                                      .data
+                                                                      .data[i]
+                                                                      .idProduk,
+                                                                  "0",
+                                                                  token);
+                                                        });
+                                                      });
+                                                      blocMember
+                                                          .resUpdateStatusProduk
+                                                          .listen((event) {
+                                                        if (event.status) {
+                                                          getToken()
+                                                              .then((token) {
+                                                            getUsername().then(
+                                                                (username) {
+                                                              getKdUser().then(
+                                                                  (kduser) {
+                                                                blocMember
+                                                                    .status(
+                                                                        kduser);
+                                                                blocMember
+                                                                    .getProduk(
                                                                         username,
                                                                         kduser,
                                                                         token);
-                                                                  });
-                                                                });
                                                               });
-                                                              Toast.show(
-                                                                  "Produk di set habis!",
-                                                                  context,
-                                                                  duration: Toast
-                                                                      .LENGTH_LONG,
-                                                                  gravity: Toast
-                                                                      .BOTTOM);
-                                                            }
-                                                          });
-                                                        } else {
-                                                          getUsername()
-                                                              .then((user) {
-                                                            getToken()
-                                                                .then((token) {
-                                                              blocMember
-                                                                  .updateStatusProduk(
-                                                                      user,
-                                                                      snapshot
-                                                                          .data
-                                                                          .data[
-                                                                              i]
-                                                                          .idProduk,
-                                                                      "1",
-                                                                      token);
                                                             });
                                                           });
-                                                          blocMember
-                                                              .resUpdateStatusProduk
-                                                              .listen((event) {
-                                                            if (event.status) {
-                                                              getToken().then(
-                                                                  (token) {
-                                                                getUsername().then(
-                                                                    (username) {
-                                                                  getKdUser().then(
-                                                                      (kduser) {
-                                                                    blocMember
-                                                                        .status(
-                                                                            kduser);
-                                                                    blocMember.getProduk(
-                                                                        username,
-                                                                        kduser,
-                                                                        token);
-                                                                  });
-                                                                });
-                                                              });
-                                                              Toast.show(
-                                                                  "Produk di set ada!",
-                                                                  context,
-                                                                  duration: Toast
-                                                                      .LENGTH_LONG,
-                                                                  gravity: Toast
-                                                                      .BOTTOM);
-                                                            }
-                                                          });
+                                                          Toast.show(
+                                                              "Produk di set habis!",
+                                                              context,
+                                                              duration: Toast
+                                                                  .LENGTH_LONG,
+                                                              gravity:
+                                                                  Toast.BOTTOM);
                                                         }
-                                                        setState(() {});
-                                                      }),
+                                                      });
+                                                    } else {
+                                                      getUsername()
+                                                          .then((user) {
+                                                        getToken()
+                                                            .then((token) {
+                                                          blocMember
+                                                              .updateStatusProduk(
+                                                                  user,
+                                                                  snapshot
+                                                                      .data
+                                                                      .data[i]
+                                                                      .idProduk,
+                                                                  "1",
+                                                                  token);
+                                                        });
+                                                      });
+                                                      blocMember
+                                                          .resUpdateStatusProduk
+                                                          .listen((event) {
+                                                        if (event.status) {
+                                                          getToken()
+                                                              .then((token) {
+                                                            getUsername().then(
+                                                                (username) {
+                                                              getKdUser().then(
+                                                                  (kduser) {
+                                                                blocMember
+                                                                    .status(
+                                                                        kduser);
+                                                                blocMember
+                                                                    .getProduk(
+                                                                        username,
+                                                                        kduser,
+                                                                        token);
+                                                              });
+                                                            });
+                                                          });
+                                                          Toast.show(
+                                                              "Produk di set ada!",
+                                                              context,
+                                                              duration: Toast
+                                                                  .LENGTH_LONG,
+                                                              gravity:
+                                                                  Toast.BOTTOM);
+                                                        }
+                                                      });
+                                                    }
+                                                    setState(() {});
+                                                  }),
                                             ),
                                           ),
 //                              Divider(),

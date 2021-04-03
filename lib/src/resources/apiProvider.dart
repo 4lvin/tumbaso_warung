@@ -19,11 +19,39 @@ class ApiProviders {
   String url = "https://jongjava.tech/tumbas/restapi";
   // String url = "https://tumbasonline.com/restapi";
 
-  Future uploadFile(File file) async {
+  Future simpanProduk(
+      File file,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String berat,
+      String deskripsi,
+      String potongan) async {
+    String _token;
+    String _username;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getUsername().then((value) {
+      _username = value;
+    });
     try {
-      FileUploadModel data;
-      var uri = Uri.parse("$url/umum/upload?tipe=foto_produk");
+      var uri = Uri.parse("$url/penjual/create_produk");
       var request = new client.MultipartRequest("POST", uri);
+      request.headers['authorization'] = _token;
+
+      request.fields['username'] = _username;
+      request.fields['kategori_id'] = kategori;
+      request.fields['subkategori_id'] = subkategori;
+      request.fields['nama_produk'] = nama;
+      request.fields['harga_pokok'] = harga;
+      request.fields['potongan'] = potongan;
+      request.fields['berat'] = berat;
+      request.fields['deskripsi'] = deskripsi;
+      request.fields['aktif'] = "0";
+      request.fields['utama'] = "0";
+
       if (file != null) {
         request.files.add(client.MultipartFile(
             "file",
@@ -34,20 +62,18 @@ class ApiProviders {
       } else {
         request.fields['file'] = "";
       }
+      int statusResponse;
       await request
           .send()
           .then((result) async {
             await client.Response.fromStream(result).then((response) {
-              if (response.statusCode == 200) {
-                data = FileUploadModel.fromJson(json.decode(response.body));
-              } else {
-                return new FileUploadModel();
-              }
+              print(response.statusCode);
+              statusResponse = response.statusCode;
             });
           })
           .catchError((err) => print('error : ' + err.toString()))
           .whenComplete(() {});
-      return data.foto;
+      return statusResponse;
     } on SocketException catch (e) {
       throw Exception(e.toString());
     } on HttpException {
@@ -238,62 +264,6 @@ class ApiProviders {
       }
     } on FormatException {
       throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future simpanProduk(
-      String kategori,
-      String subkategori,
-      String nama,
-      String harga,
-      String berat,
-      String deskripsi,
-      String potongan,
-      String gambar_1) async {
-    String _token;
-    String _username;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getUsername().then((value) {
-      _username = value;
-    });
-
-    var body = jsonEncode({
-      'username': _username,
-      'kategori_id': kategori,
-      'subkategori_id': subkategori,
-      'nama_produk': nama,
-      'harga_pokok': harga,
-      'potongan': potongan,
-      'berat': berat,
-      'deskripsi': deskripsi,
-      'aktif': 1,
-      'utama': 0,
-      'gambar_1': gambar_1
-    });
-    try {
-      final produk = await client
-          .post("$url/penjual/create_produk",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": "$_token"
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (produk.statusCode == 200) {
-        return produk.statusCode;
-      } else {
-        throw Exception('Failure response');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
     } on TimeoutException catch (e) {
       throw Exception(e.toString());
     }

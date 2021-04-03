@@ -20,7 +20,6 @@ class _NewProductPageState extends State<NewProductPage> {
   var berat = TextEditingController();
   var deskripsi = TextEditingController();
   var potongan = TextEditingController();
-  // var utama = TextEditingController();
   String gambar_1;
 
   List<Map<String, dynamic>> _listKategori = [
@@ -35,19 +34,7 @@ class _NewProductPageState extends State<NewProductPage> {
     PickedFile pickedImage = await ImagePicker().getImage(
         source: type == 1 ? ImageSource.camera : ImageSource.gallery,
         imageQuality: 50);
-    if (pickedImage != null) {
-      uploadImage(pickedImage);
-    }
     return pickedImage;
-  }
-
-  Future uploadImage(PickedFile pickedImage) async {
-    File selected = File(pickedImage.path);
-    await blocMember.uploadFile(selected).then((value) {
-      setState(() {
-        gambar_1 = value;
-      });
-    });
   }
 
   getSubkategori(idKategori) {
@@ -212,9 +199,10 @@ class _NewProductPageState extends State<NewProductPage> {
         ),
         bottomSheet: InkWell(
           onTap: () {
+            File file = File(imageFile.path);
             blocMember
-                .simpanProduct(kategori, sub_kategori, nama.text, harga.text,
-                    berat.text, deskripsi.text, potongan.text, gambar_1)
+                .simpanProduct(file, kategori, sub_kategori, nama.text,
+                    harga.text, berat.text, deskripsi.text, potongan.text)
                 .then((value) {
               if (value != 200) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -27,15 +27,6 @@ class MemberBloc {
   PublishSubject<ResUpdateStatusProdukModel> get resUpdateStatusProduk =>
       _updateStatusProdukFetcher.stream;
 
-  Future uploadFile(File file) async {
-    try {
-      String files = await _repository.uploadFile(file);
-      return files;
-    } catch (e) {
-      print(e);
-    }
-  }
-
   getSubkategori(String idKategori) async {
     ResSubkategoriModel getSubkategori =
         await _repository.getSubkategori(idKategori);
@@ -72,16 +63,16 @@ class MemberBloc {
   }
 
   Future simpanProduct(
+      File file,
       String kategori,
       String subkategori,
       String nama,
       String harga,
       String berat,
       String deskripsi,
-      String potongan,
-      String gambar_1) async {
-    int statusCode = await _repository.simpanProduk(kategori, subkategori, nama,
-        harga, berat, deskripsi, potongan, gambar_1);
+      String potongan) async {
+    int statusCode = await _repository.simpanProduk(
+        file, kategori, subkategori, nama, harga, berat, deskripsi, potongan);
     return statusCode;
   }
 
