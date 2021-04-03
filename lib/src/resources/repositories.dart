@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:tumbaso_warung/src/resources/apiProvider.dart';
 
 class Repositories {
   final apiProvider = ApiProviders();
+
+  Future uploadFile(File file) => apiProvider.uploadFile(file);
+
+  Future getSubkategori(String idKategori) =>
+      apiProvider.getSubkategori(idKategori);
 
   Future login(String username, String password) =>
       apiProvider.login(username, password);
@@ -20,15 +27,13 @@ class Repositories {
 
   Future simpanProduk(
           String kategori,
+          String subkategori,
           String nama,
           String harga,
           String berat,
           String deskripsi,
           String potongan,
-          String utama,
-          String gambar_1,
-          String gambar_2,
-          String gambar_3) =>
-      apiProvider.simpanProduk(kategori, nama, harga, berat, deskripsi,
-          potongan, utama, gambar_1, gambar_2, gambar_3);
+          String gambar_1) =>
+      apiProvider.simpanProduk(kategori, subkategori, nama, harga, berat,
+          deskripsi, potongan, gambar_1);
 }
