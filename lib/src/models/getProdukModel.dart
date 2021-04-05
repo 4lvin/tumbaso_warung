@@ -4,6 +4,11 @@
 
 import 'dart:convert';
 
+GetProdukModel getProdukModelFromJson(String str) =>
+    GetProdukModel.fromJson(json.decode(str));
+
+String getProdukModelToJson(GetProdukModel data) => json.encode(data.toJson());
+
 class GetProdukModel {
   GetProdukModel({
     this.status,
@@ -15,29 +20,27 @@ class GetProdukModel {
   List<Datum> data;
   String message;
 
-  factory GetProdukModel.fromRawJson(String str) => GetProdukModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory GetProdukModel.fromJson(Map<String, dynamic> json) => GetProdukModel(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    message: json["message"],
-  );
+        status: json["status"],
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    "message": message,
-  };
+        "status": status,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "message": message,
+      };
 }
 
 class Datum {
   Datum({
     this.idProduk,
     this.kategori,
+    this.idSubkategori,
     this.namaProduk,
     this.hargaJual,
+    this.berat,
     this.potongan,
     this.deskripsi,
     this.aktif,
@@ -47,41 +50,43 @@ class Datum {
 
   String idProduk;
   Kategori kategori;
+  String idSubkategori;
   String namaProduk;
   String hargaJual;
+  String berat;
   String potongan;
   String deskripsi;
   String aktif;
   Penjual penjual;
   Gambar gambar;
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    idProduk: json["id_produk"],
-    kategori: Kategori.fromJson(json["kategori"]),
-    namaProduk: json["nama_produk"],
-    hargaJual: json["harga_jual"],
-    potongan: json["potongan"],
-    deskripsi: json["deskripsi"],
-    aktif: json["aktif"],
-    penjual: Penjual.fromJson(json["penjual"]),
-    gambar: Gambar.fromJson(json["gambar"]),
-  );
+        idProduk: json["id_produk"],
+        kategori: Kategori.fromJson(json["kategori"]),
+        idSubkategori: json["id_subkategori"],
+        namaProduk: json["nama_produk"],
+        hargaJual: json["harga_jual"],
+        berat: json["berat"],
+        potongan: json["potongan"],
+        deskripsi: json["deskripsi"],
+        aktif: json["aktif"],
+        penjual: Penjual.fromJson(json["penjual"]),
+        gambar: Gambar.fromJson(json["gambar"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_produk": idProduk,
-    "kategori": kategori.toJson(),
-    "nama_produk": namaProduk,
-    "harga_jual": hargaJual,
-    "potongan": potongan,
-    "deskripsi": deskripsi,
-    "aktif": aktif,
-    "penjual": penjual.toJson(),
-    "gambar": gambar.toJson(),
-  };
+        "id_produk": idProduk,
+        "kategori": kategori.toJson(),
+        "id_subkategori": idSubkategori,
+        "nama_produk": namaProduk,
+        "harga_jual": hargaJual,
+        "berat": berat,
+        "potongan": potongan,
+        "deskripsi": deskripsi,
+        "aktif": aktif,
+        "penjual": penjual.toJson(),
+        "gambar": gambar.toJson(),
+      };
 }
 
 class Gambar {
@@ -95,21 +100,17 @@ class Gambar {
   String gambar2;
   String gambar3;
 
-  factory Gambar.fromRawJson(String str) => Gambar.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Gambar.fromJson(Map<String, dynamic> json) => Gambar(
-    gambar1: json["gambar_1"],
-    gambar2: json["gambar_2"],
-    gambar3: json["gambar_3"],
-  );
+        gambar1: json["gambar_1"],
+        gambar2: json["gambar_2"],
+        gambar3: json["gambar_3"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "gambar_1": gambar1,
-    "gambar_2": gambar2,
-    "gambar_3": gambar3,
-  };
+        "gambar_1": gambar1,
+        "gambar_2": gambar2,
+        "gambar_3": gambar3,
+      };
 }
 
 class Kategori {
@@ -121,19 +122,15 @@ class Kategori {
   String idKategori;
   String namaKategori;
 
-  factory Kategori.fromRawJson(String str) => Kategori.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Kategori.fromJson(Map<String, dynamic> json) => Kategori(
-    idKategori: json["id_kategori"],
-    namaKategori: json["nama_kategori"],
-  );
+        idKategori: json["id_kategori"],
+        namaKategori: json["nama_kategori"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_kategori": idKategori,
-    "nama_kategori": namaKategori,
-  };
+        "id_kategori": idKategori,
+        "nama_kategori": namaKategori,
+      };
 }
 
 class Penjual {
@@ -157,29 +154,25 @@ class Penjual {
   String longitude;
   String latitude;
 
-  factory Penjual.fromRawJson(String str) => Penjual.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Penjual.fromJson(Map<String, dynamic> json) => Penjual(
-    penjualId: json["penjual_id"],
-    nama: json["nama"],
-    namaToko: json["nama_toko"],
-    status: json["status"],
-    kecamatanId: json["kecamatan_id"],
-    alamat: json["alamat"],
-    longitude: json["longitude"],
-    latitude: json["latitude"],
-  );
+        penjualId: json["penjual_id"],
+        nama: json["nama"],
+        namaToko: json["nama_toko"],
+        status: json["status"],
+        kecamatanId: json["kecamatan_id"],
+        alamat: json["alamat"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "penjual_id": penjualId,
-    "nama": nama,
-    "nama_toko": namaToko,
-    "status": status,
-    "kecamatan_id": kecamatanId,
-    "alamat": alamat,
-    "longitude": longitude,
-    "latitude": latitude,
-  };
+        "penjual_id": penjualId,
+        "nama": nama,
+        "nama_toko": namaToko,
+        "status": status,
+        "kecamatan_id": kecamatanId,
+        "alamat": alamat,
+        "longitude": longitude,
+        "latitude": latitude,
+      };
 }

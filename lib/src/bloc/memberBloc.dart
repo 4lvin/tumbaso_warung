@@ -76,6 +76,21 @@ class MemberBloc {
     return statusCode;
   }
 
+  Future updateProduct(
+      File file,
+      String _idproduk,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String berat,
+      String deskripsi,
+      String potongan) async {
+    int statusCode = await _repository.updateProduct(file, _idproduk, kategori,
+        subkategori, nama, harga, berat, deskripsi, potongan);
+    return statusCode;
+  }
+
   dispose() {
     _loginFetcher.close();
     _statusFetcher.close();

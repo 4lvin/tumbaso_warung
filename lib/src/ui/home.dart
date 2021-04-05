@@ -4,6 +4,7 @@ import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/ui/editProduct.dart';
 import 'package:tumbaso_warung/src/ui/newProduct.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
@@ -168,10 +169,14 @@ class _HomePageState extends State<HomePage> {
                                         children: <Widget>[
                                           InkWell(
                                             onTap: () {
-                                              // Navigator.push(
-                                              //   context,
-                                              //   MaterialPageRoute(builder: (context) => DetailPesanan(pesanan: snapshot.data.data[i],)),
-                                              // );
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          EditProductPage(
+                                                              produk: snapshot
+                                                                  .data
+                                                                  .data[i])));
                                               // Navigator.push(
                                               //     context,
                                               //     PageTransition(
@@ -184,35 +189,32 @@ class _HomePageState extends State<HomePage> {
                                             child: ListTile(
                                               leading: Stack(
                                                 children: <Widget>[
-                                                  InkWell(
-                                                    onTap: () {},
-                                                    child: Container(
-                                                      // margin: EdgeInsets.only(top: 5),
-                                                      width: 80,
-                                                      height: 120,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                "http://jongjava.tech/tumbas/assets/foto_produk/" +
-                                                                    snapshot
-                                                                        .data
-                                                                        .data[i]
-                                                                        .gambar
-                                                                        .gambar1,
-                                                              ),
-                                                              // image: NetworkImage(
-                                                              //     "https://tumbasonline.com/assets/foto_produk/" +
-                                                              //         snapshot
-                                                              //             .data
-                                                              //             .data[i]
-                                                              //             .gambar
-                                                              //             .gambar1,
-                                                              //     ),
-                                                              fit: BoxFit.cover)),
-                                                    ),
+                                                  Container(
+                                                    // margin: EdgeInsets.only(top: 5),
+                                                    width: 80,
+                                                    height: 120,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        image: DecorationImage(
+                                                            image: NetworkImage(
+                                                              "http://jongjava.tech/tumbas/assets/foto_produk/" +
+                                                                  snapshot
+                                                                      .data
+                                                                      .data[i]
+                                                                      .gambar
+                                                                      .gambar1,
+                                                            ),
+                                                            // image: NetworkImage(
+                                                            //     "https://tumbasonline.com/assets/foto_produk/" +
+                                                            //         snapshot
+                                                            //             .data
+                                                            //             .data[i]
+                                                            //             .gambar
+                                                            //             .gambar1,
+                                                            //     ),
+                                                            fit: BoxFit.cover)),
                                                   ),
                                                   snapshot.data.data[i].aktif ==
                                                           "0"

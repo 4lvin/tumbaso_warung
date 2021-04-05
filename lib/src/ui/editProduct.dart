@@ -4,12 +4,14 @@ import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tumbaso_warung/src/models/resSubkategoriModel.dart';
 
-class NewProductPage extends StatefulWidget {
+class EditProductPage extends StatefulWidget {
+  final dynamic produk;
+  EditProductPage({this.produk});
   @override
-  _NewProductPageState createState() => _NewProductPageState();
+  _EditProductPageState createState() => _EditProductPageState();
 }
 
-class _NewProductPageState extends State<NewProductPage> {
+class _EditProductPageState extends State<EditProductPage> {
   PickedFile imageFile;
 
   String kategori;
@@ -37,12 +39,30 @@ class _NewProductPageState extends State<NewProductPage> {
     return pickedImage;
   }
 
-  getSubkategori(idKategori) {
+  getSubkategori(idKategori, idSubkategori) {
     blocMember.getSubkategori(idKategori).then((value) {
       setState(() {
         _listSubkategori = value;
+        if (idSubkategori != null) {
+          sub_kategori = idSubkategori;
+        } else {
+          sub_kategori = null;
+        }
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSubkategori(
+        widget.produk.kategori.idKategori, widget.produk.idSubkategori);
+    kategori = widget.produk.kategori.idKategori;
+    nama.text = widget.produk.namaProduk;
+    harga.text = widget.produk.hargaJual;
+    deskripsi.text = widget.produk.deskripsi;
+    berat.text = widget.produk.berat;
+    potongan.text = widget.produk.potongan;
   }
 
   @override
@@ -79,7 +99,9 @@ class _NewProductPageState extends State<NewProductPage> {
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         image: DecorationImage(
                             image: imageFile == null
-                                ? AssetImage('assets/baru2.png')
+                                ? NetworkImage(
+                                    "http://jongjava.tech/tumbas/assets/foto_produk/" +
+                                        widget.produk.gambar.gambar1)
                                 : FileImage(File(imageFile.path)),
                             fit: BoxFit.cover)),
                   ),
@@ -124,7 +146,7 @@ class _NewProductPageState extends State<NewProductPage> {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        getSubkategori(value);
+                        getSubkategori(value, null);
                         setState(() {
                           kategori = value;
                         });
@@ -191,7 +213,7 @@ class _NewProductPageState extends State<NewProductPage> {
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey[500]))),
                   ),
-                  SizedBox(height: 0.0)
+                  SizedBox(height: 50.0)
                 ],
               ),
             )
@@ -200,18 +222,24 @@ class _NewProductPageState extends State<NewProductPage> {
         bottomSheet: InkWell(
           onTap: () {
             File file = imageFile != null ? File(imageFile.path) : null;
-            if (kategori == null ||
-                sub_kategori == null ||
-                harga.text == "" ||
-                nama.text == "") {
+            String _idproduk = widget.produk.idProduk;
+            if (sub_kategori == null || harga.text == "") {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: const Text('Lengkapi Data anda'),
                   duration: const Duration(seconds: 3)));
               return;
             }
             blocMember
-                .simpanProduct(file, kategori, sub_kategori, nama.text,
-                    harga.text, berat.text, deskripsi.text, potongan.text)
+                .updateProduct(
+                    file,
+                    _idproduk,
+                    kategori,
+                    sub_kategori,
+                    nama.text,
+                    harga.text,
+                    berat.text,
+                    deskripsi.text,
+                    potongan.text)
                 .then((value) {
               if (value != 200) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

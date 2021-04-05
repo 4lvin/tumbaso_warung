@@ -34,4 +34,17 @@ class Repositories {
           String potongan) =>
       apiProvider.simpanProduk(
           file, kategori, subkategori, nama, harga, berat, deskripsi, potongan);
+
+  Future updateProduct(
+          File file,
+          String _idproduk,
+          String kategori,
+          String subkategori,
+          String nama,
+          String harga,
+          String berat,
+          String deskripsi,
+          String potongan) =>
+      apiProvider.updateProduct(file, _idproduk, kategori, subkategori, nama,
+          harga, berat, deskripsi, potongan);
 }
