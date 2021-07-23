@@ -47,4 +47,6 @@ class Repositories {
           String potongan) =>
       apiProvider.updateProduct(file, _idproduk, kategori, subkategori, nama,
           harga, berat, deskripsi, potongan);
+
+  Future getSetoran(String idPenjual) => apiProvider.getSetoran(idPenjual);
 }

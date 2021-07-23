@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as client;
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
+import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
 import 'package:tumbaso_warung/src/models/resFileUploadModel.dart';
 
@@ -165,6 +166,31 @@ class ApiProviders {
     }
   }
 
+  Future getSetoran(String idPenjual) async {
+    var body = jsonEncode({'id_penjual': idPenjual});
+    try {
+      final checkid = await client
+          .post("$url/penjual/get_setor",
+              headers: {"Content-Type": "application/json"}, body: body)
+          .timeout(const Duration(seconds: 11));
+      if (checkid.statusCode == 200) {
+        return GetSetoranModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future updateStatusProduk(
       String username, String idProduk, String status, String token) async {
     var body = jsonEncode(
@@ -178,9 +204,6 @@ class ApiProviders {
               },
               body: body)
           .timeout(const Duration(seconds: 11));
-      print(checkid.body);
-      print(body);
-      print(token);
       if (checkid.statusCode == 200) {
         return ResUpdateStatusProdukModel.fromJson(json.decode(checkid.body));
       } else if (checkid.statusCode == 404) {
