@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
+import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/models/resFileUploadModel.dart';
 import 'package:tumbaso_warung/src/models/resLoginModel.dart';
 import 'package:tumbaso_warung/src/models/resSubkategoriModel.dart';
@@ -20,6 +21,7 @@ class MemberBloc {
   final _updateStatusProdukFetcher =
       PublishSubject<ResUpdateStatusProdukModel>();
   final _getSetoranFetcher = PublishSubject<GetSetoranModel>();
+  final _getTransaksiFetcher = PublishSubject<GetTransaksiModel>();
 
   PublishSubject<ResLoginModel> get resLogin => _loginFetcher.stream;
   PublishSubject<GetStatusModel> get getStatus => _statusFetcher.stream;
@@ -29,6 +31,8 @@ class MemberBloc {
   PublishSubject<ResUpdateStatusProdukModel> get resUpdateStatusProduk =>
       _updateStatusProdukFetcher.stream;
   PublishSubject<GetSetoranModel> get listSetoran => _getSetoranFetcher.stream;
+  PublishSubject<GetTransaksiModel> get listTransaksi =>
+      _getTransaksiFetcher.stream;
 
   getSubkategori(String idKategori) async {
     ResSubkategoriModel getSubkategori =
@@ -99,6 +103,12 @@ class MemberBloc {
     _getSetoranFetcher.sink.add(_getSetoran);
   }
 
+  getTransaksi(String username, String history) async {
+    GetTransaksiModel _getTransaksi =
+        await _repository.getTransaksi(username, history);
+    _getTransaksiFetcher.sink.add(_getTransaksi);
+  }
+
   dispose() {
     _loginFetcher.close();
     _statusFetcher.close();
@@ -106,6 +116,7 @@ class MemberBloc {
     _getProdukFetcher.close();
     _updateStatusProdukFetcher.close();
     _getSetoranFetcher.close();
+    _getTransaksiFetcher.close();
   }
 }
 

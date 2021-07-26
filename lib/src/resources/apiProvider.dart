@@ -4,6 +4,7 @@ import 'package:http/http.dart' as client;
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
+import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/models/resFileUploadModel.dart';
 
 import 'dart:io';
@@ -175,6 +176,41 @@ class ApiProviders {
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return GetSetoranModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future getTransaksi(String username, String history) async {
+    var body = jsonEncode({'username': username, 'history': history});
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    try {
+      final checkid = await client
+          .post("$url/penjual/get_transaksi",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 13));
+      if (checkid.statusCode == 200) {
+        return GetTransaksiModel.fromJson(json.decode(checkid.body));
+      } else if (checkid.statusCode == 404) {
+        return GetProdukModel.fromJson(json.decode(checkid.body));
       } else {
         throw Exception('Failure response');
       }

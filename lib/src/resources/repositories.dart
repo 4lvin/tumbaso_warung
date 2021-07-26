@@ -49,4 +49,7 @@ class Repositories {
           harga, berat, deskripsi, potongan);
 
   Future getSetoran(String idPenjual) => apiProvider.getSetoran(idPenjual);
+
+  Future getTransaksi(String username, String history) =>
+      apiProvider.getTransaksi(username, history);
 }

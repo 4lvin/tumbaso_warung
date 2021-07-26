@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/ui/home.dart';
+import 'package:tumbaso_warung/src/ui/transaksi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/warung.dart';
 
@@ -16,7 +17,11 @@ class _ControllerPageState extends State<ControllerPage> {
   String tipe;
   final PageStorageBucket bucket = PageStorageBucket();
   DateTime currentBackPressTime;
-  final List<Widget> _widgetOptions = [HomePage(), WarungPage()];
+  final List<Widget> _widgetOptions = [
+    HomePage(),
+    TransaksiPage(),
+    WarungPage()
+  ];
 
   Future<bool> _onWillPop() {
     DateTime now = DateTime.now();
@@ -57,9 +62,11 @@ class _ControllerPageState extends State<ControllerPage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.view_headline_outlined), label: 'Warung'),
+              icon: Icon(Icons.view_headline_outlined), label: 'Produk'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Pengaturan ')
+              icon: Icon(Icons.confirmation_number), label: 'Transaksi'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Pengaturan')
         ],
         elevation: 16,
         unselectedItemColor: const Color(0xFFbdbfbe),
