@@ -16,6 +16,8 @@ class DetailPesanan extends StatefulWidget {
 
 class _DetailPesananState extends State<DetailPesanan> {
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+  final String _baseImage = "http://jongjava.tech/tumbas/assets/foto_produk/";
+  // final String _baseImage = "https://tumbasonline.com/assets/foto_produk/";
   String token;
   String username;
 
@@ -94,18 +96,16 @@ class _DetailPesananState extends State<DetailPesanan> {
                           child: Text(widget.pesanan.detailPengiriman.kurir,
                               style: TextStyle(color: Colors.black)),
                         ),
-                        // Container(
-                        //   height: 85,
-                        //   width: 80,
-                        //     decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(8),
-                        //         color: Colors.black45,
-                        //         image: DecorationImage(
-                        //             image: NetworkImage(
-                        //                 "https://tumbasonline.com/assets/foto_kurir/"),
-                        //             // "http://jongjava.tech/tumbas/assets/foto_produk/" + produkListDisplay[i].gambar),
-                        //             fit: BoxFit.cover))
-                        // )
+                        Container(
+                            height: 85,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.black45,
+                                image: DecorationImage(
+                                    image: NetworkImage(_baseImage +
+                                        widget.pesanan.detailPengiriman.foto),
+                                    fit: BoxFit.cover)))
                       ],
                     ),
                   ],

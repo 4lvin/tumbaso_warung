@@ -92,20 +92,24 @@ class DetailPengiriman {
   DetailPengiriman({
     this.kurir,
     this.telepone,
+    this.foto,
   });
 
   String kurir;
   String telepone;
+  String foto;
 
   factory DetailPengiriman.fromJson(Map<String, dynamic> json) =>
       DetailPengiriman(
         kurir: json["kurir"],
         telepone: json["telepone"],
+        foto: json["foto"],
       );
 
   Map<String, dynamic> toJson() => {
         "kurir": kurir,
         "telepone": telepone,
+        "foto": foto,
       };
 }
 
@@ -143,7 +147,7 @@ class Produk {
   String namaProduk;
   String qty;
   int harga;
-  dynamic catatan;
+  String catatan;
   String gambar1;
 
   factory Produk.fromJson(Map<String, dynamic> json) => Produk(
