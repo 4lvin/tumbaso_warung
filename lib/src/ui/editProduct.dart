@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tumbaso_warung/src/models/resSubkategoriModel.dart';
@@ -224,9 +225,11 @@ class _EditProductPageState extends State<EditProductPage> {
             File file = imageFile != null ? File(imageFile.path) : null;
             String _idproduk = widget.produk.idProduk;
             if (sub_kategori == null || harga.text == "") {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: const Text('Lengkapi Data anda'),
-                  duration: const Duration(seconds: 3)));
+              Toast.show("Lengkapi Data anda", context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //     content: const Text('Lengkapi Data anda'),
+              //     duration: const Duration(seconds: 3)));
               return;
             }
             blocMember
@@ -242,9 +245,11 @@ class _EditProductPageState extends State<EditProductPage> {
                     potongan.text)
                 .then((value) {
               if (value != 200) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Berhasil Menyimpan Data'),
-                    duration: const Duration(seconds: 3)));
+                Toast.show("Berhasil Menyimpan Data", context,
+                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //     content: const Text('Berhasil Menyimpan Data'),
+                //     duration: const Duration(seconds: 3)));
               } else {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     '/controllerPage', (route) => false);
