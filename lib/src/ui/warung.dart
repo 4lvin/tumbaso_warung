@@ -57,13 +57,13 @@ class _WarungPageState extends State<WarungPage> {
                     children: <Widget>[
                       Container(
                         height: MediaQuery.of(context).size.height / 4 - 50,
-                        color: colorses.background,
+                        color: colorses.dasar,
                         child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
-                                    colors: [colorses.dasar, colorses.background]),
+                                    colors: [colorses.dasar, colorses.dasar]),
                               ),
                             )
                       ),
@@ -120,7 +120,7 @@ class _WarungPageState extends State<WarungPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Container(
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: colorses.background),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: colorses.dasar),
                                   width: 70,
                                   height: 70,
                                   child: Icon(

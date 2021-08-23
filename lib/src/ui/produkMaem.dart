@@ -181,7 +181,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                 ),
                 Switch(
                     activeColor: colorses.dasar,
-                    inactiveTrackColor: colorses.kuning,
+                    inactiveTrackColor: colorses.orange,
                     value: onOffw,
                     onChanged: (newValue) {
                       onOffw = newValue;
@@ -347,7 +347,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                                               ),
                                               trailing: Switch(
                                                   activeColor: colorses.dasar,
-                                                  inactiveTrackColor: colorses.kuning,
+                                                  inactiveTrackColor: colorses.orange,
                                                   value: onOff[i],
                                                   onChanged: (newValue) {
                                                     onOff[i] = newValue;

@@ -92,7 +92,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(18),
-                              color: colorses.background),
+                              color: colorses.dasar),
                           child: Text(widget.pesanan.detailPengiriman.kurir,
                               style: TextStyle(color: Colors.black)),
                         ),
@@ -114,7 +114,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                   height: 8,
                 ),
                 Container(
-                  color: colorses.kuning,
+                  color: colorses.orange,
                   margin: EdgeInsets.symmetric(horizontal: 25),
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Row(

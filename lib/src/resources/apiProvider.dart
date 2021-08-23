@@ -485,6 +485,7 @@ class ApiProviders {
       final checkId = await client
           .post("$url/penjual/ubah_profil", headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
           .timeout(const Duration(seconds: 11));
+      print(body);
       print(checkId.body);
       if (checkId.statusCode == 200) {
         return ResLengkapiProfilModel.fromJson(json.decode(checkId.body));

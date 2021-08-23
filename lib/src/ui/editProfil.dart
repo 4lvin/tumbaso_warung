@@ -123,7 +123,7 @@ class _EditProfilState extends State<EditProfil> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: colorses.background,
+                color: colorses.dasar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
@@ -142,7 +142,7 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                color: colorses.background,
+                color: colorses.dasar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: StreamBuilder(
@@ -189,7 +189,7 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                color: colorses.background,
+                color: colorses.dasar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: StreamBuilder(
@@ -237,7 +237,7 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                color: colorses.background,
+                color: colorses.dasar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: StreamBuilder(
@@ -328,7 +328,7 @@ class _EditProfilState extends State<EditProfil> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: colorses.background,
+                color: colorses.dasar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
@@ -346,7 +346,7 @@ class _EditProfilState extends State<EditProfil> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: colorses.background,
+                color: colorses.dasar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
@@ -405,7 +405,7 @@ class _EditProfilState extends State<EditProfil> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: colorses.background,
+                  color: colorses.dasar,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(

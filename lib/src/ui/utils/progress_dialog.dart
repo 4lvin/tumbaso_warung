@@ -200,7 +200,7 @@ class _BodyState extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     final loader = Align(
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.center,
       child: Container(
         width: 150.0,
         height: 100.0,

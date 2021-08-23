@@ -123,7 +123,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: DropdownButton(
@@ -152,7 +152,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: DropdownButton(
@@ -180,7 +180,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -197,7 +197,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -220,7 +220,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                           padding: EdgeInsets.only(left: 20, top: 1, bottom: 1),
                           width: MediaQuery.of(context).size.width * 0.8 / 2 - 10,
                           decoration: BoxDecoration(
-                            color: colorses.background,
+                            color: colorses.dasar,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: TextFormField(
@@ -237,7 +237,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                           padding: EdgeInsets.only(left: 20, top: 1, bottom: 1),
                           width: MediaQuery.of(context).size.width * 0.8 / 2 - 10,
                           decoration: BoxDecoration(
-                            color: colorses.background,
+                            color: colorses.dasar,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: TextFormField(
@@ -258,7 +258,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -275,7 +275,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -292,7 +292,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.background,
+                      color: colorses.dasar,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(

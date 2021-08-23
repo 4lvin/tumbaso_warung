@@ -49,12 +49,12 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(left: 30),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: colorses.background,
+              color: colorses.dasar,
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(31),bottomRight: Radius.circular(31)),
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [colorses.dasar, colorses.background]),
+                  colors: [colorses.dasar, colorses.dasar]),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

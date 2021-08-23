@@ -76,32 +76,45 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: colorses.background,
+          color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SafeArea(
-                child: Container(
-                  height: 250,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
-                  width: MediaQuery.of(context).size.width,
-                  child: Image.asset("assets/baru2.png"),
+              Container(
+                height: MediaQuery.of(context).size.height - 150,
+                decoration: BoxDecoration(
+                  color: colorses.dasar,
+                  borderRadius: BorderRadius.only(bottomRight: Radius.elliptical(180.0, 50.0), bottomLeft: Radius.elliptical(180.0, 50.0)
+                )),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SafeArea(
+                      child: Container(
+                        height: 250,
+                        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.asset("assets/baru2.png"),
+                      ),
+                    ),
+                    SizedBox(height: 12,),
+                    Text(
+                      "Aplikasi untuk warung atau toko",
+                      style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold,color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      "di tumbas online dan pasmak",
+                      style: TextStyle(fontSize: 18,color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                  ],
                 ),
-              ),
-              Text(
-                "Aplikasi untuk warung atau toko",
-                style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Text(
-                "di tumbas online dan pasmak",
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(
-                height: 12,
               ),
               // Container(
               //   margin: EdgeInsets.symmetric(vertical: 10),
@@ -203,6 +216,7 @@ class _LoginPageState extends State<LoginPage> {
               // ),
               //
               // Text("----- Atau -----"),
+              SizedBox(height: 12,),
               Container(
                 margin: EdgeInsets.only(top: 12),
                 width: MediaQuery.of(context).size.width,
@@ -238,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: MediaQuery.of(context).size.width / 2,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(bottomRight: Radius.circular(18), topRight: Radius.circular(18)),
-                          color: Colors.red,
+                          color: colorses.orange,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
