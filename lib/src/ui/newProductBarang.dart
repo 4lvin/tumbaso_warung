@@ -1,17 +1,21 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tumbaso_warung/src/models/resSubkategoriModel.dart';
+import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
+import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
+import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
+import 'package:tumbaso_warung/src/ui/utils/loading.dart';
 
-class NewProductPage extends StatefulWidget {
+class NewProductBarang extends StatefulWidget {
   @override
-  _NewProductPageState createState() => _NewProductPageState();
+  _NewProductBarangState createState() => _NewProductBarangState();
 }
 
-class _NewProductPageState extends State<NewProductPage> {
+class _NewProductBarangState extends State<NewProductBarang> {
   PickedFile imageFile;
 
   String kategori;
@@ -22,16 +26,13 @@ class _NewProductPageState extends State<NewProductPage> {
   var harga = TextEditingController();
   var berat = TextEditingController();
   var deskripsi = TextEditingController();
-  var potongan = TextEditingController();
+  var satuan = TextEditingController();
+  var keterangan = TextEditingController();
+  var minimum = TextEditingController();
   String gambar_1;
 
-  List<Map<String, dynamic>> _listKategori = [
-    {"id_kategori": "1", "nama_kategori": "Makanan"},
-    {"id_kategori": "2", "nama_kategori": "Belanja"},
-    {"id_kategori": "3", "nama_kategori": "Hobi"},
-    {"id_kategori": "4", "nama_kategori": "Pakaian"}
-  ];
-  ResSubkategoriModel _listSubkategori;
+  GetKategoriBarangModel _listKategori;
+  GetSubKategoriBarangModel _listSubkategori;
 
   Future getImage(int type) async {
     PickedFile pickedImage =
@@ -39,10 +40,23 @@ class _NewProductPageState extends State<NewProductPage> {
     return pickedImage;
   }
 
+  @override
+  void initState() {
+    blocProdukPasmak.getKategoriBarang();
+    blocProdukPasmak.resKategori.listen((event) {
+      if (mounted)
+        setState(() {
+          _listKategori = event;
+        });
+    });
+    super.initState();
+  }
+
   getSubkategori(idKategori) {
-    blocMember.getSubkategori(idKategori).then((value) {
+    blocProdukPasmak.getSubKategoriBarang(idKategori);
+    blocProdukPasmak.resSubKategori.listen((event) {
       setState(() {
-        _listSubkategori = value;
+        _listSubkategori = event;
       });
     });
   }
@@ -63,7 +77,7 @@ class _NewProductPageState extends State<NewProductPage> {
         body: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10.0,bottom: 60),
+              padding: EdgeInsets.only(top: 10.0, bottom: 60),
               child: Column(
                 children: [
                   Container(
@@ -103,22 +117,6 @@ class _NewProductPageState extends State<NewProductPage> {
                       )),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                      color: colorses.background,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextFormField(
-                      controller: nama,
-                      decoration: InputDecoration(
-                          labelText: "Nama Produk*",
-                          labelStyle: TextStyle(color: Colors.grey),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
-                    ),
-                  ),
                   SizedBox(height: 10.0),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -132,12 +130,14 @@ class _NewProductPageState extends State<NewProductPage> {
                       isExpanded: true,
                       hint: Text("Pilih Kategori"),
                       value: kategori,
-                      items: _listKategori.map((value) {
-                        return DropdownMenuItem(
-                          child: Text(value["nama_kategori"]),
-                          value: value["id_kategori"],
-                        );
-                      }).toList(),
+                      items: _listKategori == null
+                          ? []
+                          : _listKategori.data.map((value) {
+                              return DropdownMenuItem(
+                                child: Text(value.namaKategori),
+                                value: value.idKategori,
+                              );
+                            }).toList(),
                       onChanged: (value) {
                         getSubkategori(value);
                         setState(() {
@@ -184,10 +184,9 @@ class _NewProductPageState extends State<NewProductPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
-                      controller: harga,
-                      keyboardType: TextInputType.number,
+                      controller: nama,
                       decoration: InputDecoration(
-                          labelText: "Harga*",
+                          labelText: "Nama Produk*",
                           labelStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
                     ),
@@ -202,12 +201,55 @@ class _NewProductPageState extends State<NewProductPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
-                      controller: berat,
+                      controller: harga,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          labelText: "Berat*",
+                          labelText: "Harga*",
                           labelStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 5, bottom: 5, left: 40),
+                          padding: EdgeInsets.only(left: 20, top: 1, bottom: 1),
+                          width: MediaQuery.of(context).size.width * 0.8 / 2 - 10,
+                          decoration: BoxDecoration(
+                            color: colorses.background,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextFormField(
+                            controller: berat,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                labelText: "Berat*",
+                                labelStyle: TextStyle(color: Colors.grey),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5, bottom: 5, right: 40),
+                          padding: EdgeInsets.only(left: 20, top: 1, bottom: 1),
+                          width: MediaQuery.of(context).size.width * 0.8 / 2 - 10,
+                          decoration: BoxDecoration(
+                            color: colorses.background,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextFormField(
+                            controller: satuan,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                                labelText: "Satuan*",
+                                labelStyle: TextStyle(color: Colors.grey),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 10.0),
@@ -237,10 +279,27 @@ class _NewProductPageState extends State<NewProductPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
-                      controller: potongan,
+                      controller: keterangan,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          labelText: "Keterangan*",
+                          labelStyle: TextStyle(color: Colors.grey),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                      color: colorses.background,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextFormField(
+                      controller: minimum,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          labelText: "Potongan*",
+                          labelText: "Minimum*",
                           labelStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500]))),
                     ),
@@ -252,18 +311,26 @@ class _NewProductPageState extends State<NewProductPage> {
         ),
         bottomSheet: InkWell(
           onTap: () {
+            Dialogs.showLoading(context, "Loading...");
             File file = imageFile != null ? File(imageFile.path) : null;
             if (kategori == null || sub_kategori == null || harga.text == "" || nama.text == "") {
               Toast.show("Lengkapi Data anda", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
               return;
             }
-            blocMember
-                .simpanProduct(file, kategori, sub_kategori, nama.text, harga.text, berat.text, deskripsi.text, potongan.text)
+            blocProdukPasmak
+                .simpanProductBarang(file, kategori, sub_kategori, nama.text, harga.text, satuan.text, berat.text, deskripsi.text,
+                    keterangan.text, minimum.text)
                 .then((value) {
               if (value != 200) {
-                Toast.show("Berhasil Menyimpan Data", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                Dialogs.dismiss(context);
+                Future.delayed(Duration(seconds: 1)).then((value) {
+                  Toast.show("Berhasil Menyimpan Data", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                });
               } else {
-                Navigator.of(context).pushNamedAndRemoveUntil('/controllerPage', (route) => false);
+                Dialogs.dismiss(context);
+                Future.delayed(Duration(seconds: 1)).then((value) {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/controllerPage', (route) => false);
+                });
               }
             });
           },

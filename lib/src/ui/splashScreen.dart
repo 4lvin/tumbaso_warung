@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String _token;
-  _authCheckSession(String id, String token) async {
+  _authCheckSession() async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -25,17 +25,22 @@ class _SplashScreenState extends State<SplashScreen> {
           duration: 7, gravity: Toast.BOTTOM);
     }
   }
+
   @override
-  void initState(){
+  void initState() {
+    _authCheckSession();
     getToken().then((value){
-      setState(() {
-        _token= value;
-      });
+      if(mounted)
+        setState(() {
+          _token= value;
+        });
     });
     Timer(Duration(seconds: 2), () {
       _token==null?Navigator.pushReplacementNamed(context, '/login'):Navigator.pushReplacementNamed(context, '/controllerPage');
     });
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

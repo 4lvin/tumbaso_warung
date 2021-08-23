@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
-import 'package:tumbaso_warung/src/ui/home.dart';
+import 'package:tumbaso_warung/src/ui/HomePage.dart';
 import 'package:tumbaso_warung/src/ui/transaksi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/warung.dart';
 
+// ignore: must_be_immutable
 class ControllerPage extends StatefulWidget {
   ControllerPage({this.selected});
   int selected;
@@ -62,11 +63,11 @@ class _ControllerPageState extends State<ControllerPage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.view_headline_outlined), label: 'Produk'),
+              icon: Icon(Icons.view_headline_outlined), label: 'Home'),
           BottomNavigationBarItem(
               icon: Icon(Icons.confirmation_number), label: 'Transaksi'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Pengaturan')
+              icon: Icon(Icons.person), label: 'Akun')
         ],
         elevation: 16,
         unselectedItemColor: const Color(0xFFbdbfbe),

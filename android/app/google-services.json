@@ -1,0 +1,108 @@
+{
+  "project_info": {
+    "project_number": "955467973709",
+    "project_id": "tumbaso",
+    "storage_bucket": "tumbaso.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955467973709:android:982f227a832f9e70c0c804",
+        "android_client_info": {
+          "package_name": "com.jongjava.tumbasno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955467973709-1netpo675ter8n2llgg4ujeqav0rvghk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jongjava.tumbasno",
+            "certificate_hash": "524c48b73ba1a980a1b6b26807040a1d884ba4a5"
+          }
+        },
+        {
+          "client_id": "955467973709-8kiaip7k3p8fmbufqv1atncg5d0o3e5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jongjava.tumbasno",
+            "certificate_hash": "820d5c1b54b47b06980ee74e31d3f86242329aca"
+          }
+        },
+        {
+          "client_id": "955467973709-sa464dhnuvo6dgr0b32d4uhjuhg1gutg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jongjava.tumbasno",
+            "certificate_hash": "82874e9e78c10eb2b5c02d4984e03127b095f590"
+          }
+        },
+        {
+          "client_id": "955467973709-6itr82icnv41fso429p1bqremhkrha8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIdgLdnipD3eeWuo83Z-g3VjKURyInJRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955467973709-6itr82icnv41fso429p1bqremhkrha8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955467973709:android:20f8b98b15a85f71c0c804",
+        "android_client_info": {
+          "package_name": "com.jongjava.tumbaso_warung"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955467973709-52aq35mnlqjdtc0fd0orfakuguuhbq9b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jongjava.tumbaso_warung",
+            "certificate_hash": "82874e9e78c10eb2b5c02d4984e03127b095f590"
+          }
+        },
+        {
+          "client_id": "955467973709-trnl1moimtqnbduuq6h4fj96dch8t72m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jongjava.tumbaso_warung",
+            "certificate_hash": "0587d12d104671b14fccc39b177a2766a2553766"
+          }
+        },
+        {
+          "client_id": "955467973709-6itr82icnv41fso429p1bqremhkrha8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIdgLdnipD3eeWuo83Z-g3VjKURyInJRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955467973709-6itr82icnv41fso429p1bqremhkrha8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

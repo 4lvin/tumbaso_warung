@@ -77,7 +77,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   @override
   void initState() {
     print(widget.history);
-    getUsername().then((value) {
+    getEmail().then((value) {
       blocMember.getTransaksi(value, widget.history);
     });
     super.initState();

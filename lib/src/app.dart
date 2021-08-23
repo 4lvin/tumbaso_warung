@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tumbaso_warung/src/ui/controllerPage.dart';
+import 'package:tumbaso_warung/src/ui/lengkapiProfil.dart';
 import 'package:tumbaso_warung/src/ui/login.dart';
 import 'package:tumbaso_warung/src/ui/splashScreen.dart';
 
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
       routes: <String,WidgetBuilder>{
         '/controllerPage': (BuildContext context)=> new ControllerPage(),
         '/login': (BuildContext context)=> new LoginPage(),
+        '/lengkapiProfil': (BuildContext context)=> new LengkapiProfil(),
       },
     );
   }

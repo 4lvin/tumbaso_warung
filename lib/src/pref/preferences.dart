@@ -45,17 +45,32 @@ Future rmvNama() async {
   return prefs.remove("nama");
 }
 
-Future setUsername(String value) async {
+Future setEmail(String value) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.setString("username", value);
+  return prefs.setString("email", value);
 }
-Future getUsername() async {
+Future getEmail() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  return prefs.getString("username");
+  return prefs.getString("email");
 }
-Future rmvUsername() async {
+Future rmvEmail() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  return prefs.remove("username");
+  return prefs.remove("email");
+}
+
+Future setKdPasmak(String value) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setString("kdpenjualpasmak", value);
+}
+Future getKdPasmak() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  return prefs.getString("kdpenjualpasmak");
+}
+Future rmvKdPasmak() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  return prefs.remove("kdpenjualpasmak");
 }

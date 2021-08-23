@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
+// ignore: must_be_immutable
 class DetailPesanan extends StatefulWidget {
   DetailPesanan({this.pesanan});
 
@@ -28,7 +28,7 @@ class _DetailPesananState extends State<DetailPesanan> {
         token = value;
       });
     });
-    getUsername().then((value) {
+    getEmail().then((value) {
       setState(() {
         username = value;
       });

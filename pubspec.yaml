@@ -33,6 +33,12 @@ dependencies:
   toast: ^0.1.5
   image_picker: ^0.6.7+22  
   page_transition: ^1.1.7+2
+  searchable_dropdown: ^1.1.0
+  firebase_auth: ^0.18.4+1
+  google_sign_in: ^4.5.6
+  firebase_core: ^0.5.3
+  firebase_messaging: ^5.1.6
+  geolocator: ^6.1.13
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +66,7 @@ flutter:
     - assets/loadingcoffee.json
     - assets/open.png
     - assets/close.png
+    - assets/google.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

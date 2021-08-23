@@ -8,21 +8,50 @@ import 'package:tumbaso_warung/src/ui/editProduct.dart';
 import 'package:tumbaso_warung/src/ui/newProduct.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
-class HomePage extends StatefulWidget {
+class ProdukMaem extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _ProdukMaemState createState() => _ProdukMaemState();
 }
 
-class _HomePageState extends State<HomePage> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+class _ProdukMaemState extends State<ProdukMaem> {
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
   List<bool> onOff = [];
   String status;
+  bool onOffw = false;
+  String nama;
+  String token;
+  String username;
+
+  String _image() {
+    String link = "assets/close.png";
+    if (onOffw == false) {
+      link = "assets/open.png";
+    }
+    return link;
+  }
+
+  Color _open() {
+    Color link = Colors.black;
+    if (!onOffw) {
+      link = Colors.green;
+    }
+    return link;
+  }
+
+  Color _close() {
+    Color link = Colors.black;
+    if (onOffw == false) {
+      link = Colors.black;
+    } else {
+      link = Colors.red;
+    }
+    return link;
+  }
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
     getToken().then((token) {
-      getUsername().then((username) {
+      getEmail().then((username) {
         getKdUser().then((kduser) {
           blocMember.status(kduser);
           blocMember.getProduk(username, kduser, token);
@@ -52,7 +81,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onLoading() async {
     getToken().then((token) {
-      getUsername().then((username) {
+      getEmail().then((username) {
         getKdUser().then((kduser) {
           blocMember.status(kduser);
           blocMember.getProduk(username, kduser, token);
@@ -69,11 +98,13 @@ class _HomePageState extends State<HomePage> {
         if (mounted)
           setState(() {
             status = "ada";
+            onOffw = false;
           });
       } else {
         if (mounted)
           setState(() {
             status = "habis";
+            onOffw = true;
           });
       }
     });
@@ -83,7 +114,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getToken().then((token) {
-      getUsername().then((username) {
+      getEmail().then((username) {
+        if(mounted)
+          setState(() {
+            username = username;
+            token = token;
+          });
         getKdUser().then((kduser) {
           blocMember.status(kduser);
           blocMember.getProduk(username, kduser, token);
@@ -109,27 +145,80 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Produk Makanan"),
+          backgroundColor: colorses.dasar,
+        ),
         body: Column(
           children: <Widget>[
             Container(
-              height: 100,
-              width: MediaQuery.of(context).size.width,
-              color: colorses.background,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SafeArea(
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      child: Image.asset(
-                        "assets/iconw.png",
-                        scale: 5,
-                      ),
-                    ),
-                  )
-                ],
+              width: 150,
+              height: 150,
+              child: Image.asset(
+                _image(),
+                color: onOffw ? Colors.red : Colors.green,
               ),
+            ),
+            SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    blocMember.updateStatusToko(username, "1", token);
+                    blocMember.resStatusToko.listen((event) {
+                      if (event.status) {
+                        setState(() {
+                          onOffw = false;
+                        });
+                      }
+                    });
+                  },
+                  child: Text(
+                    'Buka',
+                    style: TextStyle(fontSize: 30, color: _open()),
+                  ),
+                ),
+                Switch(
+                    activeColor: colorses.dasar,
+                    inactiveTrackColor: colorses.kuning,
+                    value: onOffw,
+                    onChanged: (newValue) {
+                      onOffw = newValue;
+                      if (newValue) {
+                        blocMember.updateStatusToko(username, "0", token);
+                        blocMember.resStatusToko.listen((event) {
+                          if (event.status) {
+                            Toast.show("Toko berhasil di Tutup", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                          }
+                        });
+                      } else {
+                        blocMember.updateStatusToko(username, "1", token);
+                        blocMember.resStatusToko.listen((event) {
+                          if (event.status) {
+                            Toast.show("Toko berhasil di Buka", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                          }
+                        });
+                      }
+                      setState(() {});
+                    }),
+                GestureDetector(
+                  onTap: () {
+                    blocMember.updateStatusToko(username, "0", token);
+                    blocMember.resStatusToko.listen((event) {
+                      if (event.status) {
+                        setState(() {
+                          onOffw = true;
+                        });
+                      }
+                    });
+                  },
+                  child: Text(
+                    'Tutup',
+                    style: TextStyle(fontSize: 30, color: _close()),
+                  ),
+                ),
+              ],
             ),
             Expanded(
               child: StreamBuilder(
@@ -159,24 +248,16 @@ class _HomePageState extends State<HomePage> {
                                     return Container(
                                       height: 100,
                                       decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  color: Colors.grey[200]))),
+                                          color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey[200]))),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
                                           InkWell(
                                             onTap: () {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          EditProductPage(
-                                                              produk: snapshot
-                                                                  .data
-                                                                  .data[i])));
+                                                      builder: (context) => EditProductPage(produk: snapshot.data.data[i])));
                                               // Navigator.push(
                                               //     context,
                                               //     PageTransition(
@@ -194,17 +275,11 @@ class _HomePageState extends State<HomePage> {
                                                     width: 80,
                                                     height: 120,
                                                     decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
+                                                        borderRadius: BorderRadius.circular(8),
                                                         image: DecorationImage(
                                                             image: NetworkImage(
                                                               "http://jongjava.tech/tumbas/assets/foto_produk/" +
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[i]
-                                                                      .gambar
-                                                                      .gambar1,
+                                                                  snapshot.data.data[i].gambar.gambar1,
                                                             ),
                                                             // image: NetworkImage(
                                                             //     "https://tumbasonline.com/assets/foto_produk/" +
@@ -216,8 +291,7 @@ class _HomePageState extends State<HomePage> {
                                                             //     ),
                                                             fit: BoxFit.cover)),
                                                   ),
-                                                  snapshot.data.data[i].aktif ==
-                                                          "0"
+                                                  snapshot.data.data[i].aktif == "0"
                                                       ? Container(
                                                           // margin: EdgeInsets.only(top: 5),
                                                           width: 80,
@@ -227,12 +301,7 @@ class _HomePageState extends State<HomePage> {
                                                               child: Text(
                                                             "Habis",
                                                             style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color:
-                                                                    Colors.red,
-                                                                fontSize: 18),
+                                                                fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
                                                           )),
                                                         )
                                                       : Container(
@@ -242,26 +311,16 @@ class _HomePageState extends State<HomePage> {
                                                 ],
                                               ),
                                               title: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   Text(
-                                                    snapshot.data.data[i]
-                                                        .namaProduk,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    snapshot.data.data[i].namaProduk,
+                                                    overflow: TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                     style: TextStyle(
                                                         fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: status ==
-                                                                    "habis" ||
-                                                                snapshot
-                                                                        .data
-                                                                        .data[i]
-                                                                        .aktif ==
-                                                                    "0"
+                                                        fontWeight: FontWeight.bold,
+                                                        color: status == "habis" || snapshot.data.data[i].aktif == "0"
                                                             ? Colors.grey
                                                             : Colors.black),
                                                   ),
@@ -269,21 +328,12 @@ class _HomePageState extends State<HomePage> {
                                                     height: 8,
                                                   ),
                                                   Text(
-                                                    "Rp. " +
-                                                        snapshot.data.data[i]
-                                                            .hargaJual,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    "Rp. " + snapshot.data.data[i].hargaJual,
+                                                    overflow: TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                     style: TextStyle(
                                                         fontSize: 14,
-                                                        color: status ==
-                                                                    "habis" ||
-                                                                snapshot
-                                                                        .data
-                                                                        .data[i]
-                                                                        .aktif ==
-                                                                    "0"
+                                                        color: status == "habis" || snapshot.data.data[i].aktif == "0"
                                                             ? Colors.grey
                                                             : Colors.black),
                                                   )
@@ -297,101 +347,50 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               trailing: Switch(
                                                   activeColor: colorses.dasar,
-                                                  inactiveTrackColor:
-                                                      colorses.kuning,
+                                                  inactiveTrackColor: colorses.kuning,
                                                   value: onOff[i],
                                                   onChanged: (newValue) {
                                                     onOff[i] = newValue;
                                                     if (newValue) {
-                                                      getUsername()
-                                                          .then((user) {
-                                                        getToken()
-                                                            .then((token) {
-                                                          blocMember
-                                                              .updateStatusProduk(
-                                                                  user,
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[i]
-                                                                      .idProduk,
-                                                                  "0",
-                                                                  token);
+                                                      getEmail().then((user) {
+                                                        getToken().then((token) {
+                                                          blocMember.updateStatusProduk(
+                                                              user, snapshot.data.data[i].idProduk, "0", token);
                                                         });
                                                       });
-                                                      blocMember
-                                                          .resUpdateStatusProduk
-                                                          .listen((event) {
+                                                      blocMember.resUpdateStatusProduk.listen((event) {
                                                         if (event.status) {
-                                                          getToken()
-                                                              .then((token) {
-                                                            getUsername().then(
-                                                                (username) {
-                                                              getKdUser().then(
-                                                                  (kduser) {
-                                                                blocMember
-                                                                    .status(
-                                                                        kduser);
-                                                                blocMember
-                                                                    .getProduk(
-                                                                        username,
-                                                                        kduser,
-                                                                        token);
+                                                          getToken().then((token) {
+                                                            getEmail().then((username) {
+                                                              getKdUser().then((kduser) {
+                                                                blocMember.status(kduser);
+                                                                blocMember.getProduk(username, kduser, token);
                                                               });
                                                             });
                                                           });
-                                                          Toast.show(
-                                                              "Produk di set habis!",
-                                                              context,
-                                                              duration: Toast
-                                                                  .LENGTH_LONG,
-                                                              gravity:
-                                                                  Toast.BOTTOM);
+                                                          Toast.show("Produk di set habis!", context,
+                                                              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                                                         }
                                                       });
                                                     } else {
-                                                      getUsername()
-                                                          .then((user) {
-                                                        getToken()
-                                                            .then((token) {
-                                                          blocMember
-                                                              .updateStatusProduk(
-                                                                  user,
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[i]
-                                                                      .idProduk,
-                                                                  "1",
-                                                                  token);
+                                                      getEmail().then((user) {
+                                                        getToken().then((token) {
+                                                          blocMember.updateStatusProduk(
+                                                              user, snapshot.data.data[i].idProduk, "1", token);
                                                         });
                                                       });
-                                                      blocMember
-                                                          .resUpdateStatusProduk
-                                                          .listen((event) {
+                                                      blocMember.resUpdateStatusProduk.listen((event) {
                                                         if (event.status) {
-                                                          getToken()
-                                                              .then((token) {
-                                                            getUsername().then(
-                                                                (username) {
-                                                              getKdUser().then(
-                                                                  (kduser) {
-                                                                blocMember
-                                                                    .status(
-                                                                        kduser);
-                                                                blocMember
-                                                                    .getProduk(
-                                                                        username,
-                                                                        kduser,
-                                                                        token);
+                                                          getToken().then((token) {
+                                                            getEmail().then((username) {
+                                                              getKdUser().then((kduser) {
+                                                                blocMember.status(kduser);
+                                                                blocMember.getProduk(username, kduser, token);
                                                               });
                                                             });
                                                           });
-                                                          Toast.show(
-                                                              "Produk di set ada!",
-                                                              context,
-                                                              duration: Toast
-                                                                  .LENGTH_LONG,
-                                                              gravity:
-                                                                  Toast.BOTTOM);
+                                                          Toast.show("Produk di set ada!", context,
+                                                              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                                                         }
                                                       });
                                                     }
