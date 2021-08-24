@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
@@ -436,14 +437,28 @@ class _ProdukMaemState extends State<ProdukMaem> {
             ),
           ],
         ),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: () {
+        floatingActionButton: InkWell(
+          onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewProductPage()),
             );
           },
-          child: const Icon(Icons.add),
+          child: new Container(
+            width: 150,
+            height: 45,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: colorses.dasar
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset("assets/dinner.png",color: Colors.black, width: 20, height: 20,),
+                Text("Tambah menu",style: TextStyle(color: Colors.white),)
+              ],
+            ),
+          ),
         ));
   }
 }

@@ -63,7 +63,7 @@ class _NewProductPageState extends State<NewProductPage> {
         body: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10.0,bottom: 60),
+              padding: EdgeInsets.only(top: 10.0, bottom: 60),
               child: Column(
                 children: [
                   Container(
@@ -107,8 +107,9 @@ class _NewProductPageState extends State<NewProductPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -124,8 +125,9 @@ class _NewProductPageState extends State<NewProductPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: DropdownButton(
@@ -151,8 +153,9 @@ class _NewProductPageState extends State<NewProductPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: DropdownButton(
@@ -179,8 +182,9 @@ class _NewProductPageState extends State<NewProductPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -197,8 +201,9 @@ class _NewProductPageState extends State<NewProductPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -216,7 +221,7 @@ class _NewProductPageState extends State<NewProductPage> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -232,8 +237,9 @@ class _NewProductPageState extends State<NewProductPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: colorses.dasar,
+                      border: Border.all(color: colorses.dasar, width: 1.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(

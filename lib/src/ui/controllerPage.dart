@@ -1,6 +1,8 @@
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/ui/HomePage.dart';
+import 'package:tumbaso_warung/src/ui/historyPage.dart';
 import 'package:tumbaso_warung/src/ui/transaksi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/warung.dart';
@@ -21,6 +23,7 @@ class _ControllerPageState extends State<ControllerPage> {
   final List<Widget> _widgetOptions = [
     HomePage(),
     TransaksiPage(),
+    HistoryPage(),
     WarungPage()
   ];
 
@@ -59,21 +62,33 @@ class _ControllerPageState extends State<ControllerPage> {
             child: _widgetOptions[_selectedIndex],
           ),
           onWillPop: _onWillPop),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.view_headline_outlined), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.confirmation_number), label: 'Transaksi'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'Akun')
+      bottomNavigationBar: FloatingNavbar(
+        // type: BottomNavigationBarType.fixed,
+        items:[
+          FloatingNavbarItem(
+            icon: Icons.home,
+            title: 'Home',
+          ),
+          FloatingNavbarItem(
+            icon: Icons.confirmation_number,
+            title: 'Transaksi',
+          ),
+          FloatingNavbarItem(
+            icon: Icons.history,
+            title: 'History',
+          ),
+          FloatingNavbarItem(
+            icon: Icons.person_outline,
+            title: 'Akun',
+          ),
         ],
-        elevation: 16,
+        borderRadius: 12,
+        // elevation: 16,
         unselectedItemColor: const Color(0xFFbdbfbe),
-        backgroundColor: Colors.white,
+        backgroundColor: colorses.dasar,
+        selectedBackgroundColor: colorses.orange,
         currentIndex: _selectedIndex,
-        selectedItemColor: colorses.dasar,
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );

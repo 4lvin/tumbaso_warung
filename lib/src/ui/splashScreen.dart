@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
@@ -48,9 +49,12 @@ class _SplashScreenState extends State<SplashScreen> {
         color: colorses.dasar,
         child: Center(
           child: Container(
-            width: 300,
-            height: 300,
-            child: Image.asset("assets/iconw.png"),
+            width: 200,
+            height: 200,
+            child: SvgPicture.asset(
+                "assets/warung.svg",
+                semanticsLabel: 'Acme Logo'
+            ),
           ),
         ),
       ),

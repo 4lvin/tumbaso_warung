@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:toast/toast.dart';
@@ -92,10 +93,13 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     SafeArea(
                       child: Container(
-                        height: 250,
+                        height: 200,
                         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
                         width: MediaQuery.of(context).size.width,
-                        child: Image.asset("assets/baru2.png"),
+                        child: SvgPicture.asset(
+                            "assets/warung.svg",
+                            semanticsLabel: 'Acme Logo'
+                        ),
                       ),
                     ),
                     SizedBox(height: 12,),
