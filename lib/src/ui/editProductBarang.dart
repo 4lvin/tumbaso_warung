@@ -7,15 +7,20 @@ import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
+import 'package:tumbaso_warung/src/models/getBarangModel.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/loading.dart';
 
-class NewProductBarang extends StatefulWidget {
+class EditProductBarang extends StatefulWidget {
+  final DatumBarang barang;
+
+  EditProductBarang({this.barang});
+
   @override
-  _NewProductBarangState createState() => _NewProductBarangState();
+  _EditProductBarangState createState() => _EditProductBarangState();
 }
 
-class _NewProductBarangState extends State<NewProductBarang> {
+class _EditProductBarangState extends State<EditProductBarang> {
   PickedFile imageFile;
 
   String kategori;
@@ -42,6 +47,24 @@ class _NewProductBarangState extends State<NewProductBarang> {
 
   @override
   void initState() {
+    super.initState();
+    getKategori();
+    initEdit();
+  }
+
+  initEdit() {
+    nama.text = widget.barang.namaProduk;
+    harga.text = widget.barang.harga;
+    // berat.text = widget.barang.berat;
+    // deskripsi.text = widget.barang.deskripsi;
+    satuan.text = widget.barang.satuan;
+    keterangan.text = widget.barang.keterangan;
+    minimum.text = widget.barang.minimum;
+
+    setState(() {});
+  }
+
+  getKategori() {
     blocProdukPasmak.getKategoriBarang();
     blocProdukPasmak.resKategori.listen((event) {
       if (mounted)
@@ -49,7 +72,6 @@ class _NewProductBarangState extends State<NewProductBarang> {
           _listKategori = event;
         });
     });
-    super.initState();
   }
 
   getSubkategori(idKategori) {

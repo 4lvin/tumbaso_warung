@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as client;
+import 'package:tumbaso_warung/src/models/getBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getEkspedisiModel.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getKecamatanModel.dart';
@@ -36,7 +37,8 @@ class ApiProviders {
     var body = jsonEncode({'id_kategori': idKategori});
     try {
       final checkid = await client
-          .post("$url/produk/get_subkategori", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url/produk/get_subkategori",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return ResSubkategoriModel.fromJson(json.decode(checkid.body));
@@ -59,11 +61,13 @@ class ApiProviders {
   }
 
   Future login(String username, String password) async {
-    var body = jsonEncode({'username': username, 'password': password, "token": ""});
+    var body =
+        jsonEncode({'username': username, 'password': password, "token": ""});
     try {
       print("$url/penjual/login");
       final checkid = await client
-          .post("$url/penjual/login", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url/penjual/login",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return ResLoginModel.fromJson(json.decode(checkid.body));
@@ -89,7 +93,8 @@ class ApiProviders {
     var body = jsonEncode({'id_penjual': idPenjual});
     try {
       final checkid = await client
-          .post("$url/penjual/get_penjual", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url/penjual/get_penjual",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return GetStatusModel.fromJson(json.decode(checkid.body));
@@ -115,7 +120,12 @@ class ApiProviders {
     var body = jsonEncode({'username': username, 'status': status});
     try {
       final checkid = await client
-          .post("$url/penjual/put_status_toko", headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
+          .post("$url/penjual/put_status_toko",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+              },
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return ResUpdateStatusTokoModel.fromJson(json.decode(checkid.body));
@@ -142,7 +152,11 @@ class ApiProviders {
     try {
       final checkid = await client
           .post("$url/penjual/get_produk_penjual",
-              headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+              },
+              body: body)
           .timeout(const Duration(seconds: 11));
       print(checkid.body);
       print(token);
@@ -172,7 +186,8 @@ class ApiProviders {
     var body = jsonEncode({'id_penjual': idPenjual});
     try {
       final checkid = await client
-          .post("$url/penjual/get_setor", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url/penjual/get_setor",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return GetSetoranModel.fromJson(json.decode(checkid.body));
@@ -200,7 +215,12 @@ class ApiProviders {
     });
     try {
       final checkid = await client
-          .post("$url/penjual/get_transaksi", headers: {"Content-Type": "application/json", "Authorization": _token}, body: body)
+          .post("$url/penjual/get_transaksi",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
           .timeout(const Duration(seconds: 13));
       if (checkid.statusCode == 200) {
         return GetTransaksiModel.fromJson(json.decode(checkid.body));
@@ -222,12 +242,18 @@ class ApiProviders {
     }
   }
 
-  Future updateStatusProduk(String username, String idProduk, String status, String token) async {
-    var body = jsonEncode({'username': username, 'id_produk': idProduk, 'status': status});
+  Future updateStatusProduk(
+      String username, String idProduk, String status, String token) async {
+    var body = jsonEncode(
+        {'username': username, 'id_produk': idProduk, 'status': status});
     try {
       final checkid = await client
           .post("$url/penjual/put_status_produk",
-              headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+              },
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return ResUpdateStatusProdukModel.fromJson(json.decode(checkid.body));
@@ -249,7 +275,14 @@ class ApiProviders {
     }
   }
 
-  Future simpanProduk(File file, String kategori, String subkategori, String nama, String harga, String berat, String deskripsi,
+  Future simpanProduk(
+      File file,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String berat,
+      String deskripsi,
       String potongan) async {
     String _token;
     String _username;
@@ -310,8 +343,16 @@ class ApiProviders {
     }
   }
 
-  Future updateProduct(File file, String _idproduk, String kategori, String subkategori, String nama, String harga, String berat,
-      String deskripsi, String potongan) async {
+  Future updateProduct(
+      File file,
+      String _idproduk,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String berat,
+      String deskripsi,
+      String potongan) async {
     String _token;
     String _username;
     await getToken().then((value) {
@@ -373,8 +414,9 @@ class ApiProviders {
 
   Future getProvinsi() async {
     try {
-      final prov = await client
-          .post("$url/umum/get_provinsi", headers: {"Content-Type": "application/json"}).timeout(const Duration(seconds: 11));
+      final prov = await client.post("$url/umum/get_provinsi", headers: {
+        "Content-Type": "application/json"
+      }).timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetProvinsiModel.fromJson(json.decode(prov.body));
       } else {
@@ -397,7 +439,10 @@ class ApiProviders {
     try {
       var body = jsonEncode({'id_provinsi': kodeProv});
       final data = await client.post("$url/umum/get_kabupaten",
-          body: body, headers: {"Content-Type": "application/json"}).timeout(const Duration(seconds: 11));
+          body: body,
+          headers: {
+            "Content-Type": "application/json"
+          }).timeout(const Duration(seconds: 11));
       print(data.body);
       if (data.statusCode == 200) {
         return GetKotaModel.fromJson(json.decode(data.body));
@@ -421,7 +466,10 @@ class ApiProviders {
     try {
       var body = jsonEncode({'id_kabupaten': kodeKota});
       final data = await client.post("$url/umum/get_kecamatan",
-          body: body, headers: {"Content-Type": "application/json"}).timeout(const Duration(seconds: 11));
+          body: body,
+          headers: {
+            "Content-Type": "application/json"
+          }).timeout(const Duration(seconds: 11));
       if (data.statusCode == 200) {
         return GetKecamatanModel.fromJson(json.decode(data.body));
       } else {
@@ -440,11 +488,14 @@ class ApiProviders {
     }
   }
 
-  Future loginWithGmail(String email, String foto, String nama, String token) async {
-    var body = jsonEncode({'email': email, 'foto': foto, 'nama': nama, 'token': token});
+  Future loginWithGmail(
+      String email, String foto, String nama, String token) async {
+    var body = jsonEncode(
+        {'email': email, 'foto': foto, 'nama': nama, 'token': token});
     try {
       final checkId = await client
-          .post("$url/penjual/login_gmail", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url/penjual/login_gmail",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       print(checkId.body);
       if (checkId.statusCode == 200) {
@@ -467,8 +518,18 @@ class ApiProviders {
     }
   }
 
-  Future lengkapiProfil(String email, String nama, String provinsiId, String kotaId, String kecId, String alamat,
-      String longitude, String latitude, String telephone, String kurir, String token) async {
+  Future lengkapiProfil(
+      String email,
+      String nama,
+      String provinsiId,
+      String kotaId,
+      String kecId,
+      String alamat,
+      String longitude,
+      String latitude,
+      String telephone,
+      String kurir,
+      String token) async {
     var body = jsonEncode({
       'email': email,
       'nama': nama,
@@ -483,7 +544,12 @@ class ApiProviders {
     });
     try {
       final checkId = await client
-          .post("$url/penjual/ubah_profil", headers: {"Content-Type": "application/json", "Authorization": token}, body: body)
+          .post("$url/penjual/ubah_profil",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+              },
+              body: body)
           .timeout(const Duration(seconds: 11));
       print(body);
       print(checkId.body);
@@ -510,7 +576,9 @@ class ApiProviders {
   Future getKategoriBarang() async {
     try {
       final prov = await client.post("$url2/umum/get_kategori_produk",
-          headers: {"Content-Type": "application/json"}).timeout(const Duration(seconds: 11));
+          headers: {
+            "Content-Type": "application/json"
+          }).timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetKategoriBarangModel.fromJson(json.decode(prov.body));
       } else {
@@ -535,7 +603,8 @@ class ApiProviders {
     });
     try {
       final prov = await client
-          .post("$url2/umum/get_subkategori_produk", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url2/umum/get_subkategori_produk",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetSubKategoriBarangModel.fromJson(json.decode(prov.body));
@@ -555,8 +624,57 @@ class ApiProviders {
     }
   }
 
-  Future simpanProdukBarang(File file, String kategori, String subkategori, String nama, String harga, String satuan,
-      String berat, String deskripsi, String keterangan, String minimum) async {
+  Future getBarang() async {
+    String _idPenjual;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getKdPasmak().then((value) {
+      _idPenjual = value;
+    });
+    var body = jsonEncode({
+      'id_penjual': _idPenjual,
+    });
+    try {
+      final barang = await client
+          .post("$url2/produk/get_produk",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (barang.statusCode == 200) {
+        // print(barang.body);
+        return GetBarangModel.fromJson(json.decode(barang.body));
+      } else {
+        throw Exception('Failed to load Login');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future simpanProdukBarang(
+      File file,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String satuan,
+      String berat,
+      String deskripsi,
+      String keterangan,
+      String minimum) async {
     String _token;
     String _username;
     await getToken().then((value) {
@@ -566,7 +684,7 @@ class ApiProviders {
       _username = value;
     });
     try {
-      var uri = Uri.parse("$url/penjual/create_produk");
+      var uri = Uri.parse("$url2/penjual/create_produk");
       var request = new client.MultipartRequest("POST", uri);
       request.headers['authorization'] = _token;
 
@@ -622,7 +740,8 @@ class ApiProviders {
     });
     try {
       final prov = await client
-          .post("$url2/penjual/get_profil", headers: {"Content-Type": "application/json"}, body: body)
+          .post("$url2/penjual/get_profil",
+              headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetProfilModel.fromJson(json.decode(prov.body));
@@ -644,8 +763,9 @@ class ApiProviders {
 
   Future getEkspedisi() async {
     try {
-      final prov = await client
-          .post("$url2/umum/get_kurir", headers: {"Content-Type": "application/json"}).timeout(const Duration(seconds: 11));
+      final prov = await client.post("$url2/umum/get_kurir", headers: {
+        "Content-Type": "application/json"
+      }).timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetEkspedisiModel.fromJson(json.decode(prov.body));
       } else {
