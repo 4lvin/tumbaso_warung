@@ -123,8 +123,8 @@ class _EditProfilState extends State<EditProfil> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: colorses.dasar,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
               ),
               child: TextField(
                 controller: _nama,
@@ -142,8 +142,8 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                color: colorses.dasar,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
               ),
               child: StreamBuilder(
                   stream: blocMember.resProvinsi,
@@ -189,8 +189,8 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                color: colorses.dasar,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
               ),
               child: StreamBuilder(
                   stream: blocMember.resKota,
@@ -237,8 +237,8 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                color: colorses.dasar,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
               ),
               child: StreamBuilder(
                   stream: blocMember.resKecamatan,
@@ -328,8 +328,8 @@ class _EditProfilState extends State<EditProfil> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: colorses.dasar,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
               ),
               child: TextField(
                 controller: _noTelp,
@@ -346,8 +346,8 @@ class _EditProfilState extends State<EditProfil> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: colorses.dasar,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
               ),
               child: TextField(
                 controller: _alamat,
@@ -405,8 +405,8 @@ class _EditProfilState extends State<EditProfil> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: colorses.dasar,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 2, color: colorses.dasar),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,7 +461,7 @@ class _EditProfilState extends State<EditProfil> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: colorses.dasar,
+                  color: colorses.orange,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
