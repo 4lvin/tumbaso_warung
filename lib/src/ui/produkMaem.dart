@@ -115,15 +115,15 @@ class _ProdukMaemState extends State<ProdukMaem> {
   @override
   void initState() {
     getToken().then((token) {
-      getEmail().then((username) {
+      getEmail().then((email) {
         if (mounted)
           setState(() {
-            username = username;
+            username = email;
             token = token;
           });
         getKdUser().then((kduser) {
           blocMember.status(kduser);
-          blocMember.getProduk(username, kduser, token);
+          blocMember.getProduk(email, kduser, token);
         });
       });
     });
@@ -216,66 +216,6 @@ class _ProdukMaemState extends State<ProdukMaem> {
               ),
             ),
             SizedBox(height: 15),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     GestureDetector(
-            //       onTap: () {
-            //         blocMember.updateStatusToko(username, "1", token);
-            //         blocMember.resStatusToko.listen((event) {
-            //           if (event.status) {
-            //             setState(() {
-            //               onOffw = false;
-            //             });
-            //           }
-            //         });
-            //       },
-            //       child: Text(
-            //         'Buka',
-            //         style: TextStyle(fontSize: 30, color: _open()),
-            //       ),
-            //     ),
-            //     Switch(
-            //         activeColor: colorses.dasar,
-            //         inactiveTrackColor: colorses.orange,
-            //         value: onOffw,
-            //         onChanged: (newValue) {
-            //           onOffw = newValue;
-            //           if (newValue) {
-            //             blocMember.updateStatusToko(username, "0", token);
-            //             blocMember.resStatusToko.listen((event) {
-            //               if (event.status) {
-            //                 Toast.show("Toko berhasil di Tutup", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-            //               }
-            //             });
-            //           } else {
-            //             blocMember.updateStatusToko(username, "1", token);
-            //             blocMember.resStatusToko.listen((event) {
-            //               if (event.status) {
-            //                 Toast.show("Toko berhasil di Buka", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-            //               }
-            //             });
-            //           }
-            //           setState(() {});
-            //         }),
-            //     GestureDetector(
-            //       onTap: () {
-            //         blocMember.updateStatusToko(username, "0", token);
-            //         blocMember.resStatusToko.listen((event) {
-            //           if (event.status) {
-            //             setState(() {
-            //               onOffw = true;
-            //             });
-            //           }
-            //         });
-            //       },
-            //       child: Text(
-            //         'Tutup',
-            //         style: TextStyle(fontSize: 30, color: _close()),
-            //       ),
-            //     ),
-            //   ],
-            // ),
             Expanded(
               child: StreamBuilder(
                   stream: blocMember.listProduk,
@@ -356,7 +296,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   height: 28,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left:8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
                     "Tambah menu",
                     style: TextStyle(color: Colors.white),
@@ -383,21 +323,36 @@ class _ProdukMaemState extends State<ProdukMaem> {
       ),
       child: Row(
         children: [
-          Container(
-            width: 80,
-            height: 80,
-            margin: EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: 'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}' !=
-                    'https://jongjava.tech/tumbas/assets/foto_produk/no_image.png'
-                    ? NetworkImage(
-                    'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}')
-                    : AssetImage('assets/baru2.png'),
+          Stack(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                margin: EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: 'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}' !=
+                            'https://jongjava.tech/tumbas/assets/foto_produk/no_image.png'
+                        ? NetworkImage('https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}')
+                        : AssetImage('assets/baru2.png'),
+                  ),
+                ),
               ),
-            ),
+              makanan.aktif=="0"?Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 80,
+                  height: 81,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white60
+                  ),
+                  child: Center(child: Text("Habis",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),)),
+                ),
+              ):Container()
+            ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -408,7 +363,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                 children: [
                   Text(
                     makanan.namaProduk,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16,color: makanan.aktif=="1"?Colors.black:Colors.grey),
                   ),
                   Text(
                     makanan.deskripsi,
@@ -418,7 +373,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
               ),
               Text(
                 'Rp. ${makanan.hargaJual}',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16,color: makanan.aktif=="1"?Colors.black:Colors.grey),
               ),
             ],
           ),
@@ -444,7 +399,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      makanan.aktif == 'Y' ? Color(0xFF68A29D) : colorses.orange,
+                      makanan.aktif == '0' ? Color(0xFF68A29D) : colorses.orange,
                     ),
                     elevation: MaterialStateProperty.all(2),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -453,9 +408,51 @@ class _ProdukMaemState extends State<ProdukMaem> {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (makanan.aktif == "1") {
+                      getEmail().then((user) {
+                        getToken().then((token) {
+                          blocMember.updateStatusProduk(user, makanan.idProduk, "0", token);
+                        });
+                      });
+                      blocMember.resUpdateStatusProduk.listen((event) {
+                        if (event.status) {
+                          getToken().then((token) {
+                            getEmail().then((username) {
+                              getKdUser().then((kduser) {
+                                blocMember.status(kduser);
+                                blocMember.getProduk(username, kduser, token);
+                              });
+                            });
+                          });
+                          Toast.show("Produk di set habis!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        }
+                      });
+                    } else {
+                      getEmail().then((user) {
+                        getToken().then((token) {
+                          blocMember.updateStatusProduk(user, makanan.idProduk, "1", token);
+                        });
+                      });
+                      blocMember.resUpdateStatusProduk.listen((event) {
+                        if (event.status) {
+                          getToken().then((token) {
+                            getEmail().then((username) {
+                              getKdUser().then((kduser) {
+                                blocMember.status(kduser);
+                                blocMember.getProduk(username, kduser, token);
+                              });
+                            });
+                          });
+                          Toast.show("Produk di set ada!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        }
+                      });
+                    }
+                    if(mounted)
+                    setState(() {});
+                  },
                   child: Text(
-                    makanan.aktif == 'Y' ? 'Tersedia' : 'Habis',
+                    makanan.aktif == '0' ? 'Tersedia' : 'Habis',
                     style: TextStyle(fontSize: 12),
                   ),
                 ),
@@ -470,10 +467,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
   void handleClick(int item, Datum barang) {
     switch (item) {
       case 0:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditProductPage(produk: barang)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProductPage(produk: barang)));
         break;
       case 1:
         break;
