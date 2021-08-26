@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
@@ -81,71 +82,87 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              InkWell(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          duration: Duration(milliseconds: 200),
-                          child: ProdukMaem()));
-                },
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 3,
-                          offset: Offset(3, 5), // Shadow position
+              Column(
+                children: [
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              duration: Duration(milliseconds: 200),
+                              child: ProdukMaem()));
+                    },
+                    child: Container(
+                      width: 130,
+                      height: 130,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: colorses.orange,width: 3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3,
+                              offset: Offset(3, 5), // Shadow position
+                            ),
+                          ]
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: 70,
+                          width: 70,
+                          child: Image.asset(
+                              "assets/ic-menu-makan.png",
+                          ),
                         ),
-                      ]
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.fastfood_outlined,size: 30,),
-                      SizedBox(height: 5,),
-                      Text("Makanan")
-                    ],
-                  ),
-                ),
+                  SizedBox(height: 12,),
+                  Text("Makanan",style: TextStyle(fontSize: 16),)
+                ],
               ),
-              InkWell(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          duration: Duration(milliseconds: 200),
-                          child: ProdukBarang()));
-                },
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 3,
-                          offset: Offset(3, 5), // Shadow position
+              Column(
+                children: [
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              duration: Duration(milliseconds: 200),
+                              child: ProdukBarang()));
+                    },
+                    child: Container(
+                      width: 130,
+                      height: 130,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: colorses.orange,width: 3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3,
+                              offset: Offset(3, 5), // Shadow position
+                            ),
+                          ]
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: 70,
+                          width: 70,
+                          child: Image.asset(
+                            "assets/ic-menu-barang.png",
+                          ),
                         ),
-                      ]
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.shopping_basket_outlined,size: 30),
-                      SizedBox(height: 5,),
-                      Text("Barang")
-                    ],
-                  ),
-                ),
+                  SizedBox(height: 12,),
+                  Text("Barang",style: TextStyle(fontSize: 16),)
+                ],
               )
             ],
           ),

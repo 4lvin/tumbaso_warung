@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
@@ -114,15 +115,15 @@ class _ProdukMaemState extends State<ProdukMaem> {
   @override
   void initState() {
     getToken().then((token) {
-      getEmail().then((username) {
-        if(mounted)
+      getEmail().then((email) {
+        if (mounted)
           setState(() {
-            username = username;
+            username = email;
             token = token;
           });
         getKdUser().then((kduser) {
           blocMember.status(kduser);
-          blocMember.getProduk(username, kduser, token);
+          blocMember.getProduk(email, kduser, token);
         });
       });
     });
@@ -144,6 +145,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Text("Produk Makanan"),
@@ -152,74 +154,68 @@ class _ProdukMaemState extends State<ProdukMaem> {
         body: Column(
           children: <Widget>[
             Container(
-              width: 150,
-              height: 150,
-              child: Image.asset(
-                _image(),
-                color: onOffw ? Colors.red : Colors.green,
-              ),
-            ),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    blocMember.updateStatusToko(username, "1", token);
-                    blocMember.resStatusToko.listen((event) {
-                      if (event.status) {
-                        setState(() {
-                          onOffw = false;
-                        });
-                      }
-                    });
-                  },
-                  child: Text(
-                    'Buka',
-                    style: TextStyle(fontSize: 30, color: _open()),
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.all(12),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(color: colorses.dasar, width: 1.5)),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset(
+                          _image(),
+                          color: onOffw ? Colors.red : Colors.green,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(left: 12),
+                          width: MediaQuery.of(context).size.width - 130,
+                          child: Text(
+                            "Warung anda sekarang buka, apakah anda ingin menutup warung?",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ))
+                    ],
                   ),
-                ),
-                Switch(
-                    activeColor: colorses.dasar,
-                    inactiveTrackColor: colorses.orange,
-                    value: onOffw,
-                    onChanged: (newValue) {
-                      onOffw = newValue;
-                      if (newValue) {
-                        blocMember.updateStatusToko(username, "0", token);
-                        blocMember.resStatusToko.listen((event) {
-                          if (event.status) {
-                            Toast.show("Toko berhasil di Tutup", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                          }
-                        });
-                      } else {
+                  InkWell(
+                    onTap: () {
+                      if (onOffw) {
                         blocMember.updateStatusToko(username, "1", token);
                         blocMember.resStatusToko.listen((event) {
                           if (event.status) {
-                            Toast.show("Toko berhasil di Buka", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                            setState(() {
+                              onOffw = false;
+                            });
+                          }
+                        });
+                      } else {
+                        blocMember.updateStatusToko(username, "0", token);
+                        blocMember.resStatusToko.listen((event) {
+                          if (event.status) {
+                            setState(() {
+                              onOffw = true;
+                            });
                           }
                         });
                       }
-                      setState(() {});
-                    }),
-                GestureDetector(
-                  onTap: () {
-                    blocMember.updateStatusToko(username, "0", token);
-                    blocMember.resStatusToko.listen((event) {
-                      if (event.status) {
-                        setState(() {
-                          onOffw = true;
-                        });
-                      }
-                    });
-                  },
-                  child: Text(
-                    'Tutup',
-                    style: TextStyle(fontSize: 30, color: _close()),
-                  ),
-                ),
-              ],
+                    },
+                    child: Container(
+                        width: MediaQuery.of(context).size.width - 50,
+                        child: Text(
+                          "${onOffw ? "Buka Sekarang" : "Tutup Sekarang"}",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontWeight: FontWeight.bold, color: colorses.orange),
+                        )),
+                  )
+                ],
+              ),
             ),
+            SizedBox(height: 15),
             Expanded(
               child: StreamBuilder(
                   stream: blocMember.listProduk,
@@ -245,163 +241,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                                     } else {
                                       onOff.add(true);
                                     }
-                                    return Container(
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey[200]))),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => EditProductPage(produk: snapshot.data.data[i])));
-                                              // Navigator.push(
-                                              //     context,
-                                              //     PageTransition(
-                                              //         type: PageTransitionType.rightToLeft,
-                                              //         inheritTheme: true,
-                                              //         ctx: context,
-                                              //         duration: Duration(milliseconds: 400),
-                                              //         child: DetailPesanan(pesanan: snapshot.data.data[i],)));
-                                            },
-                                            child: ListTile(
-                                              leading: Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                    // margin: EdgeInsets.only(top: 5),
-                                                    width: 80,
-                                                    height: 120,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(8),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(
-                                                              "http://jongjava.tech/tumbas/assets/foto_produk/" +
-                                                                  snapshot.data.data[i].gambar.gambar1,
-                                                            ),
-                                                            // image: NetworkImage(
-                                                            //     "https://tumbasonline.com/assets/foto_produk/" +
-                                                            //         snapshot
-                                                            //             .data
-                                                            //             .data[i]
-                                                            //             .gambar
-                                                            //             .gambar1,
-                                                            //     ),
-                                                            fit: BoxFit.cover)),
-                                                  ),
-                                                  snapshot.data.data[i].aktif == "0"
-                                                      ? Container(
-                                                          // margin: EdgeInsets.only(top: 5),
-                                                          width: 80,
-                                                          height: 120,
-                                                          color: Colors.white54,
-                                                          child: Center(
-                                                              child: Text(
-                                                            "Habis",
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
-                                                          )),
-                                                        )
-                                                      : Container(
-                                                          height: 50,
-                                                          width: 50,
-                                                        )
-                                                ],
-                                              ),
-                                              title: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                    snapshot.data.data[i].namaProduk,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: status == "habis" || snapshot.data.data[i].aktif == "0"
-                                                            ? Colors.grey
-                                                            : Colors.black),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Text(
-                                                    "Rp. " + snapshot.data.data[i].hargaJual,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: status == "habis" || snapshot.data.data[i].aktif == "0"
-                                                            ? Colors.grey
-                                                            : Colors.black),
-                                                  )
-                                                  // Text(
-                                                  //   formatDate,
-                                                  //   overflow: TextOverflow.ellipsis,
-                                                  //   maxLines: 2,
-                                                  //   style: TextStyle(fontSize: 12),
-                                                  // ),
-                                                ],
-                                              ),
-                                              trailing: Switch(
-                                                  activeColor: colorses.dasar,
-                                                  inactiveTrackColor: colorses.orange,
-                                                  value: onOff[i],
-                                                  onChanged: (newValue) {
-                                                    onOff[i] = newValue;
-                                                    if (newValue) {
-                                                      getEmail().then((user) {
-                                                        getToken().then((token) {
-                                                          blocMember.updateStatusProduk(
-                                                              user, snapshot.data.data[i].idProduk, "0", token);
-                                                        });
-                                                      });
-                                                      blocMember.resUpdateStatusProduk.listen((event) {
-                                                        if (event.status) {
-                                                          getToken().then((token) {
-                                                            getEmail().then((username) {
-                                                              getKdUser().then((kduser) {
-                                                                blocMember.status(kduser);
-                                                                blocMember.getProduk(username, kduser, token);
-                                                              });
-                                                            });
-                                                          });
-                                                          Toast.show("Produk di set habis!", context,
-                                                              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                                                        }
-                                                      });
-                                                    } else {
-                                                      getEmail().then((user) {
-                                                        getToken().then((token) {
-                                                          blocMember.updateStatusProduk(
-                                                              user, snapshot.data.data[i].idProduk, "1", token);
-                                                        });
-                                                      });
-                                                      blocMember.resUpdateStatusProduk.listen((event) {
-                                                        if (event.status) {
-                                                          getToken().then((token) {
-                                                            getEmail().then((username) {
-                                                              getKdUser().then((kduser) {
-                                                                blocMember.status(kduser);
-                                                                blocMember.getProduk(username, kduser, token);
-                                                              });
-                                                            });
-                                                          });
-                                                          Toast.show("Produk di set ada!", context,
-                                                              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                                                        }
-                                                      });
-                                                    }
-                                                    setState(() {});
-                                                  }),
-                                            ),
-                                          ),
-//                              Divider(),
-                                        ],
-                                      ),
-                                    );
+                                    return buildItems(size, snapshot.data.data[i]);
                                   }),
                             )
                           : Padding(
@@ -436,14 +276,201 @@ class _ProdukMaemState extends State<ProdukMaem> {
             ),
           ],
         ),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: () {
+        floatingActionButton: InkWell(
+          onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewProductPage()),
             );
           },
-          child: const Icon(Icons.add),
+          child: new Container(
+            width: 150,
+            height: 45,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: colorses.dasar),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/dinner.png",
+                  width: 28,
+                  height: 28,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    "Tambah menu",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
         ));
+  }
+
+  Widget buildItems(Size size, Datum makanan) {
+    return Container(
+      width: size.width,
+      height: size.height * 0.12,
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.black12,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                margin: EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: 'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}' !=
+                            'https://jongjava.tech/tumbas/assets/foto_produk/no_image.png'
+                        ? NetworkImage('https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}')
+                        : AssetImage('assets/baru2.png'),
+                  ),
+                ),
+              ),
+              makanan.aktif=="0"?Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 80,
+                  height: 81,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white60
+                  ),
+                  child: Center(child: Text("Habis",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),)),
+                ),
+              ):Container()
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    makanan.namaProduk,
+                    style: TextStyle(fontSize: 16,color: makanan.aktif=="1"?Colors.black:Colors.grey),
+                  ),
+                  Text(
+                    makanan.deskripsi,
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              ),
+              Text(
+                'Rp. ${makanan.hargaJual}',
+                style: TextStyle(fontSize: 16,color: makanan.aktif=="1"?Colors.black:Colors.grey),
+              ),
+            ],
+          ),
+          Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: PopupMenuButton<int>(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(Icons.more_vert, color: Colors.grey, size: 20),
+                  onSelected: (item) => handleClick(item, makanan),
+                  itemBuilder: (context) => [
+                    PopupMenuItem<int>(value: 0, child: Text('Edit')),
+                    PopupMenuItem<int>(value: 1, child: Text('Hapus')),
+                  ],
+                ),
+              ),
+              Container(
+                width: 85,
+                height: 25,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      makanan.aktif == '0' ? Color(0xFF68A29D) : colorses.orange,
+                    ),
+                    elevation: MaterialStateProperty.all(2),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (makanan.aktif == "1") {
+                      getEmail().then((user) {
+                        getToken().then((token) {
+                          blocMember.updateStatusProduk(user, makanan.idProduk, "0", token);
+                        });
+                      });
+                      blocMember.resUpdateStatusProduk.listen((event) {
+                        if (event.status) {
+                          getToken().then((token) {
+                            getEmail().then((username) {
+                              getKdUser().then((kduser) {
+                                blocMember.status(kduser);
+                                blocMember.getProduk(username, kduser, token);
+                              });
+                            });
+                          });
+                          Toast.show("Produk di set habis!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        }
+                      });
+                    } else {
+                      getEmail().then((user) {
+                        getToken().then((token) {
+                          blocMember.updateStatusProduk(user, makanan.idProduk, "1", token);
+                        });
+                      });
+                      blocMember.resUpdateStatusProduk.listen((event) {
+                        if (event.status) {
+                          getToken().then((token) {
+                            getEmail().then((username) {
+                              getKdUser().then((kduser) {
+                                blocMember.status(kduser);
+                                blocMember.getProduk(username, kduser, token);
+                              });
+                            });
+                          });
+                          Toast.show("Produk di set ada!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        }
+                      });
+                    }
+                    if(mounted)
+                    setState(() {});
+                  },
+                  child: Text(
+                    makanan.aktif == '0' ? 'Tersedia' : 'Habis',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void handleClick(int item, Datum barang) {
+    switch (item) {
+      case 0:
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProductPage(produk: barang)));
+        break;
+      case 1:
+        break;
+    }
   }
 }

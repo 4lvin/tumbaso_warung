@@ -64,7 +64,6 @@ class ApiProviders {
     var body =
         jsonEncode({'username': username, 'password': password, "token": ""});
     try {
-      print("$url/penjual/login");
       final checkid = await client
           .post("$url/penjual/login",
               headers: {"Content-Type": "application/json"}, body: body)
@@ -117,7 +116,7 @@ class ApiProviders {
   }
 
   Future updateStatusToko(String username, String status, String token) async {
-    var body = jsonEncode({'username': username, 'status': status});
+    var body = jsonEncode({'email': username, 'status': status});
     try {
       final checkid = await client
           .post("$url/penjual/put_status_toko",
@@ -158,10 +157,6 @@ class ApiProviders {
               },
               body: body)
           .timeout(const Duration(seconds: 11));
-      print(checkid.body);
-      print(token);
-      print(idPenjual);
-      print(username);
       if (checkid.statusCode == 200) {
         return GetProdukModel.fromJson(json.decode(checkid.body));
       } else if (checkid.statusCode == 404) {
@@ -208,7 +203,7 @@ class ApiProviders {
   }
 
   Future getTransaksi(String username, String history) async {
-    var body = jsonEncode({'username': username, 'history': history});
+    var body = jsonEncode({'email': username, 'history': history});
     String _token;
     await getToken().then((value) {
       _token = value;
@@ -245,7 +240,7 @@ class ApiProviders {
   Future updateStatusProduk(
       String username, String idProduk, String status, String token) async {
     var body = jsonEncode(
-        {'username': username, 'id_produk': idProduk, 'status': status});
+        {'email': username, 'id_produk': idProduk, 'status': status});
     try {
       final checkid = await client
           .post("$url/penjual/put_status_produk",
@@ -443,7 +438,6 @@ class ApiProviders {
           headers: {
             "Content-Type": "application/json"
           }).timeout(const Duration(seconds: 11));
-      print(data.body);
       if (data.statusCode == 200) {
         return GetKotaModel.fromJson(json.decode(data.body));
       } else {
@@ -497,7 +491,6 @@ class ApiProviders {
           .post("$url/penjual/login_gmail",
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
-      print(checkId.body);
       if (checkId.statusCode == 200) {
         return GetLoginWithGmailModel.fromJson(json.decode(checkId.body));
       } else if (checkId.statusCode == 404) {
@@ -551,8 +544,6 @@ class ApiProviders {
               },
               body: body)
           .timeout(const Duration(seconds: 11));
-      print(body);
-      print(checkId.body);
       if (checkId.statusCode == 200) {
         return ResLengkapiProfilModel.fromJson(json.decode(checkId.body));
       } else if (checkId.statusCode == 404) {
@@ -646,7 +637,6 @@ class ApiProviders {
               body: body)
           .timeout(const Duration(seconds: 11));
       if (barang.statusCode == 200) {
-        // print(barang.body);
         return GetBarangModel.fromJson(json.decode(barang.body));
       } else {
         throw Exception('Failed to load Login');
