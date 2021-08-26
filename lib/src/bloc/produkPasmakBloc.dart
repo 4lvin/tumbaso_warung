@@ -70,6 +70,33 @@ class produkPasmakBloc {
     return statusCode;
   }
 
+  Future editProductBarang(
+      File file,
+      String id_barang,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String satuan,
+      String berat,
+      String deskripsi,
+      String keterangan,
+      String minimum) async {
+    int statusCode = await _repository.editProdukBarang(
+        file,
+        id_barang,
+        kategori,
+        subkategori,
+        nama,
+        harga,
+        satuan,
+        berat,
+        deskripsi,
+        keterangan,
+        minimum);
+    return statusCode;
+  }
+
   getEkspedisi() async {
     try {
       GetEkspedisiModel getEkspedisiModel = await _repository.getEkspedisi();

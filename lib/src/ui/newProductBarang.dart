@@ -65,7 +65,6 @@ class _NewProductBarangState extends State<NewProductBarang> {
     if (kategori == null ||
         harga.text == "" ||
         nama.text == "" ||
-        berat.text == "" ||
         keterangan.text == "") {
       Toast.show("Form tidak boleh kosong", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -95,8 +94,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
       } else {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil('/controllerPage', (route) => false);
+          Navigator.of(context).pop();
         });
       }
     });

@@ -98,6 +98,21 @@ class Repositories {
       apiProvider.simpanProdukBarang(file, kategori, subkategori, nama, harga,
           satuan, berat, deskripsi, keterangan, minimum);
 
+  Future editProdukBarang(
+          File file,
+          String id_barang,
+          String kategori,
+          String subkategori,
+          String nama,
+          String harga,
+          String satuan,
+          String berat,
+          String deskripsi,
+          String keterangan,
+          String minimum) =>
+      apiProvider.editProdukBarang(file, id_barang, kategori, subkategori, nama,
+          harga, satuan, berat, deskripsi, keterangan, minimum);
+
   Future getProfil(String email) => apiProvider.getProfil(email);
 
   Future getEkspedisi() => apiProvider.getEkspedisi();

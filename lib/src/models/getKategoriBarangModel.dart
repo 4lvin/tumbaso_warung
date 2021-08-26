@@ -12,28 +12,31 @@ class GetKategoriBarangModel {
   });
 
   bool status;
-  List<Datum> data;
+  List<KategoriDatum> data;
   String message;
 
-  factory GetKategoriBarangModel.fromRawJson(String str) => GetKategoriBarangModel.fromJson(json.decode(str));
+  factory GetKategoriBarangModel.fromRawJson(String str) =>
+      GetKategoriBarangModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory GetKategoriBarangModel.fromJson(Map<String, dynamic> json) => GetKategoriBarangModel(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    message: json["message"],
-  );
+  factory GetKategoriBarangModel.fromJson(Map<String, dynamic> json) =>
+      GetKategoriBarangModel(
+        status: json["status"],
+        data: List<KategoriDatum>.from(
+            json["data"].map((x) => KategoriDatum.fromJson(x))),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    "message": message,
-  };
+        "status": status,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "message": message,
+      };
 }
 
-class Datum {
-  Datum({
+class KategoriDatum {
+  KategoriDatum({
     this.idKategori,
     this.namaKategori,
   });
@@ -41,17 +44,18 @@ class Datum {
   String idKategori;
   String namaKategori;
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+  factory KategoriDatum.fromRawJson(String str) =>
+      KategoriDatum.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    idKategori: json["id_kategori"],
-    namaKategori: json["nama_kategori"],
-  );
+  factory KategoriDatum.fromJson(Map<String, dynamic> json) => KategoriDatum(
+        idKategori: json["id_kategori"],
+        namaKategori: json["nama_kategori"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_kategori": idKategori,
-    "nama_kategori": namaKategori,
-  };
+        "id_kategori": idKategori,
+        "nama_kategori": namaKategori,
+      };
 }

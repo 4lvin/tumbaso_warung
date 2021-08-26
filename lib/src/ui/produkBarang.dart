@@ -1,6 +1,9 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
 import 'package:tumbaso_warung/src/models/getBarangModel.dart';
+import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/ui/editProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/newProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
@@ -11,10 +14,35 @@ class ProdukBarang extends StatefulWidget {
 }
 
 class _ProdukBarangState extends State<ProdukBarang> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
+  GetKategoriBarangModel _listKategori;
+
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+
+    blocProdukPasmak.getBarang();
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    blocProdukPasmak.getBarang();
+    _refreshController.loadComplete();
+  }
+
   @override
   void initState() {
     super.initState();
     blocProdukPasmak.getBarang();
+    blocProdukPasmak.getKategoriBarang();
+    blocProdukPasmak.resKategori.listen((event) {
+      if (mounted)
+        setState(() {
+          _listKategori = event;
+        });
+    });
   }
 
   @override
@@ -22,146 +50,358 @@ class _ProdukBarangState extends State<ProdukBarang> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Produk Barang"),
-          backgroundColor: colorses.dasar,
-        ),
-        body: body(size),
-        floatingActionButton: new FloatingActionButton(
-          backgroundColor: colorses.dasar,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NewProductBarang()),
-            );
-          },
-          child: const Icon(Icons.add),
-        ));
-  }
-
-  Widget body(Size size) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: StreamBuilder<GetBarangModel>(
-          stream: blocProdukPasmak.resBarang,
-          builder: (_, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.data.isEmpty) {
-                return Center(
-                  child: Text('Data Kosong..'),
-                );
-              } else {
-                return ListView.builder(
-                  padding: EdgeInsets.all(0),
-                  itemCount: snapshot.data.data.length,
-                  itemBuilder: (context, index) {
-                    return buildItems(size, snapshot.data.data[index]);
-                  },
-                );
-              }
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+      appBar: AppBar(
+        title: Text("Produk Barang"),
+        backgroundColor: colorses.dasar,
+        elevation: 0,
+      ),
+      body: body(size),
     );
   }
 
-  Widget buildItems(Size size, DatumBarang barang) {
-    return Container(
-      width: size.width,
-      height: size.height * 0.12,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 1,
-            color: Colors.black12,
+  Widget body(Size size) {
+    return Column(
+      children: [
+        buildToko(size),
+        Container(
+          width: size.width,
+          height: size.height * 0.78,
+          // color: Colors.amber,
+          padding: EdgeInsets.all(20),
+          child: StreamBuilder<GetBarangModel>(
+            stream: blocProdukPasmak.resBarang,
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.data.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 18.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.notifications_off,
+                            color: Colors.grey,
+                            size: 50,
+                          ),
+                          Text(
+                            "Belum mempunyai Barang",
+                            style: TextStyle(color: Colors.grey),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: false,
+                    header: WaterDropMaterialHeader(
+                      backgroundColor: colorses.dasar,
+                    ),
+                    controller: _refreshController,
+                    onRefresh: _onRefresh,
+                    onLoading: _onLoading,
+                    child: GridView.builder(
+                      itemCount: snapshot.data.data.length,
+                      itemBuilder: (context, index) =>
+                          buildItem(snapshot.data.data[index]),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 190 / 280,
+                        crossAxisSpacing: 18,
+                        mainAxisSpacing: 18,
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            margin: EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: 'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}' !=
-                        'https://tumbasonline.com/pasarmakmur/asset/foto_produk/no_image.png'
-                    ? NetworkImage(
-                        'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}')
-                    : AssetImage('assets/baru2.png'),
-              ),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    barang.namaProduk,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    barang.keterangan,
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
-              Text(
-                'Rp. ${barang.harga}',
-                style: TextStyle(fontSize: 16),
+      ],
+    );
+  }
+
+  Widget buildToko(Size size) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: size.width,
+          height: 40,
+          margin: EdgeInsets.only(bottom: 40),
+          decoration: BoxDecoration(
+            color: colorses.dasar,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 3,
+                offset: Offset(0, 3),
               ),
             ],
           ),
-          Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+        Container(
+          height: 60,
+          width: size.width * 0.9,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 3,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewProductBarang()),
+                ),
+                child: Container(
+                  width: (size.width / 3) - 24,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: colorses.orange,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: colorses.orange,
+                          size: 16,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Tambah Produk',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              VerticalDivider(
+                color: Colors.grey.shade300,
+                thickness: 1,
+                endIndent: 4,
+                indent: 4,
+              ),
               Container(
-                child: PopupMenuButton<int>(
-                  padding: EdgeInsets.zero,
-                  icon: Icon(Icons.more_vert, color: Colors.grey, size: 20),
-                  onSelected: (item) => handleClick(item, barang),
-                  itemBuilder: (context) => [
-                    PopupMenuItem<int>(value: 0, child: Text('Edit')),
-                    PopupMenuItem<int>(value: 1, child: Text('Hapus')),
+                width: (size.width / 3) - 24,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '4,5',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    SizedBox(height: 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow[600],
+                          size: 16,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow[600],
+                          size: 16,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow[600],
+                          size: 16,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow[600],
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Rating Toko',
+                      style: TextStyle(fontSize: 10),
+                    ),
                   ],
                 ),
               ),
+              VerticalDivider(
+                color: Colors.grey.shade300,
+                thickness: 1,
+                endIndent: 4,
+                indent: 4,
+              ),
               Container(
-                width: 85,
-                height: 25,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      barang.aktif == 'Y' ? Color(0xFF68A29D) : colorses.orange,
+                width: (size.width / 3) - 24,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.share_outlined,
+                      color: colorses.orange,
                     ),
-                    elevation: MaterialStateProperty.all(2),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Share',
+                      style: TextStyle(fontSize: 10),
                     ),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    barang.aktif == 'Y' ? 'Tersedia' : 'Habis',
-                    style: TextStyle(fontSize: 12),
-                  ),
+                  ],
                 ),
               ),
             ],
-          )
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildItem(DatumBarang barang) {
+    String kategori;
+    if (_listKategori != null) {
+      _listKategori.data.forEach((e) {
+        if (e.idKategori == barang.idKategoriProduk) {
+          kategori = e.namaKategori;
+        }
+      });
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: 180,
+                height: 160,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: 'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}' !=
+                            'https://tumbasonline.com/pasarmakmur/asset/foto_produk/no_image.png'
+                        ? NetworkImage(
+                            'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}')
+                        : AssetImage('assets/baru2.png'),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProductBarang(barang: barang),
+                    ),
+                  ),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.90),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: PopupMenuButton<int>(
+                  icon: Icon(Icons.edit),
+                  onSelected: (item) => handleClick(item, barang),
+                  itemBuilder: (context) => [
+                    PopupMenuItem<int>(value: 0, child: Text('Edit')),
+                    PopupMenuItem<int>(value: 1, child: Text('Status')),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 84,
+            width: 180,
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  kategori == null ? 'Kategori' : kategori,
+                  style: TextStyle(
+                    color: colorses.orange,
+                    fontSize: 10,
+                  ),
+                ),
+                Text(
+                  barang.namaProduk,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Rp. ${currencyFormatter.format(int.parse(barang.harga))}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.star,
+                      size: 15,
+                      color: Colors.yellow[600],
+                    ),
+                    Text(
+                      '4,5',
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
