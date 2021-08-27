@@ -105,10 +105,10 @@ class _ProdukBarangState extends State<ProdukBarang> {
                     child: GridView.builder(
                       itemCount: snapshot.data.data.length,
                       itemBuilder: (context, index) =>
-                          buildItem(snapshot.data.data[index]),
+                          buildItem(size, snapshot.data.data[index]),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 190 / 280,
+                        childAspectRatio: 3 / 4.4,
                         crossAxisSpacing: 18,
                         mainAxisSpacing: 18,
                       ),
@@ -170,7 +170,7 @@ class _ProdukBarangState extends State<ProdukBarang> {
                   MaterialPageRoute(builder: (context) => NewProductBarang()),
                 ),
                 child: Container(
-                  width: (size.width / 3) - 24,
+                  width: (size.width / 3) - 28,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -206,7 +206,7 @@ class _ProdukBarangState extends State<ProdukBarang> {
                 indent: 4,
               ),
               Container(
-                width: (size.width / 3) - 24,
+                width: (size.width / 3) - 28,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -255,7 +255,7 @@ class _ProdukBarangState extends State<ProdukBarang> {
                 indent: 4,
               ),
               Container(
-                width: (size.width / 3) - 24,
+                width: (size.width / 3) - 28,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -278,7 +278,7 @@ class _ProdukBarangState extends State<ProdukBarang> {
     );
   }
 
-  Widget buildItem(DatumBarang barang) {
+  Widget buildItem(Size size, DatumBarang barang) {
     String kategori;
     if (_listKategori != null) {
       _listKategori.data.forEach((e) {
@@ -300,12 +300,14 @@ class _ProdukBarangState extends State<ProdukBarang> {
         ],
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
               Container(
-                width: 180,
-                height: 160,
+                width: ((size.width / 2) - 20),
+                height: ((size.width / 2) - 40),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
@@ -355,9 +357,9 @@ class _ProdukBarangState extends State<ProdukBarang> {
             ],
           ),
           Container(
-            height: 84,
-            width: 180,
-            padding: const EdgeInsets.all(8),
+            height: size.height * 0.1,
+            width: (size.width / 2) - 20,
+            padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,11 +382,16 @@ class _ProdukBarangState extends State<ProdukBarang> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Rp. ${currencyFormatter.format(int.parse(barang.harga))}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                    Container(
+                      width: size.width * 0.3,
+                      child: Text(
+                        'Rp. ${currencyFormatter.format(int.parse(barang.harga))}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     Spacer(),

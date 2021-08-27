@@ -491,7 +491,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Container(
-                                    width: size.width * 0.6,
+                                    width: size.width * 0.58,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
