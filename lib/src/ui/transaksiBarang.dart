@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:toast/toast.dart';
+import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
+import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
+import 'package:tumbaso_warung/src/ui/utils/timeago.dart';
 
 class TransaksiBarang extends StatefulWidget {
   const TransaksiBarang({Key key}) : super(key: key);
@@ -10,6 +17,29 @@ class TransaksiBarang extends StatefulWidget {
 }
 
 class _TransaksiBarangState extends State<TransaksiBarang> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+
+    blocProdukPasmak.getTransaksiBarang('aktif');
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    blocProdukPasmak.getTransaksiBarang('aktif');
+    _refreshController.loadComplete();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    blocProdukPasmak.getTransaksiBarang('aktif');
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -24,14 +54,56 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 10),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                buildItem(context, size, 2, 'Baru saja', 1),
-                buildItem(context, size, 5, '1 Jam yang lalu', 2),
-                buildItem(context, size, 1, '4 Jam yang lalu', 3),
-              ],
+          Container(
+            width: size.width,
+            height: size.height * 0.64,
+            child: StreamBuilder<GetTransaksiBarangModel>(
+              stream: blocProdukPasmak.resTransaksiBarang,
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.data.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 18.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.notifications_off,
+                              color: Colors.grey,
+                              size: 50,
+                            ),
+                            Text(
+                              "Belum mempunyai Barang",
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: false,
+                      header: WaterDropMaterialHeader(
+                        backgroundColor: colorses.dasar,
+                      ),
+                      controller: _refreshController,
+                      onRefresh: _onRefresh,
+                      onLoading: _onLoading,
+                      child: ListView.builder(
+                        itemCount: snapshot.data.data.length,
+                        itemBuilder: (context, index) =>
+                            buildItem(context, size, snapshot.data.data[index]),
+                      ),
+                    );
+                  }
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ),
         ],
@@ -40,25 +112,40 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
   }
 
   Widget buildItem(
-      BuildContext context, Size size, int count, String date, int status) {
+      BuildContext context, Size size, TransaksiBarangDatum transaksi) {
+    int count = transaksi.pemesananDetail.length;
+    int status = int.parse(transaksi.proses);
+    String date = TimeConvert.timeAgo(transaksi.waktuTransaksi);
+
     String textStatus;
     Color colorStatus;
-    if (status == 1) {
-      textStatus = 'Menuggu di kemas';
+
+    if (status == 0) {
+      textStatus = 'Menunggu pembayaran';
       colorStatus = Color(0xFFF75F5F);
-    } else if (status == 2) {
+    } else if (status == 1 && transaksi.noResi == null) {
       textStatus = 'Menuggu input resi';
+      colorStatus = Color(0xFFf9c74f);
+    } else if (status == 2) {
+      textStatus = 'Menunggu Diproses';
       colorStatus = Color(0xFFF08B5E);
-    } else if (status == 3) {
+    } else if (status == 1 && transaksi.noResi != null) {
+      textStatus = 'Dalam Perjalanan';
+      colorStatus = colorses.dasar;
+    } else if (status == 4) {
       textStatus = 'Dalam Perjalanan';
       colorStatus = colorses.dasar;
     }
     return GestureDetector(
       onTap: () {
-        if (status == 1) {
-          detailPesanan(context, size, 1);
+        if (status == 0) {
+          detailPesanan(context, size, 1, transaksi);
+        } else if (status == 1 && transaksi.noResi == null) {
+          detailPesanan(context, size, 2, transaksi);
         } else if (status == 2) {
-          detailPesanan(context, size, 2);
+          detailPesanan(context, size, 3, transaksi);
+        } else if (status == 1 && transaksi.noResi != null) {
+          trackingPesanan(size);
         } else if (status == 3) {
           trackingPesanan(size);
         }
@@ -128,7 +215,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
 
   Future<Object> trackingPesanan(Size size) {
     return showGeneralDialog(
-      barrierLabel: "Label",
+      barrierLabel: "tracking",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: Duration(milliseconds: 700),
@@ -305,9 +392,20 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
     );
   }
 
-  Future<Object> detailPesanan(BuildContext context, Size size, int status) {
+  Future<Object> detailPesanan(BuildContext context, Size size, int status,
+      TransaksiBarangDatum transaksi) {
+    int dProduk = 3;
+    if (transaksi.pemesananDetail.length < 3) {
+      dProduk = transaksi.pemesananDetail.length;
+    }
+
+    int total = 0;
+    transaksi.pemesananDetail.forEach((prod) {
+      total += prod.harga;
+    });
+
     return showGeneralDialog(
-      barrierLabel: "Label",
+      barrierLabel: "detail",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: Duration(milliseconds: 700),
@@ -363,7 +461,8 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                                'https://images.unsplash.com/photo-1629996734437-7217ae43bb55?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80'),
+                              'https://img.icons8.com/bubbles/2x/user.png',
+                            ),
                           ),
                         ),
                       ),
@@ -372,11 +471,11 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Imam Pradana',
+                            transaksi.pembeli.namaLengkap,
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            '3 menu | 12-08-2021 13:37',
+                            '${transaksi.pemesananDetail.length} menu | ${TimeConvert.timeAgo(transaksi.waktuTransaksi)}',
                             style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                           SizedBox(height: 20),
@@ -392,7 +491,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Container(
-                                    width: 240,
+                                    width: size.width * 0.6,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -402,20 +501,35 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                                           style: TextStyle(fontSize: 10),
                                         ),
                                         Text(
-                                          'Imam Pradana',
+                                          transaksi.pembeli.namaLengkap,
                                           style: TextStyle(fontSize: 10),
                                         ),
                                         Text(
-                                          'No. 26 Dsn. Kembang Kuning Rt. 001/Rw.001 Ds. Pandean Kec. Purwosari Kab. Pasuruan 67163',
+                                          '${transaksi.pembeli.alamatLengkap} ${transaksi.keterangan}',
                                           style: TextStyle(fontSize: 10),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.copy,
-                                    color: colorses.orange,
-                                    size: 18,
+                                  IconButton(
+                                    onPressed: () => Clipboard.setData(
+                                      ClipboardData(
+                                        text:
+                                            '${transaksi.pembeli.alamatLengkap} ${transaksi.keterangan}',
+                                      ),
+                                    ).then(
+                                      (_) => Toast.show(
+                                        "Alamat disalin",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.BOTTOM,
+                                      ),
+                                    ),
+                                    icon: Icon(
+                                      Icons.copy,
+                                      color: colorses.orange,
+                                      size: 18,
+                                    ),
                                   )
                                 ],
                               ),
@@ -442,7 +556,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                                   ),
                                   SizedBox(height: 6),
                                   Text(
-                                    'Ninja Express',
+                                    transaksi.kurir,
                                     style: TextStyle(fontSize: 10),
                                   ),
                                 ],
@@ -456,14 +570,12 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                   SizedBox(height: 40),
                   Container(
                     width: size.width,
-                    height: (60.0 * 3),
+                    height: (60.0 * dProduk),
                     child: ListView(
                       padding: EdgeInsets.zero,
-                      children: [
-                        detailPesananItem(size),
-                        detailPesananItem(size),
-                        detailPesananItem(size),
-                      ],
+                      children: transaksi.pemesananDetail
+                          .map((e) => detailPesananItem(size, e))
+                          .toList(),
                     ),
                   ),
                   Container(
@@ -487,46 +599,52 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          'Rp. 6.000.000',
+                          'Rp. Rp. ${currencyFormatter.format(total)}',
                           style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: size.width,
-                    height: 130,
-                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[300], width: 2),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          "assets/delivery-man.svg",
-                          semanticsLabel: 'Acme Logo',
-                          height: 34,
-                          width: 34,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Kirimkan pesanan ke jasa pengiriman sebelum Senin, 15 - 08 - 2021',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
                   ),
                   Spacer(),
                   status == 1
+                      ? Container()
+                      : Container(
+                          width: size.width,
+                          height: 130,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.grey[300], width: 2),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/delivery-man.svg",
+                                semanticsLabel: 'Acme Logo',
+                                height: 34,
+                                width: 34,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'Kirimkan pesanan ke jasa pengiriman sebelum Senin, 15 - 08 - 2021',
+                                textAlign: TextAlign.center,
+                                style:
+                                    TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                  SizedBox(height: 20),
+                  status == 3
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: 100,
+                              width: size.width * 0.3,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {},
@@ -552,7 +670,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                               ),
                             ),
                             Container(
-                              width: 240,
+                              width: size.width * 0.56,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {},
@@ -569,7 +687,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                                   ),
                                 ),
                                 child: Text(
-                                  'Telah di kemas',
+                                  'Telah dikemas',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.white),
                                 ),
@@ -577,30 +695,32 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                             )
                           ],
                         )
-                      : Container(
-                          width: size.width,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () => inputNoResi(context),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(colorses.dasar),
-                              shadowColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                      : status == 2
+                          ? Container(
+                              width: size.width,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () => inputNoResi(context),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(colorses.dasar),
+                                  shadowColor: MaterialStateProperty.all<Color>(
+                                      Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Masukkan No. Resi',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.white),
                                 ),
                               ),
-                            ),
-                            child: Text(
-                              'Masukkan No. Resi',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                          ),
-                        ),
+                            )
+                          : Container(),
                 ],
               ),
             ),
@@ -684,7 +804,8 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
         });
   }
 
-  Widget detailPesananItem(Size size) {
+  Widget detailPesananItem(Size size, PemesananDetail pesanan) {
+    int harga = pesanan.harga * pesanan.qty;
     return Container(
       width: size.width,
       height: 60,
@@ -713,20 +834,20 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
           ),
           SizedBox(width: 20),
           Container(
-            width: 160,
+            // width: 160,
             child: Text(
-              'Laptop Hp X221 Core i5',
+              pesanan.namaProduk,
               style: TextStyle(fontSize: 14),
             ),
           ),
           Spacer(),
           Text(
-            '1x',
+            '${pesanan.qty}x',
             style: TextStyle(fontSize: 14),
           ),
           SizedBox(width: 20),
           Text(
-            'Rp. 2.000.000',
+            'Rp. Rp. ${currencyFormatter.format(harga)}',
             style: TextStyle(fontSize: 14),
           ),
         ],

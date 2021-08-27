@@ -116,4 +116,7 @@ class Repositories {
   Future getProfil(String email) => apiProvider.getProfil(email);
 
   Future getEkspedisi() => apiProvider.getEkspedisi();
+
+  Future getTransaksiBarang(String status) =>
+      apiProvider.getTransaksiBarang(status);
 }

@@ -13,6 +13,7 @@ import 'package:tumbaso_warung/src/models/getProvinsiModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
+import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/models/resLengkapiProfilModel.dart';
 
@@ -830,6 +831,47 @@ class ApiProviders {
       }).timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetEkspedisiModel.fromJson(json.decode(prov.body));
+      } else {
+        throw Exception('Failed to load Login');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future getTransaksiBarang(String status) async {
+    String email;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      email = value;
+    });
+    var body = jsonEncode({
+      'email': email,
+      'status': status,
+    });
+    try {
+      final barang = await client
+          .post("$url2/penjual/get_transaksi",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (barang.statusCode == 200) {
+        // print(barang.body);
+        return GetTransaksiBarangModel.fromJson(json.decode(barang.body));
       } else {
         throw Exception('Failed to load Login');
       }

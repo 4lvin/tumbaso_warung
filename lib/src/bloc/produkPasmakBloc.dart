@@ -5,6 +5,7 @@ import 'package:tumbaso_warung/src/models/getBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getEkspedisiModel.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
+import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/resources/repositories.dart';
 
 class produkPasmakBloc {
@@ -13,6 +14,7 @@ class produkPasmakBloc {
   final _getSubKategoriFetcher = PublishSubject<GetSubKategoriBarangModel>();
   final _getEkspedisiFetcher = PublishSubject<GetEkspedisiModel>();
   final _getBarangFechter = PublishSubject<GetBarangModel>();
+  final _getTransaksiBarangFechter = PublishSubject<GetTransaksiBarangModel>();
 
   PublishSubject<GetKategoriBarangModel> get resKategori =>
       _getKategoriFetcher.stream;
@@ -24,6 +26,9 @@ class produkPasmakBloc {
       _getEkspedisiFetcher.stream;
 
   PublishSubject<GetBarangModel> get resBarang => _getBarangFechter.stream;
+
+  PublishSubject<GetTransaksiBarangModel> get resTransaksiBarang =>
+      _getTransaksiBarangFechter.stream;
 
   getKategoriBarang() async {
     try {
@@ -115,11 +120,22 @@ class produkPasmakBloc {
     }
   }
 
+  getTransaksiBarang(String status) async {
+    try {
+      GetTransaksiBarangModel getTransaksi =
+          await _repository.getTransaksiBarang(status);
+      _getTransaksiBarangFechter.sink.add(getTransaksi);
+    } catch (err) {
+      _getTransaksiBarangFechter.sink.add(err);
+    }
+  }
+
   dispose() {
     _getKategoriFetcher.close();
     _getSubKategoriFetcher.close();
     _getEkspedisiFetcher.close();
     _getBarangFechter.close();
+    _getTransaksiBarangFechter.close();
   }
 }
 
