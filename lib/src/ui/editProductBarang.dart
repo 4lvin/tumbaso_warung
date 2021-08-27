@@ -60,6 +60,8 @@ class _EditProductBarangState extends State<EditProductBarang> {
     satuan.text = widget.barang.satuan;
     keterangan.text = widget.barang.keterangan;
     minimum.text = widget.barang.minimum;
+    kategori = widget.barang.idKategoriProduk;
+    sub_kategori = widget.barang.idKategoriProdukSub;
 
     setState(() {});
   }
@@ -83,11 +85,10 @@ class _EditProductBarangState extends State<EditProductBarang> {
     });
   }
 
-  void _onSimpan() {
+  void _onEdit() {
     if (kategori == null ||
         harga.text == "" ||
         nama.text == "" ||
-        berat.text == "" ||
         keterangan.text == "") {
       Toast.show("Form tidak boleh kosong", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -96,9 +97,10 @@ class _EditProductBarangState extends State<EditProductBarang> {
     File file = imageFile != null ? File(imageFile.path) : null;
     Dialogs.showLoading(context, "Loading...");
     blocProdukPasmak
-        .simpanProductBarang(
+        .editProductBarang(
             file,
-            kategori,
+            widget.barang.idProduk,
+            kategori ?? "",
             sub_kategori ?? "",
             nama.text,
             harga.text,
@@ -117,8 +119,7 @@ class _EditProductBarangState extends State<EditProductBarang> {
       } else {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil('/controllerPage', (route) => false);
+          Navigator.of(context).pop();
         });
       }
     });
@@ -224,10 +225,10 @@ class _EditProductBarangState extends State<EditProductBarang> {
                       ),
                     ),
                     onPressed: () {
-                      _onSimpan();
+                      _onEdit();
                     },
                     child: Text(
-                      'Simpan',
+                      'Update',
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),

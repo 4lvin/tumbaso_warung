@@ -64,22 +64,78 @@ class _ControllerPageState extends State<ControllerPage> {
           onWillPop: _onWillPop),
       bottomNavigationBar: FloatingNavbar(
         // type: BottomNavigationBarType.fixed,
-        items:[
+        items: [
           FloatingNavbarItem(
-            icon: Icons.home,
-            title: 'Home',
+            customWidget: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white,
+                ),
+              ),
+              child: Icon(
+                Icons.home,
+                size: 40,
+                color: Colors.white,
+              ),
+            ),
           ),
           FloatingNavbarItem(
-            icon: Icons.confirmation_number,
-            title: 'Transaksi',
+            customWidget: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white,
+                ),
+              ),
+              child: Icon(
+                Icons.confirmation_number,
+                size: 36,
+                color: Colors.white,
+              ),
+            ),
           ),
           FloatingNavbarItem(
-            icon: Icons.history,
-            title: 'History',
+            customWidget: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white,
+                ),
+              ),
+              child: Icon(
+                Icons.history,
+                size: 36,
+                color: Colors.white,
+              ),
+            ),
           ),
           FloatingNavbarItem(
-            icon: Icons.person_outline,
-            title: 'Akun',
+            customWidget: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white,
+                ),
+              ),
+              child: Icon(
+                Icons.person,
+                size: 36,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
         borderRadius: 12,

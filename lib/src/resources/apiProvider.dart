@@ -13,6 +13,7 @@ import 'package:tumbaso_warung/src/models/getProvinsiModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
+import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/models/resLengkapiProfilModel.dart';
 
@@ -724,6 +725,78 @@ class ApiProviders {
     }
   }
 
+  Future editProdukBarang(
+      File file,
+      String id_barang,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String satuan,
+      String berat,
+      String deskripsi,
+      String keterangan,
+      String minimum) async {
+    String _token;
+    String _username;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      _username = value;
+    });
+    try {
+      var uri = Uri.parse("$url2/penjual/update_produk");
+      var request = new client.MultipartRequest("POST", uri);
+      request.headers['authorization'] = _token;
+
+      request.fields['email'] = _username;
+      request.fields['id_produk'] = id_barang;
+      request.fields['kategori_id'] = kategori;
+      request.fields['subkategori_id'] = subkategori;
+      request.fields['nama_produk'] = nama;
+      request.fields['harga'] = harga;
+      request.fields['satuan'] = satuan;
+      request.fields['berat'] = berat;
+      request.fields['deskripsi'] = deskripsi;
+      request.fields['keterangan'] = keterangan;
+      request.fields['minimum'] = minimum;
+
+      if (file != null) {
+        request.files.add(client.MultipartFile(
+            "file",
+            // ignore: deprecated_member_use
+            client.ByteStream(DelegatingStream.typed(file.openRead())),
+            await file.length(),
+            filename: path.basename(file.path)));
+      } else {
+        request.fields['file'] = "";
+      }
+      int statusResponse;
+      await request
+          .send()
+          .then((result) async {
+            await client.Response.fromStream(result).then((response) {
+              print(response.statusCode);
+              statusResponse = response.statusCode;
+            });
+          })
+          .catchError((err) => print('error : ' + err.toString()))
+          .whenComplete(() {});
+      return statusResponse;
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future getProfil(String email) async {
     var body = jsonEncode({
       'email': email,
@@ -758,6 +831,47 @@ class ApiProviders {
       }).timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetEkspedisiModel.fromJson(json.decode(prov.body));
+      } else {
+        throw Exception('Failed to load Login');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future getTransaksiBarang(String status) async {
+    String email;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      email = value;
+    });
+    var body = jsonEncode({
+      'email': email,
+      'status': status,
+    });
+    try {
+      final barang = await client
+          .post("$url2/penjual/get_transaksi",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (barang.statusCode == 200) {
+        // print(barang.body);
+        return GetTransaksiBarangModel.fromJson(json.decode(barang.body));
       } else {
         throw Exception('Failed to load Login');
       }
