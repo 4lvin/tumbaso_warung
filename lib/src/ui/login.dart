@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,25 +27,31 @@ class _LoginPageState extends State<LoginPage> {
   // FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   String tokenUser;
 
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   Future _signIn() async {
     Dialogs.showLoading(context, "Loading...");
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    UserCredential signIn = await signIntoFirebase(googleSignInAccount).catchError((onError) {
+    UserCredential signIn =
+        await signIntoFirebase(googleSignInAccount).catchError((onError) {
       Dialogs.dismiss(context);
-      Toast.show(onError.toString(), context, duration: 3, gravity: Toast.BOTTOM);
+      Toast.show(onError.toString(), context,
+          duration: 3, gravity: Toast.BOTTOM);
     });
-    blocMember.loginGmail(signIn.user.email, signIn.user.photoURL, signIn.user.displayName, tokenUser);
+    blocMember.loginGmail(signIn.user.email, signIn.user.photoURL,
+        signIn.user.displayName, tokenUser);
     blocMember.resLoginGmail.listen((login) {
       if (login.data.telepone != "") {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
+          print(signIn.user);
           setToken(login.data.idToken);
           // setKota(login.data.kota.kode);
           setEmail(signIn.user.email);
           setNama(login.data.nama);
           setKdUser(login.data.key.idPenjual);
           setKdPasmak(login.data.key.idPenjualMakmur);
-          Navigator.pushReplacementNamed(context, '/controllerPage');
+          // Navigator.pushReplacementNamed(context, '/controllerPage');
         });
       } else {
         Dialogs.dismiss(context);
@@ -54,12 +61,11 @@ class _LoginPageState extends State<LoginPage> {
               type: PageTransitionType.rightToLeft,
               duration: Duration(milliseconds: 400),
               child: LengkapiProfil(
-                email: signIn.user.email,
-                token: login.data.idToken,
-                kdUser: login.data.key.idPenjual,
-                nama: login.data.nama,
-                kdPasmak : login.data.key.idPenjualMakmur
-              )));
+                  email: signIn.user.email,
+                  token: login.data.idToken,
+                  kdUser: login.data.key.idPenjual,
+                  nama: login.data.nama,
+                  kdPasmak: login.data.key.idPenjualMakmur)));
         });
       }
     });
@@ -68,6 +74,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _firebaseMessaging.getToken().then((token) {
+      setState(() {
+        tokenUser = token;
+      });
+    });
   }
 
   @override
@@ -85,34 +96,39 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 height: MediaQuery.of(context).size.height - 150,
                 decoration: BoxDecoration(
-                  color: colorses.dasar,
-                  borderRadius: BorderRadius.only(bottomRight: Radius.elliptical(180.0, 50.0), bottomLeft: Radius.elliptical(180.0, 50.0)
-                )),
+                    color: colorses.dasar,
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.elliptical(180.0, 50.0),
+                        bottomLeft: Radius.elliptical(180.0, 50.0))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SafeArea(
                       child: Container(
                         height: 200,
-                        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
+                        margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height / 7),
                         width: MediaQuery.of(context).size.width,
-                        child: SvgPicture.asset(
-                            "assets/warung.svg",
-                            semanticsLabel: 'Acme Logo'
-                        ),
+                        child: SvgPicture.asset("assets/warung.svg",
+                            semanticsLabel: 'Acme Logo'),
                       ),
                     ),
-                    SizedBox(height: 12,),
+                    SizedBox(
+                      height: 12,
+                    ),
                     Text(
                       "Aplikasi untuk warung atau toko",
-                      style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold,color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
                       "di tumbas online dan pasmak",
-                      style: TextStyle(fontSize: 18,color: Colors.white),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     SizedBox(
                       height: 12,
@@ -220,7 +236,9 @@ class _LoginPageState extends State<LoginPage> {
               // ),
               //
               // Text("----- Atau -----"),
-              SizedBox(height: 12,),
+              SizedBox(
+                height: 12,
+              ),
               Container(
                 margin: EdgeInsets.only(top: 12),
                 width: MediaQuery.of(context).size.width,
@@ -230,7 +248,9 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                         height: 40,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18), topLeft: Radius.circular(18)),
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(18),
+                                topLeft: Radius.circular(18)),
                             color: Colors.grey[200],
                             boxShadow: [
                               BoxShadow(
@@ -255,7 +275,9 @@ class _LoginPageState extends State<LoginPage> {
                         height: 40,
                         width: MediaQuery.of(context).size.width / 2,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(18), topRight: Radius.circular(18)),
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(18),
+                              topRight: Radius.circular(18)),
                           color: colorses.orange,
                           boxShadow: [
                             BoxShadow(

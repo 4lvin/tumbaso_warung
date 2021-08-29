@@ -4,6 +4,8 @@ import 'package:tumbaso_warung/src/ui/transaksiMaem.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
 class TransaksiPage extends StatefulWidget {
+  TransaksiPage({this.selected});
+  int selected;
   @override
   _TransaksiPageState createState() => _TransaksiPageState();
 }
@@ -14,7 +16,10 @@ class _TransaksiPageState extends State<TransaksiPage>
 
   @override
   void initState() {
-    controller = new TabController(length: 2, vsync: this);
+    controller = new TabController(
+        length: 2,
+        vsync: this,
+        initialIndex: widget.selected == null ? 0 : widget.selected);
     super.initState();
   }
 

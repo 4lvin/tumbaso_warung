@@ -1,10 +1,15 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/ui/HomePage.dart';
 import 'package:tumbaso_warung/src/ui/historyPage.dart';
+import 'package:tumbaso_warung/src/ui/produkBarang.dart';
+import 'package:tumbaso_warung/src/ui/produkMaem.dart';
 import 'package:tumbaso_warung/src/ui/transaksi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
+import 'package:tumbaso_warung/src/ui/utils/notification.dart';
 import 'package:tumbaso_warung/src/ui/warung.dart';
 
 // ignore: must_be_immutable
@@ -17,12 +22,21 @@ class ControllerPage extends StatefulWidget {
 
 class _ControllerPageState extends State<ControllerPage> {
   int _selectedIndex;
+  bool _selectedTransakasi = false;
   String tipe;
   final PageStorageBucket bucket = PageStorageBucket();
   DateTime currentBackPressTime;
+
   final List<Widget> _widgetOptions = [
     HomePage(),
     TransaksiPage(),
+    HistoryPage(),
+    WarungPage()
+  ];
+
+  final List<Widget> _widgetOptions2 = [
+    HomePage(),
+    TransaksiPage(selected: 1),
     HistoryPage(),
     WarungPage()
   ];
@@ -50,7 +64,29 @@ class _ControllerPageState extends State<ControllerPage> {
     widget.selected == null
         ? _selectedIndex = 0
         : _selectedIndex = widget.selected;
+    _onActionNotif();
     super.initState();
+  }
+
+  _onActionNotif() {
+    AwesomeNotifications().actionStream.listen((event) {
+      if (event.channelKey == 'barang_channel') {
+        _selectedTransakasi = true;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'maem_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    CustomNotification().dispose();
+    super.dispose();
   }
 
   @override
@@ -59,7 +95,9 @@ class _ControllerPageState extends State<ControllerPage> {
       body: WillPopScope(
           child: PageStorage(
             bucket: bucket,
-            child: _widgetOptions[_selectedIndex],
+            child: _selectedTransakasi
+                ? _widgetOptions2[_selectedIndex]
+                : _widgetOptions[_selectedIndex],
           ),
           onWillPop: _onWillPop),
       bottomNavigationBar: FloatingNavbar(
