@@ -69,6 +69,24 @@ class _ControllerPageState extends State<ControllerPage> {
   }
 
   _onActionNotif() {
+    AwesomeNotifications().displayedStream.listen((event) {
+      if (event.channelKey == 'barang_channel') {
+        _selectedTransakasi = true;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'maem_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'awesome_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 0;
+        setState(() {});
+      }
+    });
+
     AwesomeNotifications().actionStream.listen((event) {
       if (event.channelKey == 'barang_channel') {
         _selectedTransakasi = true;
@@ -80,12 +98,18 @@ class _ControllerPageState extends State<ControllerPage> {
         _selectedIndex = 1;
         setState(() {});
       }
+      if (event.channelKey == 'awesome_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 0;
+        setState(() {});
+      }
     });
   }
 
   @override
   void dispose() {
-    CustomNotification().dispose();
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().displayedSink.close();
     super.dispose();
   }
 

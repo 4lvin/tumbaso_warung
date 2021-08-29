@@ -78,23 +78,9 @@ class _SplashScreenState extends State<SplashScreen> {
   messaging() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.data != null) {
-        if (message.data['content'] != null) {
-          AwesomeNotifications().createNotificationFromJsonData(message.data);
-        } else {
-          CustomNotification().createNotificationPrimary(
-            message.data['title'],
-            message.data['body'],
-            message.data['image'],
-          );
-        }
+        CustomNotification().typeNotif(message);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    CustomNotification().dispose();
-    super.dispose();
   }
 
   nav() {
