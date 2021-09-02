@@ -52,7 +52,7 @@ class _TransaksiPageState extends State<TransaksiPage>
       body: new TabBarView(
         controller: controller,
         children: <Widget>[
-          new TransaksiBarang(),
+          new TransaksiMaem(),
           new TransaksiBarang(),
         ],
       ),

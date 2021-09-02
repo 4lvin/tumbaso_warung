@@ -1,0 +1,58 @@
+@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBpdHVuZ3MwNjBAZ21haWwuY29tIn0.mGnwo56UMZyLLNjquUUGsBTaVTMQwDtGTTQfcDMPsuI
+@url_barang = https://tumbasonline.com/pasarmakmur/restapi/
+@url_maem = https://jongjava.tech/tumbas/restapi/
+
+// Login Penjual
+POST {{ url_barang }}/penjual/login_gmail HTTP/1.1
+content-type: application/json
+
+{
+    "email": "pitungs060@gmail.com",
+	"nama": "Bagus Panji",
+	"token": ""
+}
+
+###
+// Transaksi Barang
+POST {{ url_barang }}/penjual/get_transaksi HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "email": "pitungs060@gmail.com",
+	"status": "aktif"
+}
+
+###
+// Update Transaksi Barang
+POST {{ url_barang }}/penjual/update_transaksi HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "email": "pitungs060@gmail.com",
+    "id_transaksi": 133, 
+	"status": 1
+}
+
+###
+// Produk Maem
+POST {{url_maem}}/produk/get_produk_by_toko HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "email": "pitungs060@gmail.com",
+    "penjual_id": 75
+}
+
+###
+// Transaksi Maem
+POST {{url_maem}}/penjual/get_transaksi HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "username": "pitungs060@gmail.com",
+    "history": "0"
+}

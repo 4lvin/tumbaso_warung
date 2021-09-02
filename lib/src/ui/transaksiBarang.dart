@@ -74,7 +74,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                               size: 50,
                             ),
                             Text(
-                              "Belum mempunyai Barang",
+                              "Belum mempunyai Transaksi",
                               style: TextStyle(color: Colors.grey),
                             )
                           ],

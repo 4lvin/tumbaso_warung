@@ -202,7 +202,7 @@ class ApiProviders {
   }
 
   Future getTransaksi(String username, String history) async {
-    var body = jsonEncode({'email': username, 'history': history});
+    var body = jsonEncode({'username': username, 'history': history});
     String _token;
     await getToken().then((value) {
       _token = value;
