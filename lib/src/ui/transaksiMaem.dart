@@ -48,6 +48,12 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
