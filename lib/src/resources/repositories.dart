@@ -119,4 +119,7 @@ class Repositories {
 
   Future getTransaksiBarang(String status) =>
       apiProvider.getTransaksiBarang(status);
+
+  Future updateStatusBarang(String idProduk, String status) =>
+      apiProvider.updateStatusBarang(idProduk, status);
 }

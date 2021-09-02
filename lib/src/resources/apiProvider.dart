@@ -16,15 +16,13 @@ import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/models/resLengkapiProfilModel.dart';
-
-import 'dart:io';
-
 import 'package:tumbaso_warung/src/models/resLoginModel.dart';
 import 'package:tumbaso_warung/src/models/resSubkategoriModel.dart';
 import 'package:tumbaso_warung/src/models/resUpdateStatusProdukModel.dart';
 import 'package:tumbaso_warung/src/models/resUpdateStatusTokoModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 import 'package:async/async.dart';
 
 class ApiProviders {
@@ -874,6 +872,46 @@ class ApiProviders {
         return GetTransaksiBarangModel.fromJson(json.decode(barang.body));
       } else {
         throw Exception('Failed to load Login');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future updateStatusBarang(String idProduk, String status) async {
+    String email;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      email = value;
+    });
+    var body =
+        jsonEncode({'email': email, 'id_produk': idProduk, 'status': status});
+    try {
+      final checkid = await client
+          .post("$url2/penjual/update_status_produk",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (checkid.statusCode == 200) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else if (checkid.statusCode == 404) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
       }
     } on SocketException catch (e) {
       throw Exception(e.toString());
