@@ -63,7 +63,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hari ini',
+            'Transaksi Makanan',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 10),
@@ -129,8 +129,8 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
     int status = int.parse(transaksi.status.idStatusPesanan);
     // String date = TimeConvert.timeAgo(transaksi.waktuTransaksi);
 
-    String textStatus;
-    Color colorStatus;
+    String textStatus = '';
+    Color colorStatus = Colors.white;
 
     if (status == 3) {
       textStatus = 'Kurir Menuju Warung';
