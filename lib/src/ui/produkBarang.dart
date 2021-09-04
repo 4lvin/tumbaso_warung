@@ -46,6 +46,12 @@ class _ProdukBarangState extends State<ProdukBarang> {
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -323,6 +329,36 @@ class _ProdukBarangState extends State<ProdukBarang> {
                   ),
                 ),
               ),
+              barang.aktif == 'Y'
+                  ? Container()
+                  : Container(
+                      alignment: Alignment.center,
+                      width: ((size.width / 2) - 20),
+                      height: ((size.width / 2) - 40),
+                      decoration: BoxDecoration(
+                        color: Colors.white70,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                        ),
+                      ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: size.width / 5,
+                        height: size.width / 5,
+                        decoration: BoxDecoration(
+                          color: Colors.black45,
+                          borderRadius: BorderRadius.circular(60),
+                        ),
+                        child: Text(
+                          'Habis',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
               Align(
                 alignment: Alignment.topRight,
                 child: GestureDetector(
@@ -427,6 +463,9 @@ class _ProdukBarangState extends State<ProdukBarang> {
         );
         break;
       case 1:
+        blocProdukPasmak.updateStatusBarang(
+            barang.idProduk, barang.aktif == 'Y' ? 'N' : 'Y');
+        _onRefresh();
         break;
     }
   }

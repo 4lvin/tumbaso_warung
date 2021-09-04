@@ -15,7 +15,8 @@ class ProdukMaem extends StatefulWidget {
 }
 
 class _ProdukMaemState extends State<ProdukMaem> {
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   List<bool> onOff = [];
   String status;
   bool onOffw = false;
@@ -144,6 +145,12 @@ class _ProdukMaemState extends State<ProdukMaem> {
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -158,8 +165,9 @@ class _ProdukMaemState extends State<ProdukMaem> {
               width: MediaQuery.of(context).size.width,
               margin: EdgeInsets.all(20),
               padding: EdgeInsets.all(12),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(color: colorses.dasar, width: 1.5)),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: colorses.dasar, width: 1.5)),
               child: Column(
                 children: [
                   Row(
@@ -178,7 +186,8 @@ class _ProdukMaemState extends State<ProdukMaem> {
                           width: MediaQuery.of(context).size.width - 130,
                           child: Text(
                             "Warung anda sekarang buka, apakah anda ingin menutup warung?",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ))
                     ],
                   ),
@@ -209,7 +218,9 @@ class _ProdukMaemState extends State<ProdukMaem> {
                         child: Text(
                           "${onOffw ? "Buka Sekarang" : "Tutup Sekarang"}",
                           textAlign: TextAlign.right,
-                          style: TextStyle(fontWeight: FontWeight.bold, color: colorses.orange),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: colorses.orange),
                         )),
                   )
                 ],
@@ -241,7 +252,8 @@ class _ProdukMaemState extends State<ProdukMaem> {
                                     } else {
                                       onOff.add(true);
                                     }
-                                    return buildItems(size, snapshot.data.data[i]);
+                                    return buildItems(
+                                        size, snapshot.data.data[i]);
                                   }),
                             )
                           : Padding(
@@ -286,7 +298,8 @@ class _ProdukMaemState extends State<ProdukMaem> {
           child: new Container(
             width: 150,
             height: 45,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: colorses.dasar),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25), color: colorses.dasar),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -335,23 +348,32 @@ class _ProdukMaemState extends State<ProdukMaem> {
                     fit: BoxFit.cover,
                     image: 'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}' !=
                             'https://jongjava.tech/tumbas/assets/foto_produk/no_image.png'
-                        ? NetworkImage('https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}')
+                        ? NetworkImage(
+                            'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}')
                         : AssetImage('assets/baru2.png'),
                   ),
                 ),
               ),
-              makanan.aktif=="0"?Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 80,
-                  height: 81,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white60
-                  ),
-                  child: Center(child: Text("Habis",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),)),
-                ),
-              ):Container()
+              makanan.aktif == "0"
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: 80,
+                        height: 81,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white60),
+                        child: Center(
+                            child: Text(
+                          "Habis",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        )),
+                      ),
+                    )
+                  : Container()
             ],
           ),
           Column(
@@ -363,7 +385,10 @@ class _ProdukMaemState extends State<ProdukMaem> {
                 children: [
                   Text(
                     makanan.namaProduk,
-                    style: TextStyle(fontSize: 16,color: makanan.aktif=="1"?Colors.black:Colors.grey),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            makanan.aktif == "1" ? Colors.black : Colors.grey),
                   ),
                   Text(
                     makanan.deskripsi,
@@ -373,7 +398,9 @@ class _ProdukMaemState extends State<ProdukMaem> {
               ),
               Text(
                 'Rp. ${makanan.hargaJual}',
-                style: TextStyle(fontSize: 16,color: makanan.aktif=="1"?Colors.black:Colors.grey),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: makanan.aktif == "1" ? Colors.black : Colors.grey),
               ),
             ],
           ),
@@ -399,7 +426,9 @@ class _ProdukMaemState extends State<ProdukMaem> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      makanan.aktif == '0' ? Color(0xFF68A29D) : colorses.orange,
+                      makanan.aktif == '0'
+                          ? Color(0xFF68A29D)
+                          : colorses.orange,
                     ),
                     elevation: MaterialStateProperty.all(2),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -412,7 +441,8 @@ class _ProdukMaemState extends State<ProdukMaem> {
                     if (makanan.aktif == "1") {
                       getEmail().then((user) {
                         getToken().then((token) {
-                          blocMember.updateStatusProduk(user, makanan.idProduk, "0", token);
+                          blocMember.updateStatusProduk(
+                              user, makanan.idProduk, "0", token);
                         });
                       });
                       blocMember.resUpdateStatusProduk.listen((event) {
@@ -425,13 +455,16 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               });
                             });
                           });
-                          Toast.show("Produk di set habis!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                          Toast.show("Produk di set habis!", context,
+                              duration: Toast.LENGTH_LONG,
+                              gravity: Toast.BOTTOM);
                         }
                       });
                     } else {
                       getEmail().then((user) {
                         getToken().then((token) {
-                          blocMember.updateStatusProduk(user, makanan.idProduk, "1", token);
+                          blocMember.updateStatusProduk(
+                              user, makanan.idProduk, "1", token);
                         });
                       });
                       blocMember.resUpdateStatusProduk.listen((event) {
@@ -444,12 +477,13 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               });
                             });
                           });
-                          Toast.show("Produk di set ada!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                          Toast.show("Produk di set ada!", context,
+                              duration: Toast.LENGTH_LONG,
+                              gravity: Toast.BOTTOM);
                         }
                       });
                     }
-                    if(mounted)
-                    setState(() {});
+                    if (mounted) setState(() {});
                   },
                   child: Text(
                     makanan.aktif == '0' ? 'Tersedia' : 'Habis',
@@ -467,7 +501,10 @@ class _ProdukMaemState extends State<ProdukMaem> {
   void handleClick(int item, Datum barang) {
     switch (item) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProductPage(produk: barang)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditProductPage(produk: barang)));
         break;
       case 1:
         break;

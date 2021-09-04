@@ -9,14 +9,14 @@ import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/timeago.dart';
 
-class TransaksiBarang extends StatefulWidget {
-  const TransaksiBarang({Key key}) : super(key: key);
+class HistoryBarang extends StatefulWidget {
+  const HistoryBarang({Key key}) : super(key: key);
 
   @override
-  _TransaksiBarangState createState() => _TransaksiBarangState();
+  _HistoryBarangState createState() => _HistoryBarangState();
 }
 
-class _TransaksiBarangState extends State<TransaksiBarang> {
+class _HistoryBarangState extends State<HistoryBarang> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -25,19 +25,19 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
 
-    blocProdukPasmak.getTransaksiBarang('aktif');
+    blocProdukPasmak.getTransaksiBarang('history');
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
-    blocProdukPasmak.getTransaksiBarang('aktif');
+    blocProdukPasmak.getTransaksiBarang('history');
     _refreshController.loadComplete();
   }
 
   @override
   void initState() {
     super.initState();
-    blocProdukPasmak.getTransaksiBarang('aktif');
+    blocProdukPasmak.getTransaksiBarang('history');
   }
 
   @override
@@ -126,35 +126,12 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
     String textStatus = '';
     Color colorStatus = Colors.white;
 
-    if (status == 0) {
-      textStatus = 'Menunggu pembayaran';
-      colorStatus = Color(0xFFF75F5F);
-    } else if (status == 1 && transaksi.noResi == null) {
-      textStatus = 'Menuggu input resi';
-      colorStatus = Color(0xFFf9c74f);
-    } else if (status == 2) {
-      textStatus = 'Menunggu Diproses';
-      colorStatus = Color(0xFFF08B5E);
-    } else if (status == 1 && transaksi.noResi != null) {
-      textStatus = 'Dalam Proses Perjalanan';
-      colorStatus = colorses.dasar;
-    } else {
-      textStatus = 'Dalam Perjalanan';
-      colorStatus = colorses.dasar;
-    }
+    textStatus = 'Selesai Diantar';
+    colorStatus = colorses.dasar;
+
     return GestureDetector(
       onTap: () {
-        if (status == 0) {
-          detailPesanan(context, size, 1, transaksi);
-        } else if (status == 1 && transaksi.noResi == null) {
-          detailPesanan(context, size, 2, transaksi);
-        } else if (status == 2) {
-          detailPesanan(context, size, 3, transaksi);
-        } else if (status == 1 && transaksi.noResi != null) {
-          trackingPesanan(size);
-        } else {
-          trackingPesanan(size);
-        }
+        detailPesanan(context, size, 1, transaksi);
       },
       child: Container(
         width: size.width,

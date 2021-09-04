@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
@@ -17,12 +18,21 @@ class ControllerPage extends StatefulWidget {
 
 class _ControllerPageState extends State<ControllerPage> {
   int _selectedIndex;
+  bool _selectedTransakasi = false;
   String tipe;
   final PageStorageBucket bucket = PageStorageBucket();
   DateTime currentBackPressTime;
+
   final List<Widget> _widgetOptions = [
     HomePage(),
     TransaksiPage(),
+    HistoryPage(),
+    WarungPage()
+  ];
+
+  final List<Widget> _widgetOptions2 = [
+    HomePage(),
+    TransaksiPage(selected: 1),
     HistoryPage(),
     WarungPage()
   ];
@@ -50,7 +60,53 @@ class _ControllerPageState extends State<ControllerPage> {
     widget.selected == null
         ? _selectedIndex = 0
         : _selectedIndex = widget.selected;
+    _onActionNotif();
     super.initState();
+  }
+
+  _onActionNotif() {
+    AwesomeNotifications().displayedStream.listen((event) {
+      if (event.channelKey == 'barang_channel') {
+        _selectedTransakasi = true;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'maem_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'awesome_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 0;
+        setState(() {});
+      }
+    });
+
+    AwesomeNotifications().actionStream.listen((event) {
+      if (event.channelKey == 'barang_channel') {
+        _selectedTransakasi = true;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'maem_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 1;
+        setState(() {});
+      }
+      if (event.channelKey == 'awesome_channel') {
+        _selectedTransakasi = false;
+        _selectedIndex = 0;
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().displayedSink.close();
+    super.dispose();
   }
 
   @override
@@ -59,7 +115,9 @@ class _ControllerPageState extends State<ControllerPage> {
       body: WillPopScope(
           child: PageStorage(
             bucket: bucket,
-            child: _widgetOptions[_selectedIndex],
+            child: _selectedTransakasi
+                ? _widgetOptions2[_selectedIndex]
+                : _widgetOptions[_selectedIndex],
           ),
           onWillPop: _onWillPop),
       bottomNavigationBar: FloatingNavbar(

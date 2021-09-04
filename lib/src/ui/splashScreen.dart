@@ -1,12 +1,15 @@
-
 import 'dart:async';
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/ui/controllerPage.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
+import 'package:tumbaso_warung/src/ui/utils/notification.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -30,16 +33,60 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     _authCheckSession();
-    getToken().then((value){
-      if(mounted)
+    getToken().then((value) {
+      if (mounted)
         setState(() {
-          _token= value;
+          _token = value;
         });
     });
-    Timer(Duration(seconds: 2), () {
-      _token==null?Navigator.pushReplacementNamed(context, '/login'):Navigator.pushReplacementNamed(context, '/controllerPage');
+    messaging();
+
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Izinkan Notifikasi'),
+            content: Text('Aplikasi membutuhkan akses notifikasi'),
+            actions: [
+              TextButton(
+                onPressed: () => nav(),
+                child: Text(
+                  'Jangan Izinkan',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              TextButton(
+                onPressed: () => AwesomeNotifications()
+                    .requestPermissionToSendNotifications()
+                    .then((_) => nav()),
+                child: Text('Izinkan'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Timer(Duration(seconds: 2), () {
+          nav();
+        });
+      }
     });
+
     super.initState();
+  }
+
+  messaging() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.data != null) {
+        CustomNotification().typeNotif(message);
+      }
+    });
+  }
+
+  nav() {
+    _token == null
+        ? Navigator.pushReplacementNamed(context, '/login')
+        : Navigator.pushReplacementNamed(context, '/controllerPage');
   }
 
   @override
@@ -51,10 +98,8 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Container(
             width: 200,
             height: 200,
-            child: SvgPicture.asset(
-                "assets/warung.svg",
-                semanticsLabel: 'Acme Logo'
-            ),
+            child: SvgPicture.asset("assets/warung.svg",
+                semanticsLabel: 'Acme Logo'),
           ),
         ),
       ),

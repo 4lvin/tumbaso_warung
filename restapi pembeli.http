@@ -1,0 +1,35 @@
+@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InBpdHVuZ3MwNjBAZ21haWwuY29tIn0.5bY7n004S9GmF3XbZ2mwbQ8D09PomG9cdBsI8LG9HFg
+@url = http://jongjava.tech/tumbas/restapi/
+// Login Penjual
+POST {{ url }}/pelanggan/login_gmail HTTP/1.1
+content-type: application/json
+
+{
+    "email": "pitungs060@gmail.com",
+	"nama": "Bagus Panji",
+	"foto": "",
+	"token": ""
+}
+
+###
+// Pemesanan Maem
+POST {{ url }}/pelanggan/pemesanan HTTP/1.1
+content-type: application/json
+Authorization: {{ token }}
+
+{
+    "id_pelanggan": "6",
+    "total_ongkir": 4500,
+    "total_harga": 12500,
+    "latitude": 0,
+    "longitude": 0,
+    "detail": [
+		{
+			"id_produk": 810,
+			"harga": 21000,
+			"potongan": 0,
+			"qty": 1,
+			"catatan": ""
+		}
+	]
+}
