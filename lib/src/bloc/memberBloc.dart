@@ -23,7 +23,8 @@ class MemberBloc {
   final _statusFetcher = PublishSubject<GetStatusModel>();
   final _updateStatusTokoFetcher = PublishSubject<ResUpdateStatusTokoModel>();
   final _getProdukFetcher = PublishSubject<GetProdukModel>();
-  final _updateStatusProdukFetcher = PublishSubject<ResUpdateStatusProdukModel>();
+  final _updateStatusProdukFetcher =
+      PublishSubject<ResUpdateStatusProdukModel>();
   final _getSetoranFetcher = PublishSubject<GetSetoranModel>();
   final _getTransaksiFetcher = PublishSubject<GetTransaksiModel>();
   final _provinsiFetcher = PublishSubject<GetProvinsiModel>();
@@ -37,30 +38,37 @@ class MemberBloc {
 
   PublishSubject<GetStatusModel> get getStatus => _statusFetcher.stream;
 
-  PublishSubject<ResUpdateStatusTokoModel> get resStatusToko => _updateStatusTokoFetcher.stream;
+  PublishSubject<ResUpdateStatusTokoModel> get resStatusToko =>
+      _updateStatusTokoFetcher.stream;
 
   PublishSubject<GetProdukModel> get listProduk => _getProdukFetcher.stream;
 
-  PublishSubject<ResUpdateStatusProdukModel> get resUpdateStatusProduk => _updateStatusProdukFetcher.stream;
+  PublishSubject<ResUpdateStatusProdukModel> get resUpdateStatusProduk =>
+      _updateStatusProdukFetcher.stream;
 
   PublishSubject<GetSetoranModel> get listSetoran => _getSetoranFetcher.stream;
 
-  PublishSubject<GetTransaksiModel> get listTransaksi => _getTransaksiFetcher.stream;
+  PublishSubject<GetTransaksiModel> get listTransaksi =>
+      _getTransaksiFetcher.stream;
 
   PublishSubject<GetProvinsiModel> get resProvinsi => _provinsiFetcher.stream;
 
   PublishSubject<GetKotaModel> get resKota => _kotaFetcher.stream;
 
-  PublishSubject<GetKecamatanModel> get resKecamatan => _kecamatanFetcher.stream;
+  PublishSubject<GetKecamatanModel> get resKecamatan =>
+      _kecamatanFetcher.stream;
 
-  PublishSubject<GetLoginWithGmailModel> get resLoginGmail => _loginGmailFetcher.stream;
+  PublishSubject<GetLoginWithGmailModel> get resLoginGmail =>
+      _loginGmailFetcher.stream;
 
-  PublishSubject<ResLengkapiProfilModel> get resUpdateProfil => _updateProfilFetcher.stream;
+  PublishSubject<ResLengkapiProfilModel> get resUpdateProfil =>
+      _updateProfilFetcher.stream;
 
   PublishSubject<GetProfilModel> get resGetrofil => _getProfilFetcher.stream;
 
   getSubkategori(String idKategori) async {
-    ResSubkategoriModel getSubkategori = await _repository.getSubkategori(idKategori);
+    ResSubkategoriModel getSubkategori =
+        await _repository.getSubkategori(idKategori);
     return getSubkategori;
   }
 
@@ -75,35 +83,54 @@ class MemberBloc {
   }
 
   updateStatusToko(String username, String status, String token) async {
-    ResUpdateStatusTokoModel resUpdateStatusTokoModel = await _repository.updateStatusToko(username, status, token);
+    ResUpdateStatusTokoModel resUpdateStatusTokoModel =
+        await _repository.updateStatusToko(username, status, token);
     _updateStatusTokoFetcher.sink.add(resUpdateStatusTokoModel);
   }
 
   getProduk(String username, String idPenjual, String token) async {
     try {
-      GetProdukModel getProdukModel = await _repository.getProduk(username, idPenjual, token);
+      GetProdukModel getProdukModel =
+          await _repository.getProduk(username, idPenjual, token);
       _getProdukFetcher.sink.add(getProdukModel);
     } catch (error) {
       _getProdukFetcher.sink.add(error);
     }
   }
 
-  updateStatusProduk(String username, String idProduk, String status, String token) async {
+  updateStatusProduk(
+      String username, String idProduk, String status, String token) async {
     ResUpdateStatusProdukModel resUpdateStatusProdukModel =
         await _repository.updateStatusProduk(username, idProduk, status, token);
     _updateStatusProdukFetcher.sink.add(resUpdateStatusProdukModel);
   }
 
-  Future simpanProduct(File file, String kategori, String subkategori, String nama, String harga, String berat, String deskripsi,
+  Future simpanProduct(
+      File file,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String berat,
+      String deskripsi,
       String potongan) async {
-    int statusCode = await _repository.simpanProduk(file, kategori, subkategori, nama, harga, berat, deskripsi, potongan);
+    int statusCode = await _repository.simpanProduk(
+        file, kategori, subkategori, nama, harga, berat, deskripsi, potongan);
     return statusCode;
   }
 
-  Future updateProduct(File file, String _idproduk, String kategori, String subkategori, String nama, String harga, String berat,
-      String deskripsi, String potongan) async {
-    int statusCode =
-        await _repository.updateProduct(file, _idproduk, kategori, subkategori, nama, harga, berat, deskripsi, potongan);
+  Future updateProduct(
+      File file,
+      String _idproduk,
+      String kategori,
+      String subkategori,
+      String nama,
+      String harga,
+      String berat,
+      String deskripsi,
+      String potongan) async {
+    int statusCode = await _repository.updateProduct(file, _idproduk, kategori,
+        subkategori, nama, harga, berat, deskripsi, potongan);
     return statusCode;
   }
 
@@ -113,7 +140,8 @@ class MemberBloc {
   }
 
   getTransaksi(String username, String history) async {
-    GetTransaksiModel _getTransaksi = await _repository.getTransaksi(username, history);
+    GetTransaksiModel _getTransaksi =
+        await _repository.getTransaksi(username, history);
     _getTransaksiFetcher.sink.add(_getTransaksi);
   }
 
@@ -137,7 +165,8 @@ class MemberBloc {
 
   getKecamatan(String kodeKota) async {
     try {
-      GetKecamatanModel getKecamatanModel = await _repository.getKecamatan(kodeKota);
+      GetKecamatanModel getKecamatanModel =
+          await _repository.getKecamatan(kodeKota);
       _kecamatanFetcher.sink.add(getKecamatanModel);
     } catch (error) {
       _kecamatanFetcher.sink.add(error);
@@ -146,27 +175,39 @@ class MemberBloc {
 
   loginGmail(String email, String foto, String nama, String token) async {
     try {
-      GetLoginWithGmailModel getLoginWithGmailModel = await _repository.loginWIthGmail(email, foto, nama, token);
+      GetLoginWithGmailModel getLoginWithGmailModel =
+          await _repository.loginWIthGmail(email, foto, nama, token);
       _loginGmailFetcher.sink.add(getLoginWithGmailModel);
     } catch (error) {
       _loginGmailFetcher.sink.add(error);
     }
   }
 
-  lengkapiProfil(String email, String nama, String provinsiId, String kotaId, String kecId, String alamat, String longitude,
-      String latitude, String telephone, String kurir,String token) async {
+  lengkapiProfil(
+      String email,
+      String nama,
+      String provinsiId,
+      String kotaId,
+      String kecId,
+      String alamat,
+      String longitude,
+      String latitude,
+      String telephone,
+      String kurir,
+      String token) async {
     try {
       ResLengkapiProfilModel resLengkapiProfilModel =
-          await _repository.lengkapiProfil(email, nama, provinsiId, kotaId, kecId, alamat, longitude, latitude, telephone, kurir,token);
+          await _repository.lengkapiProfil(email, nama, provinsiId, kotaId,
+              kecId, alamat, longitude, latitude, telephone, kurir, token);
       _updateProfilFetcher.sink.add(resLengkapiProfilModel);
     } catch (error) {
       _updateProfilFetcher.sink.add(error);
     }
   }
 
-  getProfil(String email) async {
+  getProfil() async {
     try {
-      GetProfilModel getProfilModel = await _repository.getProfil(email);
+      GetProfilModel getProfilModel = await _repository.getProfil();
       _getProfilFetcher.sink.add(getProfilModel);
     } catch (error) {
       _getProfilFetcher.sink.add(error);

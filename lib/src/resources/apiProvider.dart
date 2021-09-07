@@ -795,14 +795,26 @@ class ApiProviders {
     }
   }
 
-  Future getProfil(String email) async {
+  Future getProfil() async {
+    String _email;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      _email = value;
+    });
     var body = jsonEncode({
-      'email': email,
+      'email': _email,
     });
     try {
       final prov = await client
           .post("$url2/penjual/get_profil",
-              headers: {"Content-Type": "application/json"}, body: body)
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetProfilModel.fromJson(json.decode(prov.body));

@@ -1,9 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:toast/toast.dart';
+import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
 import 'package:tumbaso_warung/src/models/getBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
+import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:tumbaso_warung/src/ui/editProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/newProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
@@ -171,10 +174,21 @@ class _ProdukBarangState extends State<ProdukBarang> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewProductBarang()),
-                ),
+                onTap: () async {
+                  blocMember.getProfil();
+                  blocMember.resGetrofil.listen((event) {
+                    print(event.data[0].pilihanKurir);
+                    if (event.data[0].pilihanKurir != '') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewProductBarang()));
+                    } else {
+                      Toast.show("Anda harus melengkapi profil", context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    }
+                  });
+                },
                 child: Container(
                   width: (size.width / 3) - 28,
                   child: Column(

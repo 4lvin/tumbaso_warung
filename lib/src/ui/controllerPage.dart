@@ -70,13 +70,11 @@ class _ControllerPageState extends State<ControllerPage> {
         _selectedTransakasi = true;
         _selectedIndex = 1;
         setState(() {});
-      }
-      if (event.channelKey == 'maem_channel') {
+      } else if (event.channelKey == 'maem_channel') {
         _selectedTransakasi = false;
         _selectedIndex = 1;
         setState(() {});
-      }
-      if (event.channelKey == 'awesome_channel') {
+      } else {
         _selectedTransakasi = false;
         _selectedIndex = 0;
         setState(() {});
@@ -88,13 +86,11 @@ class _ControllerPageState extends State<ControllerPage> {
         _selectedTransakasi = true;
         _selectedIndex = 1;
         setState(() {});
-      }
-      if (event.channelKey == 'maem_channel') {
+      } else if (event.channelKey == 'maem_channel') {
         _selectedTransakasi = false;
         _selectedIndex = 1;
         setState(() {});
-      }
-      if (event.channelKey == 'awesome_channel') {
+      } else {
         _selectedTransakasi = false;
         _selectedIndex = 0;
         setState(() {});

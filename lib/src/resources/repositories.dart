@@ -113,7 +113,7 @@ class Repositories {
       apiProvider.editProdukBarang(file, id_barang, kategori, subkategori, nama,
           harga, satuan, berat, deskripsi, keterangan, minimum);
 
-  Future getProfil(String email) => apiProvider.getProfil(email);
+  Future getProfil() => apiProvider.getProfil();
 
   Future getEkspedisi() => apiProvider.getEkspedisi();
 
