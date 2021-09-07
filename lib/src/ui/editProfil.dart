@@ -42,11 +42,12 @@ class _EditProfilState extends State<EditProfil> {
   bool check = false;
   List<bool> _isChecked;
   List namaEkspedisi;
-  
+
   String _selectedKota;
 
   currentPosition() async {
-    positionStream = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    positionStream = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     if (mounted) {
       setState(() {
         longitude = positionStream.longitude;
@@ -68,11 +69,6 @@ class _EditProfilState extends State<EditProfil> {
         });
     });
     currentPosition();
-    // blocMember.getProfil(widget.email);
-    // blocMember.resGetrofil.listen((event) {
-    // _nama.text = event.data[0].nama;
-    // _nama.text = event.data[0].nama;
-    // });
     getToken().then((value) {
       print(value);
       if (mounted)
@@ -83,10 +79,21 @@ class _EditProfilState extends State<EditProfil> {
     blocMember.resKota.listen((data) {
       for (int i = 0; i < data.data.length; i++) {
         itemsKot.add(new DropdownMenuItem(
-          child: new Text(data.data[i].namaKabupaten, style: TextStyle(fontSize: 14.0)),
+          child: new Text(data.data[i].namaKabupaten,
+              style: TextStyle(fontSize: 14.0)),
           value: data.data[i].namaKabupaten,
         ));
       }
+    });
+    blocMember.getProfil();
+    blocMember.resGetrofil.listen((event) {
+      var profil = event.data[0];
+      _alamat.text = profil.alamatLengkap;
+      _nama.text = profil.nama;
+      _noTelp.text = profil.telepone;
+      // _provinsi = int.parse(profil.provinsiId);
+      // _kotaInt = int.parse(profil.kotaId);
+      // _kecInt = int.parse(profil.kecamatanId);
     });
     super.initState();
   }
@@ -132,7 +139,9 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "Nama Toko",
                   border: InputBorder.none,
-                  errorText: _nama.text.length < 3 && _validate ? 'Nama Toko harus diisi !' : null,
+                  errorText: _nama.text.length < 3 && _validate
+                      ? 'Nama Toko harus diisi !'
+                      : null,
                 ),
               ),
             ),
@@ -162,14 +171,17 @@ class _EditProfilState extends State<EditProfil> {
                                 )),
                           );
                         }).toList(),
-                        value: _provinsi == null ? null : snapshot.data.data[_provinsi],
+                        value: _provinsi == null
+                            ? null
+                            : snapshot.data.data[_provinsi],
                         hint: Text(
                           "pilih Provinsi",
                           style: TextStyle(fontSize: 14.0),
                         ),
                         onChanged: (value) {
                           setState(() {
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                             _provinsi = snapshot.data.data.indexOf(value);
                             _selectedProvinsi = value.idProvinsi;
                             blocMember.getKota(_selectedProvinsi);
@@ -209,14 +221,17 @@ class _EditProfilState extends State<EditProfil> {
                                 )),
                           );
                         }).toList(),
-                        value: _kotaInt == null ? null : snapshot.data.data[_kotaInt],
+                        value: _kotaInt == null
+                            ? null
+                            : snapshot.data.data[_kotaInt],
                         hint: Text(
                           "pilih Kota",
                           style: TextStyle(fontSize: 14.0),
                         ),
                         onChanged: (value) {
                           setState(() {
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                             _kotaInt = snapshot.data.data.indexOf(value);
                             _selectedKota = value.idKabupaten;
                             blocMember.getKecamatan(_selectedKota);
@@ -227,7 +242,8 @@ class _EditProfilState extends State<EditProfil> {
                       );
                     }
                     return Container(
-                      child: Center(child: Text("Pilih Provinsi terlebih dahulu....")),
+                      child: Center(
+                          child: Text("Pilih Provinsi terlebih dahulu....")),
                     );
                   }),
             ),
@@ -242,7 +258,8 @@ class _EditProfilState extends State<EditProfil> {
               ),
               child: StreamBuilder(
                   stream: blocMember.resKecamatan,
-                  builder: (context, AsyncSnapshot<GetKecamatanModel> snapshot) {
+                  builder:
+                      (context, AsyncSnapshot<GetKecamatanModel> snapshot) {
                     if (snapshot.hasData) {
                       return new DropdownButton<ResultKec>(
                         isExpanded: true,
@@ -257,14 +274,17 @@ class _EditProfilState extends State<EditProfil> {
                                 )),
                           );
                         }).toList(),
-                        value: _kecInt == null ? null : snapshot.data.data[_kecInt],
+                        value: _kecInt == null
+                            ? null
+                            : snapshot.data.data[_kecInt],
                         hint: Text(
                           "pilih Kecamatan",
                           style: TextStyle(fontSize: 14.0),
                         ),
                         onChanged: (value) {
                           setState(() {
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                             _kecInt = snapshot.data.data.indexOf(value);
                             _selectedKec = value.idKecamatan;
                             // blocMember.getKota(_selectedProvinsi);
@@ -274,7 +294,8 @@ class _EditProfilState extends State<EditProfil> {
                       );
                     }
                     return Container(
-                      child: Center(child: Text("Pilih Kota terlebih dahulu..")),
+                      child:
+                          Center(child: Text("Pilih Kota terlebih dahulu..")),
                     );
                   }),
             ),
@@ -337,7 +358,9 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "No Telp",
                   border: InputBorder.none,
-                  errorText: _noTelp.text.length < 3 && _validate ? 'No Telp harus diisi !' : null,
+                  errorText: _noTelp.text.length < 3 && _validate
+                      ? 'No Telp harus diisi !'
+                      : null,
                 ),
               ),
             ),
@@ -355,17 +378,22 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "Alamat",
                   border: InputBorder.none,
-                  errorText: _alamat.text.length < 3 && _validate ? 'Alamat harus diisi !' : null,
+                  errorText: _alamat.text.length < 3 && _validate
+                      ? 'Alamat harus diisi !'
+                      : null,
                 ),
               ),
             ),
             InkWell(
               onTap: () {
-                _controller = _scaffoldKey.currentState.showBottomSheet((BuildContext context) {
+                _controller = _scaffoldKey.currentState
+                    .showBottomSheet((BuildContext context) {
                   return Container(
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey,
@@ -379,7 +407,8 @@ class _EditProfilState extends State<EditProfil> {
                             height: 50,
                             padding: EdgeInsets.only(top: 0),
                             width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                            decoration:
+                                BoxDecoration(color: Colors.white, boxShadow: [
                               BoxShadow(
                                 color: Colors.grey,
                                 blurRadius: 8.0,
@@ -428,6 +457,14 @@ class _EditProfilState extends State<EditProfil> {
             ),
             InkWell(
               onTap: () {
+                String kurir = '';
+                namaEkspedisi.forEach((element) {
+                  if (kurir == '') {
+                    kurir = element;
+                  } else {
+                    kurir = kurir + ',' + element;
+                  }
+                });
                 if (_nama.text.isEmpty ||
                     _selectedProvinsi == null ||
                     _selectedKota == null ||
@@ -440,17 +477,29 @@ class _EditProfilState extends State<EditProfil> {
                     });
                 } else {
                   Dialogs.showLoading(context, "Loading...");
-                  blocMember.lengkapiProfil(widget.email, _nama.text, _selectedProvinsi, _selectedKota, _selectedKec,
-                      _alamat.text, longitude.toString(), latitude.toString(), _noTelp.text, "", token);
+                  blocMember.lengkapiProfil(
+                      widget.email,
+                      _nama.text,
+                      _selectedProvinsi,
+                      _selectedKota,
+                      _selectedKec,
+                      _alamat.text,
+                      longitude.toString(),
+                      latitude.toString(),
+                      _noTelp.text,
+                      kurir,
+                      token);
                   blocMember.resUpdateProfil.listen((event) {
                     if (event.status) {
                       Dialogs.dismiss(context);
                       Future.delayed(Duration(seconds: 1)).then((value) {
-                        Navigator.pushReplacementNamed(context, '/controllerPage');
+                        Navigator.pushReplacementNamed(
+                            context, '/controllerPage');
                       });
                     } else {
                       Dialogs.dismiss(context);
-                      Toast.show(event.message, context, duration: 3, gravity: Toast.BOTTOM);
+                      Toast.show(event.message, context,
+                          duration: 3, gravity: Toast.BOTTOM);
                     }
                   });
                 }
@@ -497,7 +546,7 @@ class _EditProfilState extends State<EditProfil> {
                         () {
                           _isChecked[i] = val;
                           if (val == true) {
-                            namaEkspedisi.add(ekspedisi[i].namaKurir);
+                            namaEkspedisi.add(ekspedisi[i].idKurir);
                           } else {
                             namaEkspedisi.remove("");
                           }

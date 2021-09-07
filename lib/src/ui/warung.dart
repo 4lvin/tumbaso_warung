@@ -5,6 +5,7 @@ import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/ui/auth/auth.dart';
 import 'package:tumbaso_warung/src/ui/editProfil.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
@@ -26,7 +27,7 @@ class _WarungPageState extends State<WarungPage> {
 
   @override
   void initState() {
-    getEmail().then((value){
+    getEmail().then((value) {
       if (mounted)
         setState(() {
           email = value;
@@ -56,33 +57,37 @@ class _WarungPageState extends State<WarungPage> {
                   child: Stack(
                     children: <Widget>[
                       Container(
-                        height: MediaQuery.of(context).size.height / 4 - 50,
-                        color: colorses.dasar,
-                        child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [colorses.dasar, colorses.dasar]),
-                              ),
-                            )
-                      ),
+                          height: MediaQuery.of(context).size.height / 4 - 50,
+                          color: colorses.dasar,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [colorses.dasar, colorses.dasar]),
+                            ),
+                          )),
                       Align(
                         alignment: Alignment.topCenter,
                         child: SafeArea(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18.0, vertical: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
                                   "Profil",
-                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Container(
                                   width: 80,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Icon(
                                         Icons.notifications,
@@ -101,13 +106,15 @@ class _WarungPageState extends State<WarungPage> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.rightToLeft,
                                     duration: Duration(milliseconds: 200),
-                                    child: EditProfil(email: email,)));
+                                    child: EditProfil(
+                                      email: email,
+                                    )));
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -120,7 +127,9 @@ class _WarungPageState extends State<WarungPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Container(
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: colorses.dasar),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: colorses.dasar),
                                   width: 70,
                                   height: 70,
                                   child: Icon(
@@ -133,7 +142,8 @@ class _WarungPageState extends State<WarungPage> {
                                   width: 180,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         "$nama",
@@ -193,22 +203,24 @@ class _WarungPageState extends State<WarungPage> {
                 ),
                 InkWell(
                   onTap: () {
-                    rmvEmail();
-                    rmvKdUser();
-                    rmvNama();
-                    rmvToken();
+                    signOutAccount();
                     Navigator.pushReplacementNamed(context, "/login");
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 5),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16), color: Colors.red[100], border: Border.all(color: Colors.red)),
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.red[100],
+                        border: Border.all(color: Colors.red)),
                     height: 55,
                     width: MediaQuery.of(context).size.width - 50,
                     child: Center(
                         child: Text(
                       "Logout",
-                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 18),
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
                     )),
                   ),
                 ),

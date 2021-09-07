@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
           setNama(login.data.nama);
           setKdUser(login.data.key.idPenjual);
           setKdPasmak(login.data.key.idPenjualMakmur);
-          // Navigator.pushReplacementNamed(context, '/controllerPage');
+          Navigator.pushReplacementNamed(context, '/controllerPage');
         });
       } else {
         Dialogs.dismiss(context);
@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _firebaseMessaging.getToken().then((token) {
+      print(token);
       setState(() {
         tokenUser = token;
       });

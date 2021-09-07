@@ -75,6 +75,14 @@
           }
         },
         {
+          "client_id": "955467973709-5ncnbqb9r0di3hu0mhkg45vv8lj16tev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jongjava.tumbaso_warung",
+            "certificate_hash": "aa7483f9b2e7c0745f73ef8d9181dfd67a704a4c"
+          }
+        },
+        {
           "client_id": "955467973709-trnl1moimtqnbduuq6h4fj96dch8t72m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

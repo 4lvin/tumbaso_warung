@@ -1,4 +1,4 @@
-@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBpdHVuZ3MwNjBAZ21haWwuY29tIn0.mGnwo56UMZyLLNjquUUGsBTaVTMQwDtGTTQfcDMPsuI
+@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im11aGFtbWFkc3lhcndhbmk5NTVAZ21haWwuY29tIn0.lGDkrwWmNWoMsf9bt5oYBO72Q8l2CI67x4GCHRb8X5g
 @url_barang = https://tumbasonline.com/pasarmakmur/restapi/
 @url_maem = https://jongjava.tech/tumbas/restapi/
 
@@ -7,9 +7,19 @@ POST {{ url_barang }}/penjual/login_gmail HTTP/1.1
 content-type: application/json
 
 {
-    "email": "pitungs060@gmail.com",
-	"nama": "Bagus Panji",
-	"token": ""
+    "email": "muhammadsyarwani955@gmail.com",
+	"nama": "muhammadsyarwani",
+	"token": "fyM8TuMaSXqqKwI2j1AoJc:APA91bGtOLb5MVQLR78JNt4RiW5snhaPHzV4q_I_sw4FWMQcfNedqZbM37jFuGN6zGVctxGzBfFUQDhQ0Zp3SbDOAZrb6hENAyDLGPdHUKePany8tjbek9HpFKa7aqN472VWkwy7RZ-5"
+}
+
+###
+// Profil Penjual
+POST {{ url_barang }}/penjual/get_profil HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "email": "muhammadsyarwani955@gmail.com"
 }
 
 ###
@@ -33,6 +43,17 @@ Authorization: {{token}}
     "email": "pitungs060@gmail.com",
     "id_transaksi": 133, 
 	"status": 4
+}
+
+###
+// Produk Barang
+POST {{url_barang}}/produk/get_produk HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "email": "muhammadsyarwani955@gmail.com",
+    "penjual_id": 80
 }
 
 ###
