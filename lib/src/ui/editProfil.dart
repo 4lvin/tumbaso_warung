@@ -87,13 +87,45 @@ class _EditProfilState extends State<EditProfil> {
     });
     blocMember.getProfil();
     blocMember.resGetrofil.listen((event) {
-      var profil = event.data[0];
-      _alamat.text = profil.alamatLengkap;
-      _nama.text = profil.nama;
-      _noTelp.text = profil.telepone;
-      // _provinsi = int.parse(profil.provinsiId);
-      // _kotaInt = int.parse(profil.kotaId);
-      // _kecInt = int.parse(profil.kecamatanId);
+      if(mounted)
+      setState(() {
+        var profil = event.data[0];
+        _alamat.text = profil.alamatLengkap;
+        _nama.text = profil.nama;
+        _noTelp.text = profil.telepone;
+        // _provinsi = int.parse(profil.provinsiId);
+        // _kotaInt = int.parse(profil.kotaId);
+        // _kecInt = int.parse(profil.kecamatanId);
+      });
+      blocMember.getKota(event.data[0].provinsiId);
+      blocMember.getKecamatan(event.data[0].kotaId);
+      blocMember.resProvinsi.listen((prov) {
+        for (var i = 0; i < prov.data.length; i++) {
+          if (prov.data[i].idProvinsi == event.data[0].provinsiId) {
+            setState(() {
+              _provinsi = i;
+            });
+          }
+        }
+      });
+      blocMember.resKota.listen((kota) {
+        for (var i = 0; i < kota.data.length; i++) {
+          if (kota.data[i].idKabupaten == event.data[0].kotaId) {
+            setState(() {
+              _kotaInt = i;
+            });
+          }
+        }
+      });
+      blocMember.resKecamatan.listen((kec) {
+        for (var i = 0; i < kec.data.length; i++) {
+          if (kec.data[i].idKecamatan == event.data[0].kecamatanId) {
+            setState(() {
+              _kecInt = i;
+            });
+          }
+        }
+      });
     });
     super.initState();
   }

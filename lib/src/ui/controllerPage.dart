@@ -102,6 +102,7 @@ class _ControllerPageState extends State<ControllerPage> {
   void dispose() {
     AwesomeNotifications().actionSink.close();
     AwesomeNotifications().displayedSink.close();
+    AwesomeNotifications().createdSink.close();
     super.dispose();
   }
 
