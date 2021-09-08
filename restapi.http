@@ -77,3 +77,53 @@ Authorization: {{token}}
     "username": "pitungs060@gmail.com",
     "history": "0"
 }
+
+###
+// FCM
+POST https://fcm.googleapis.com/fcm/send HTTP/1.1
+content-type: application/json
+Authorization: key=AAAA3nZURE0:APA91bGldbq9XNtZTiTaYdSJPUKcz2AdhvDiQ71T1icDNa2RC61iUajQ_D00uL7p-2kGEOG0f9LGXRQEjaLQmY1_BsDxt1WjtASopSjb_7z-BI2x_z6B4FKnyyuOuz77mDWVZDw-qmuf
+
+{
+	"to": "/topics/warung",
+    "data" : {
+        "title": "UKM Kece",
+        "body": "Tingkatkan UKM dengan berjualan via tumbas online",
+        "image": "",
+        "tipe": ""
+    }
+}
+
+###
+// FCM2
+POST https://fcm.googleapis.com/fcm/send HTTP/1.1
+content-type: application/json
+Authorization: key=AAAA3nZURE0:APA91bGldbq9XNtZTiTaYdSJPUKcz2AdhvDiQ71T1icDNa2RC61iUajQ_D00uL7p-2kGEOG0f9LGXRQEjaLQmY1_BsDxt1WjtASopSjb_7z-BI2x_z6B4FKnyyuOuz77mDWVZDw-qmuf
+
+{
+	"to": "eRqcNlJUQI-CiBGhHvPATW:APA91bH8-dMpC0n36-kfFFXET-iqT2zVH6OwEOIHpxWuP76srhDUVW1DPibp6qISbHTzfxJj-oYpnGq2U02oy711xfXffYCyuX-JieEZgw9jfln80jiHpX2OaGWmt9bZYi9l5vJiQkoC",
+	"mutable_content" : true,
+    "content_available": true,
+    "priority": "high",
+    "data" : {
+        "content": {
+            "id": 22,
+            "channelKey": "maem_channel",
+            "title": "Pesanan Masuk",
+            "body": "Anda mendapatkan pesanan baru",
+            "notificationLayout": "BigPicture",
+            "largeIcon": "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Zm9vZHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+            "bigPicture": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Zm9vZHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+            "showWhen": true,
+            "autoCancel": true,
+            "privacy": "Private"
+        },
+        "actionButtons": [
+            {
+                "key": "SHOW",
+                "label": "Lihat",
+                "autoCancel": true
+            }
+        ]
+    }
+}

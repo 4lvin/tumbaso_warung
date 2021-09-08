@@ -87,16 +87,23 @@ class _EditProfilState extends State<EditProfil> {
     });
     blocMember.getProfil();
     blocMember.resGetrofil.listen((event) {
-      if(mounted)
-      setState(() {
-        var profil = event.data[0];
-        _alamat.text = profil.alamatLengkap;
-        _nama.text = profil.nama;
-        _noTelp.text = profil.telepone;
-        _selectedProvinsi = profil.provinsiId;
-        _selectedKota = profil.kotaId;
-        _selectedKec = profil.kecamatanId;
-      });
+      if (mounted)
+        setState(() {
+          var profil = event.data[0];
+          _alamat.text = profil.alamatLengkap;
+          _nama.text = profil.nama;
+          _noTelp.text = profil.telepone;
+          _selectedProvinsi = profil.provinsiId;
+          _selectedKota = profil.kotaId;
+          _selectedKec = profil.kecamatanId;
+          String kurir = event.data[0].pilihanKurir;
+          List<String> listKurir = kurir.split(',');
+          namaEkspedisi.clear();
+          listKurir.forEach((e) {
+            _isChecked[int.parse(e)] = true;
+            namaEkspedisi.add(e);
+          });
+        });
       blocMember.getKota(event.data[0].provinsiId);
       blocMember.getKecamatan(event.data[0].kotaId);
       blocMember.resProvinsi.listen((prov) {
@@ -128,6 +135,54 @@ class _EditProfilState extends State<EditProfil> {
       });
     });
     super.initState();
+  }
+
+  _onSave() async {
+    String kurir = '';
+    namaEkspedisi.forEach((element) {
+      if (kurir == '') {
+        kurir = element;
+      } else {
+        kurir = kurir + ',' + element;
+      }
+    });
+    if (_nama.text.isEmpty ||
+        _selectedProvinsi == null ||
+        _selectedKota == null ||
+        _selectedKec == null ||
+        _noTelp.text.isEmpty ||
+        _alamat.text.isEmpty) {
+      if (mounted)
+        setState(() {
+          _validate = true;
+        });
+    } else {
+      Dialogs.showLoading(context, "Loading...");
+      blocMember.lengkapiProfil(
+          widget.email,
+          _nama.text,
+          _selectedProvinsi,
+          _selectedKota,
+          _selectedKec,
+          _alamat.text,
+          longitude.toString(),
+          latitude.toString(),
+          _noTelp.text,
+          kurir,
+          token);
+      blocMember.resUpdateProfil.listen((event) {
+        if (event.status) {
+          Dialogs.dismiss(context);
+          Future.delayed(Duration(seconds: 1)).then((value) {
+            Navigator.pushReplacementNamed(context, '/controllerPage');
+          });
+        } else {
+          Dialogs.dismiss(context);
+          Toast.show(event.message, context,
+              duration: 3, gravity: Toast.BOTTOM);
+        }
+      });
+    }
   }
 
   @override
@@ -331,51 +386,6 @@ class _EditProfilState extends State<EditProfil> {
                     );
                   }),
             ),
-            // Container(
-            //   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 30),
-            //   padding: EdgeInsets.symmetric(horizontal: 18, vertical: 0),
-            //   width: MediaQuery.of(context).size.width * 0.8,
-            //   height: 70,
-            //   decoration: BoxDecoration(
-            //     color: colorses.background,
-            //     borderRadius: BorderRadius.circular(8),
-            //   ),
-            //   child: StreamBuilder(
-            //       stream: blocMember.resKota,
-            //       builder: (context, AsyncSnapshot<GetKotaModel> snapshot) {
-            //         if(snapshot.hasData){
-            //           return SearchableDropdown(
-            //             isExpanded: true,
-            //             items: itemsKot,
-            //             value: _kota,
-            //             hint: Text(
-            //               "pilih Kota",
-            //               style: TextStyle(fontSize: 14.0),
-            //             ),
-            //             onChanged: (value) {
-            //               setState(() {
-            //                 FocusScope.of(context).requestFocus(new FocusNode());
-            //                 for(int i=0; i < snapshot.data.data.length; i++){
-            //                   if(value == snapshot.data.data[i].namaKabupaten){
-            //                     _selectedKota = snapshot.data.data[i].idKabupaten;
-            //                   }
-            //                 }
-            //                 _kota = value;
-            //                 // masterBloc.getKelurahan(_selectedKota, _selectedKecamatan);
-            //               });
-            //             },
-            //           );
-            //         }
-            //         return DropdownButton(
-            //           isExpanded: true,
-            //           hint: Text(
-            //             "pilih Provinsi dulu",
-            //             style: TextStyle(fontSize: 14.0),
-            //           ),
-            //         );
-            //       }
-            //   ),
-            // ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
@@ -488,54 +498,7 @@ class _EditProfilState extends State<EditProfil> {
               ),
             ),
             InkWell(
-              onTap: () {
-                String kurir = '';
-                namaEkspedisi.forEach((element) {
-                  if (kurir == '') {
-                    kurir = element;
-                  } else {
-                    kurir = kurir + ',' + element;
-                  }
-                });
-                if (_nama.text.isEmpty ||
-                    _selectedProvinsi == null ||
-                    _selectedKota == null ||
-                    _selectedKec == null ||
-                    _noTelp.text.isEmpty ||
-                    _alamat.text.isEmpty) {
-                  if (mounted)
-                    setState(() {
-                      _validate = true;
-                    });
-                } else {
-                  Dialogs.showLoading(context, "Loading...");
-                  blocMember.lengkapiProfil(
-                      widget.email,
-                      _nama.text,
-                      _selectedProvinsi,
-                      _selectedKota,
-                      _selectedKec,
-                      _alamat.text,
-                      longitude.toString(),
-                      latitude.toString(),
-                      _noTelp.text,
-                      kurir,
-                      token);
-                  blocMember.resUpdateProfil.listen((event) {
-                    if (event.status) {
-                      Dialogs.dismiss(context);
-                      Future.delayed(Duration(seconds: 1)).then((value) {
-                        Navigator.pushReplacementNamed(
-                            context, '/controllerPage');
-                      });
-                    } else {
-                      Dialogs.dismiss(context);
-                      Toast.show(event.message, context,
-                          duration: 3, gravity: Toast.BOTTOM);
-                    }
-                  });
-                }
-              },
+              onTap: () => _onSave(),
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),

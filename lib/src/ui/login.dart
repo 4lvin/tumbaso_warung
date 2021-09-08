@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       if (login.data.telepone != "") {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          print(signIn.user);
+          // print(signIn.user);
           setToken(login.data.idToken);
           // setKota(login.data.kota.kode);
           setEmail(signIn.user.email);
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _firebaseMessaging.getToken().then((token) {
-      print(token);
+      print('token fcm: ' + token);
       setState(() {
         tokenUser = token;
       });
@@ -131,9 +131,16 @@ class _LoginPageState extends State<LoginPage> {
                       "di tumbas online dan pasmak",
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height/5,),
-                    Text("Bekerja sama dengan :",style: TextStyle(color: Colors.white),),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 5,
+                    ),
+                    Text(
+                      "Bekerja sama dengan :",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       width: 50,
                       height: 50,
