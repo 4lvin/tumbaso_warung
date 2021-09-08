@@ -93,9 +93,9 @@ class _EditProfilState extends State<EditProfil> {
         _alamat.text = profil.alamatLengkap;
         _nama.text = profil.nama;
         _noTelp.text = profil.telepone;
-        // _provinsi = int.parse(profil.provinsiId);
-        // _kotaInt = int.parse(profil.kotaId);
-        // _kecInt = int.parse(profil.kecamatanId);
+        _selectedProvinsi = profil.provinsiId;
+        _selectedKota = profil.kotaId;
+        _selectedKec = profil.kecamatanId;
       });
       blocMember.getKota(event.data[0].provinsiId);
       blocMember.getKecamatan(event.data[0].kotaId);

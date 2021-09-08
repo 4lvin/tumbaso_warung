@@ -60,50 +60,7 @@ class _ControllerPageState extends State<ControllerPage> {
     widget.selected == null
         ? _selectedIndex = 0
         : _selectedIndex = widget.selected;
-    _onActionNotif();
     super.initState();
-  }
-
-  _onActionNotif() {
-    AwesomeNotifications().displayedStream.listen((event) {
-      if (event.channelKey == 'barang_channel') {
-        _selectedTransakasi = true;
-        _selectedIndex = 1;
-        setState(() {});
-      } else if (event.channelKey == 'maem_channel') {
-        _selectedTransakasi = false;
-        _selectedIndex = 1;
-        setState(() {});
-      } else {
-        _selectedTransakasi = false;
-        _selectedIndex = 0;
-        setState(() {});
-      }
-    });
-
-    AwesomeNotifications().actionStream.listen((event) {
-      if (event.channelKey == 'barang_channel') {
-        _selectedTransakasi = true;
-        _selectedIndex = 1;
-        setState(() {});
-      } else if (event.channelKey == 'maem_channel') {
-        _selectedTransakasi = false;
-        _selectedIndex = 1;
-        setState(() {});
-      } else {
-        _selectedTransakasi = false;
-        _selectedIndex = 0;
-        setState(() {});
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    AwesomeNotifications().actionSink.close();
-    AwesomeNotifications().displayedSink.close();
-    AwesomeNotifications().createdSink.close();
-    super.dispose();
   }
 
   @override
