@@ -71,8 +71,56 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       }
     });
-
+    _onActionNotif();
     super.initState();
+  }
+
+  _onActionNotif() {
+    AwesomeNotifications().displayedStream.listen((event) {
+      if (event.channelKey == 'barang_channel') {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        // _selectedTransakasi = true;
+        // _selectedIndex = 1;
+        // setState(() {});
+      } else if (event.channelKey == 'maem_channel') {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        // _selectedTransakasi = false;
+        // _selectedIndex = 1;
+        // setState(() {});
+      } else {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 0,)));
+        // _selectedTransakasi = false;
+        // _selectedIndex = 0;
+        // setState(() {});
+      }
+    });
+
+    AwesomeNotifications().actionStream.listen((event) {
+      if (event.channelKey == 'barang_channel') {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        // _selectedTransakasi = true;
+        // _selectedIndex = 1;
+        // setState(() {});
+      } else if (event.channelKey == 'maem_channel') {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        // _selectedTransakasi = false;
+        // _selectedIndex = 1;
+        // setState(() {});
+      } else {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 0,)));
+        // _selectedTransakasi = false;
+        // _selectedIndex = 0;
+        // setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().displayedSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
   }
 
   messaging() {
@@ -94,13 +142,28 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         color: colorses.dasar,
-        child: Center(
-          child: Container(
-            width: 200,
-            height: 200,
-            child: SvgPicture.asset("assets/warung.svg",
-                semanticsLabel: 'Acme Logo'),
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/2 - 100),
+                width: 200,
+                height: 200,
+                child: SvgPicture.asset("assets/warung.svg",
+                    semanticsLabel: 'Tumbas'),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height/5,),
+            Text("Bekerja sama dengan :",style: TextStyle(color: Colors.white),),
+            SizedBox(height: 20,),
+            Container(
+              width: 50,
+              height: 50,
+              child: SvgPicture.asset("assets/pasmak.svg",
+                  semanticsLabel: 'pasmak'),
+            ),
+          ],
         ),
       ),
     );
