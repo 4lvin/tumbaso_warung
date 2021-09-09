@@ -24,15 +24,11 @@ import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:async/async.dart';
+import 'package:tumbaso_warung/src/resources/globalApi.dart';
 
 class ApiProviders {
-  // String url = "https://tumbasonline.com/restapi";
-
-  String url = "https://jongjava.tech/tumbas/restapi";
-  // String url = "https://tumbasonline.com/restapi";
-
-  String url2 = "https://pasar.benmakmur.id/restapi";
-  // String url2 = "https://tumbasonline.com/pasarmakmur/restapi";
+  String url = "${globalMaem}/restapi";
+  String url2 = "${globalBarang}/restapi";
 
   Future getSubkategori(String idKategori) async {
     var body = jsonEncode({'id_kategori': idKategori});
@@ -524,7 +520,8 @@ class ApiProviders {
       String latitude,
       String telephone,
       String kurir,
-      String token) async {
+      String token,
+      String agen) async {
     var body = jsonEncode({
       'email': email,
       'nama': nama,
@@ -536,7 +533,7 @@ class ApiProviders {
       'latitude': latitude,
       'telepone': telephone,
       'kurir': kurir,
-      'agen_id': "",
+      'agen_id': agen,
     });
     try {
       final checkId = await client

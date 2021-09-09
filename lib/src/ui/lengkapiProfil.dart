@@ -11,7 +11,8 @@ import 'package:tumbaso_warung/src/ui/utils/loading.dart';
 
 // ignore: must_be_immutable
 class LengkapiProfil extends StatefulWidget {
-  LengkapiProfil({this.email, this.token, this.kdUser, this.nama, this.kdPasmak});
+  LengkapiProfil(
+      {this.email, this.token, this.kdUser, this.nama, this.kdPasmak});
 
   String email;
   String token;
@@ -27,6 +28,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
   TextEditingController _alamat = TextEditingController();
   TextEditingController _nama = TextEditingController();
   TextEditingController _noTelp = TextEditingController();
+  TextEditingController _agen = TextEditingController();
   int _provinsi;
   String _selectedProvinsi;
   bool _validate = false;
@@ -42,7 +44,8 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
   String _selectedKota;
 
   currentPosition() async {
-    positionStream = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    positionStream = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     if (mounted) {
       setState(() {
         longitude = positionStream.longitude;
@@ -60,7 +63,8 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
     blocMember.resKota.listen((data) {
       for (int i = 0; i < data.data.length; i++) {
         itemsKot.add(new DropdownMenuItem(
-          child: new Text(data.data[i].namaKabupaten, style: TextStyle(fontSize: 14.0)),
+          child: new Text(data.data[i].namaKabupaten,
+              style: TextStyle(fontSize: 14.0)),
           value: data.data[i].namaKabupaten,
         ));
       }
@@ -77,7 +81,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height-100,
+          height: MediaQuery.of(context).size.height - 100,
           child: Column(
             children: [
               Container(
@@ -101,7 +105,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorses.dasar,width: 1.5),
+                  border: Border.all(color: colorses.dasar, width: 1.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextField(
@@ -110,7 +114,9 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                   decoration: InputDecoration(
                     hintText: "Nama Toko",
                     border: InputBorder.none,
-                    errorText: _nama.text.length < 3 && _validate ? 'Nama Toko harus diisi !' : null,
+                    errorText: _nama.text.length < 3 && _validate
+                        ? 'Nama Toko harus diisi !'
+                        : null,
                   ),
                 ),
               ),
@@ -120,12 +126,13 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorses.dasar,width: 1.5),
+                  border: Border.all(color: colorses.dasar, width: 1.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: StreamBuilder(
                     stream: blocMember.resProvinsi,
-                    builder: (context, AsyncSnapshot<GetProvinsiModel> snapshot) {
+                    builder:
+                        (context, AsyncSnapshot<GetProvinsiModel> snapshot) {
                       if (snapshot.hasData) {
                         return new DropdownButton<ResultProv>(
                           isExpanded: true,
@@ -140,14 +147,17 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                                   )),
                             );
                           }).toList(),
-                          value: _provinsi == null ? null : snapshot.data.data[_provinsi],
+                          value: _provinsi == null
+                              ? null
+                              : snapshot.data.data[_provinsi],
                           hint: Text(
-                            "pilih Provinsi",
+                            "Pilih Provinsi",
                             style: TextStyle(fontSize: 14.0),
                           ),
                           onChanged: (value) {
                             setState(() {
-                              FocusScope.of(context).requestFocus(new FocusNode());
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
                               _provinsi = snapshot.data.data.indexOf(value);
                               _selectedProvinsi = value.idProvinsi;
                               blocMember.getKota(_selectedProvinsi);
@@ -157,6 +167,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                         );
                       }
                       return DropdownButton(
+                        items: [],
                         isExpanded: true,
                         hint: Text(
                           "loading . . .",
@@ -171,7 +182,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorses.dasar,width: 1.5),
+                  border: Border.all(color: colorses.dasar, width: 1.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: StreamBuilder(
@@ -191,14 +202,17 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                                   )),
                             );
                           }).toList(),
-                          value: _kotaInt == null ? null : snapshot.data.data[_kotaInt],
+                          value: _kotaInt == null
+                              ? null
+                              : snapshot.data.data[_kotaInt],
                           hint: Text(
-                            "pilih Kota",
+                            "Pilih Kota",
                             style: TextStyle(fontSize: 14.0),
                           ),
                           onChanged: (value) {
                             setState(() {
-                              FocusScope.of(context).requestFocus(new FocusNode());
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
                               _kotaInt = snapshot.data.data.indexOf(value);
                               _selectedKota = value.idKabupaten;
                               blocMember.getKecamatan(_selectedKota);
@@ -209,9 +223,10 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                         );
                       }
                       return DropdownButton(
+                        items: [],
                         isExpanded: true,
                         hint: Text(
-                          "pilih provinsi dulu",
+                          "Pilih Provinsi dulu",
                           style: TextStyle(fontSize: 14.0),
                         ),
                       );
@@ -223,12 +238,13 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorses.dasar,width: 1.5),
+                  border: Border.all(color: colorses.dasar, width: 1.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: StreamBuilder(
                     stream: blocMember.resKecamatan,
-                    builder: (context, AsyncSnapshot<GetKecamatanModel> snapshot) {
+                    builder:
+                        (context, AsyncSnapshot<GetKecamatanModel> snapshot) {
                       if (snapshot.hasData) {
                         return new DropdownButton<ResultKec>(
                           isExpanded: true,
@@ -243,14 +259,17 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                                   )),
                             );
                           }).toList(),
-                          value: _kecInt == null ? null : snapshot.data.data[_kecInt],
+                          value: _kecInt == null
+                              ? null
+                              : snapshot.data.data[_kecInt],
                           hint: Text(
-                            "pilih Kecamatan",
+                            "Pilih Kecamatan",
                             style: TextStyle(fontSize: 14.0),
                           ),
                           onChanged: (value) {
                             setState(() {
-                              FocusScope.of(context).requestFocus(new FocusNode());
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
                               _kecInt = snapshot.data.data.indexOf(value);
                               _selectedKec = value.idKecamatan;
                               // blocMember.getKota(_selectedProvinsi);
@@ -260,74 +279,33 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                         );
                       }
                       return DropdownButton(
+                        items: [],
                         isExpanded: true,
                         hint: Text(
-                          "pilih Kota dulu",
+                          "Pilih Kota dulu",
                           style: TextStyle(fontSize: 14.0),
                         ),
                       );
                     }),
               ),
-              // Container(
-              //   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 30),
-              //   padding: EdgeInsets.symmetric(horizontal: 18, vertical: 0),
-              //   width: MediaQuery.of(context).size.width * 0.8,
-              //   height: 70,
-              //   decoration: BoxDecoration(
-              //     color: colorses.background,
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              //   child: StreamBuilder(
-              //       stream: blocMember.resKota,
-              //       builder: (context, AsyncSnapshot<GetKotaModel> snapshot) {
-              //         if(snapshot.hasData){
-              //           return SearchableDropdown(
-              //             isExpanded: true,
-              //             items: itemsKot,
-              //             value: _kota,
-              //             hint: Text(
-              //               "pilih Kota",
-              //               style: TextStyle(fontSize: 14.0),
-              //             ),
-              //             onChanged: (value) {
-              //               setState(() {
-              //                 FocusScope.of(context).requestFocus(new FocusNode());
-              //                 for(int i=0; i < snapshot.data.data.length; i++){
-              //                   if(value == snapshot.data.data[i].namaKabupaten){
-              //                     _selectedKota = snapshot.data.data[i].idKabupaten;
-              //                   }
-              //                 }
-              //                 _kota = value;
-              //                 // masterBloc.getKelurahan(_selectedKota, _selectedKecamatan);
-              //               });
-              //             },
-              //           );
-              //         }
-              //         return DropdownButton(
-              //           isExpanded: true,
-              //           hint: Text(
-              //             "pilih Provinsi dulu",
-              //             style: TextStyle(fontSize: 14.0),
-              //           ),
-              //         );
-              //       }
-              //   ),
-              // ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorses.dasar,width: 1.5),
+                  border: Border.all(color: colorses.dasar, width: 1.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   controller: _noTelp,
                   cursorColor: colorses.dasar,
                   decoration: InputDecoration(
                     hintText: "No Telp",
                     border: InputBorder.none,
-                    errorText: _noTelp.text.length < 3 && _validate ? 'No Telp harus diisi !' : null,
+                    errorText: _noTelp.text.length < 3 && _validate
+                        ? 'No Telp harus diisi !'
+                        : null,
                   ),
                 ),
               ),
@@ -336,7 +314,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorses.dasar,width: 1.5),
+                  border: Border.all(color: colorses.dasar, width: 1.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextField(
@@ -345,38 +323,83 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                   decoration: InputDecoration(
                     hintText: "Alamat",
                     border: InputBorder.none,
-                    errorText: _alamat.text.length < 3 && _validate ? 'Alamat harus diisi !' : null,
+                    errorText: _alamat.text.length < 3 && _validate
+                        ? 'Alamat harus diisi !'
+                        : null,
                   ),
                 ),
               ),
-              Expanded(child: Container(height: 10,),),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                  border: Border.all(color: colorses.dasar, width: 1.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextField(
+                  controller: _agen,
+                  cursorColor: colorses.dasar,
+                  decoration: InputDecoration(
+                    hintText: "Kode Agen",
+                    border: InputBorder.none,
+                    errorText: _agen.text.length < 3 && _validate
+                        ? 'Kode Agen harus diisi !'
+                        : null,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: 10,
+                ),
+              ),
               InkWell(
                 onTap: () {
-                  if(_nama.text.isEmpty || _selectedProvinsi == null || _selectedKota == null || _selectedKec == null || _noTelp.text.isEmpty || _alamat.text.isEmpty){
-                    if(mounted)
+                  if (_nama.text.isEmpty ||
+                      _selectedProvinsi == null ||
+                      _selectedKota == null ||
+                      _selectedKec == null ||
+                      _noTelp.text.isEmpty ||
+                      _alamat.text.isEmpty ||
+                      _agen.text.isEmpty) {
+                    if (mounted)
                       setState(() {
                         _validate = true;
                       });
-                  }else{
-                  Dialogs.showLoading(context, "Loading...");
-                  blocMember.lengkapiProfil(widget.email, _nama.text, _selectedProvinsi, _selectedKota, _selectedKec, _alamat.text,
-                      longitude.toString(), latitude.toString(), _noTelp.text, "",widget.token);
-                  blocMember.resUpdateProfil.listen((event) {
-                    if (event.status) {
-                      Dialogs.dismiss(context);
-                  Future.delayed(Duration(seconds: 1)).then((value) {
-                      setToken(widget.token);
-                      setEmail(widget.email);
-                      setNama(_nama.text);
-                      setKdUser(widget.kdUser);
-                      setKdPasmak(widget.kdPasmak);
-                      Navigator.pushReplacementNamed(context, '/controllerPage');
-                  });
-                    } else {
-                      Dialogs.dismiss(context);
-                      Toast.show(event.message, context, duration: 3, gravity: Toast.BOTTOM);
-                    }
-                  });
+                  } else {
+                    Dialogs.showLoading(context, "Loading...");
+                    blocMember.lengkapiProfil(
+                        widget.email,
+                        _nama.text,
+                        _selectedProvinsi,
+                        _selectedKota,
+                        _selectedKec,
+                        _alamat.text,
+                        longitude.toString(),
+                        latitude.toString(),
+                        _noTelp.text,
+                        "",
+                        widget.token,
+                        _agen.text);
+                    blocMember.resUpdateProfil.listen((event) {
+                      if (event.status) {
+                        Dialogs.dismiss(context);
+                        Future.delayed(Duration(seconds: 1)).then((value) {
+                          setToken(widget.token);
+                          setEmail(widget.email);
+                          setNama(_nama.text);
+                          setKdUser(widget.kdUser);
+                          setKdPasmak(widget.kdPasmak);
+                          Navigator.pushReplacementNamed(
+                              context, '/controllerPage');
+                        });
+                      } else {
+                        Dialogs.dismiss(context);
+                        Toast.show(event.message, context,
+                            duration: 3, gravity: Toast.BOTTOM);
+                      }
+                    });
                   }
                 },
                 child: Container(
@@ -391,7 +414,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                   child: Center(
                       child: Text(
                     "Berikutnya",
-                    style: TextStyle(color: Colors.white,fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   )),
                 ),
               )

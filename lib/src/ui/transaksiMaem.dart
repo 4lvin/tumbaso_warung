@@ -7,6 +7,7 @@ import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/resources/globalApi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/timeago.dart';
 
@@ -692,8 +693,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
     String image =
         'https://images.unsplash.com/photo-1624032545726-9d770c3615e7?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDJ8Sjl5clBhSFhSUVl8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60';
     if (image != '') {
-      image =
-          'https://jongjava.tech/tumbas/assets/foto_produk/' + pesanan.gambar1;
+      image = '${globalMaem}/assets/foto_produk/' + pesanan.gambar1;
     }
 
     return Container(

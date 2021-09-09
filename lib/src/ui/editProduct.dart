@@ -4,6 +4,7 @@ import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tumbaso_warung/src/models/resSubkategoriModel.dart';
+import 'package:tumbaso_warung/src/resources/globalApi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
 class EditProductPage extends StatefulWidget {
@@ -38,8 +39,9 @@ class _EditProductPageState extends State<EditProductPage> {
   ResSubkategoriModel _listSubkategori;
 
   Future getImage(int type) async {
-    PickedFile pickedImage =
-        await ImagePicker().getImage(source: type == 1 ? ImageSource.camera : ImageSource.gallery, imageQuality: 50);
+    PickedFile pickedImage = await ImagePicker().getImage(
+        source: type == 1 ? ImageSource.camera : ImageSource.gallery,
+        imageQuality: 50);
     return pickedImage;
   }
 
@@ -59,7 +61,8 @@ class _EditProductPageState extends State<EditProductPage> {
   @override
   void initState() {
     super.initState();
-    getSubkategori(widget.produk.kategori.idKategori, widget.produk.idSubkategori);
+    getSubkategori(
+        widget.produk.kategori.idKategori, widget.produk.idSubkategori);
     kategori = widget.produk.kategori.idKategori;
     nama.text = widget.produk.namaProduk;
     harga.text = widget.produk.hargaJual;
@@ -102,7 +105,8 @@ class _EditProductPageState extends State<EditProductPage> {
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       image: DecorationImage(
                           image: imageFile == null
-                              ? NetworkImage("https://jongjava.tech/tumbas/assets/foto_produk/" + widget.produk.gambar.gambar1)
+                              ? NetworkImage(
+                                  "${globalMaem}/assets/foto_produk/${widget.produk.gambar.gambar1}")
                               : FileImage(File(imageFile.path)),
                           fit: BoxFit.cover)),
                 ),
@@ -308,23 +312,34 @@ class _EditProductPageState extends State<EditProductPage> {
                     File file = imageFile != null ? File(imageFile.path) : null;
                     String _idproduk = widget.produk.idProduk;
                     if (sub_kategori == null || harga.text == "") {
-                      Toast.show("Lengkapi Data anda", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      Toast.show("Lengkapi Data anda", context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       //     content: const Text('Lengkapi Data anda'),
                       //     duration: const Duration(seconds: 3)));
                       return;
                     }
                     blocMember
-                        .updateProduct(file, _idproduk, kategori, sub_kategori, nama.text, harga.text, berat.text, deskripsi.text,
+                        .updateProduct(
+                            file,
+                            _idproduk,
+                            kategori,
+                            sub_kategori,
+                            nama.text,
+                            harga.text,
+                            berat.text,
+                            deskripsi.text,
                             potongan.text)
                         .then((value) {
                       if (value != 200) {
-                        Toast.show("Berhasil Menyimpan Data", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        Toast.show("Berhasil Menyimpan Data", context,
+                            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         //     content: const Text('Berhasil Menyimpan Data'),
                         //     duration: const Duration(seconds: 3)));
                       } else {
-                        Navigator.of(context).pushNamedAndRemoveUntil('/controllerPage', (route) => false);
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/controllerPage', (route) => false);
                       }
                     });
                   },

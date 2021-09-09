@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:toast/toast.dart';
@@ -44,6 +46,7 @@ class _EditProfilState extends State<EditProfil> {
   List namaEkspedisi;
 
   String _selectedKota;
+  String _agen = "";
 
   currentPosition() async {
     positionStream = await Geolocator.getCurrentPosition(
@@ -58,6 +61,14 @@ class _EditProfilState extends State<EditProfil> {
 
   @override
   void initState() {
+    currentPosition();
+    getToken().then((value) {
+      print(value);
+      if (mounted)
+        setState(() {
+          token = value;
+        });
+    });
     blocMember.getProvinsi();
     blocProdukPasmak.getEkspedisi();
     blocProdukPasmak.resEkspedisi.listen((event) {
@@ -66,14 +77,6 @@ class _EditProfilState extends State<EditProfil> {
         setState(() {
           _isChecked = List<bool>.filled(event.data.length, false);
           namaEkspedisi = List.filled(_isChecked.length, "").toList();
-        });
-    });
-    currentPosition();
-    getToken().then((value) {
-      print(value);
-      if (mounted)
-        setState(() {
-          token = value;
         });
     });
     blocMember.resKota.listen((data) {
@@ -96,19 +99,23 @@ class _EditProfilState extends State<EditProfil> {
           _selectedProvinsi = profil.provinsiId;
           _selectedKota = profil.kotaId;
           _selectedKec = profil.kecamatanId;
-          String kurir = event.data[0].pilihanKurir;
+          // _agen = profil.agen;
+          String kurir = profil.pilihanKurir;
           List<String> listKurir = kurir.split(',');
           namaEkspedisi.clear();
           listKurir.forEach((e) {
             _isChecked[int.parse(e)] = true;
             namaEkspedisi.add(e);
           });
+          blocMember.getKota(profil.provinsiId);
+          blocMember.getKecamatan(profil.kotaId);
         });
-      blocMember.getKota(event.data[0].provinsiId);
-      blocMember.getKecamatan(event.data[0].kotaId);
+    });
+
+    Timer(Duration(seconds: 3), () {
       blocMember.resProvinsi.listen((prov) {
         for (var i = 0; i < prov.data.length; i++) {
-          if (prov.data[i].idProvinsi == event.data[0].provinsiId) {
+          if (prov.data[i].idProvinsi == _selectedProvinsi) {
             setState(() {
               _provinsi = i;
             });
@@ -117,7 +124,7 @@ class _EditProfilState extends State<EditProfil> {
       });
       blocMember.resKota.listen((kota) {
         for (var i = 0; i < kota.data.length; i++) {
-          if (kota.data[i].idKabupaten == event.data[0].kotaId) {
+          if (kota.data[i].idKabupaten == _selectedKota) {
             setState(() {
               _kotaInt = i;
             });
@@ -126,7 +133,7 @@ class _EditProfilState extends State<EditProfil> {
       });
       blocMember.resKecamatan.listen((kec) {
         for (var i = 0; i < kec.data.length; i++) {
-          if (kec.data[i].idKecamatan == event.data[0].kecamatanId) {
+          if (kec.data[i].idKecamatan == _selectedKec) {
             setState(() {
               _kecInt = i;
             });
@@ -169,7 +176,8 @@ class _EditProfilState extends State<EditProfil> {
           latitude.toString(),
           _noTelp.text,
           kurir,
-          token);
+          token,
+          _agen);
       blocMember.resUpdateProfil.listen((event) {
         if (event.status) {
           Dialogs.dismiss(context);
@@ -262,7 +270,7 @@ class _EditProfilState extends State<EditProfil> {
                             ? null
                             : snapshot.data.data[_provinsi],
                         hint: Text(
-                          "pilih Provinsi",
+                          "Pilih Provinsi",
                           style: TextStyle(fontSize: 14.0),
                         ),
                         onChanged: (value) {
@@ -312,7 +320,7 @@ class _EditProfilState extends State<EditProfil> {
                             ? null
                             : snapshot.data.data[_kotaInt],
                         hint: Text(
-                          "pilih Kota",
+                          "Pilih Kota",
                           style: TextStyle(fontSize: 14.0),
                         ),
                         onChanged: (value) {
@@ -365,7 +373,7 @@ class _EditProfilState extends State<EditProfil> {
                             ? null
                             : snapshot.data.data[_kecInt],
                         hint: Text(
-                          "pilih Kecamatan",
+                          "Pilih Kecamatan",
                           style: TextStyle(fontSize: 14.0),
                         ),
                         onChanged: (value) {

@@ -8,6 +8,7 @@ import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
 import 'package:tumbaso_warung/src/models/getBarangModel.dart';
+import 'package:tumbaso_warung/src/resources/globalApi.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/loading.dart';
 
@@ -40,8 +41,9 @@ class _EditProductBarangState extends State<EditProductBarang> {
   GetSubKategoriBarangModel _listSubkategori;
 
   Future getImage(int type) async {
-    PickedFile pickedImage =
-        await ImagePicker().getImage(source: type == 1 ? ImageSource.camera : ImageSource.gallery, imageQuality: 50);
+    PickedFile pickedImage = await ImagePicker().getImage(
+        source: type == 1 ? ImageSource.camera : ImageSource.gallery,
+        imageQuality: 50);
     return pickedImage;
   }
 
@@ -62,6 +64,7 @@ class _EditProductBarangState extends State<EditProductBarang> {
     minimum.text = widget.barang.minimum;
     kategori = widget.barang.idKategoriProduk;
     sub_kategori = widget.barang.idKategoriProdukSub;
+    gambar_1 = widget.barang.gambar;
 
     setState(() {});
   }
@@ -86,20 +89,36 @@ class _EditProductBarangState extends State<EditProductBarang> {
   }
 
   void _onEdit() {
-    if (kategori == null || harga.text == "" || nama.text == "" || keterangan.text == "") {
-      Toast.show("Form tidak boleh kosong", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    if (kategori == null ||
+        harga.text == "" ||
+        nama.text == "" ||
+        keterangan.text == "") {
+      Toast.show("Form tidak boleh kosong", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     File file = imageFile != null ? File(imageFile.path) : null;
     Dialogs.showLoading(context, "Loading...");
     blocProdukPasmak
-        .editProductBarang(file, widget.barang.idProduk, kategori ?? "", sub_kategori ?? "", nama.text, harga.text, satuan.text,
-            berat.text, deskripsi.text, keterangan.text, minimum.text, stok.text)
+        .editProductBarang(
+            file,
+            widget.barang.idProduk,
+            kategori ?? "",
+            sub_kategori ?? "",
+            nama.text,
+            harga.text,
+            satuan.text,
+            berat.text,
+            deskripsi.text,
+            keterangan.text,
+            minimum.text,
+            stok.text)
         .then((value) {
       if (value != 200) {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          Toast.show("Berhasil Menyimpan Data", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          Toast.show("Berhasil Menyimpan Data", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         });
       } else {
         Dialogs.dismiss(context);
@@ -119,7 +138,7 @@ class _EditProductBarangState extends State<EditProductBarang> {
         //   color: Colors.black, //change your color here
         // ),
         title: Text(
-          "Produk Baru",
+          "Edit Produk",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -207,7 +226,8 @@ class _EditProductBarangState extends State<EditProductBarang> {
                   height: 50,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(colorses.orange),
+                      backgroundColor:
+                          MaterialStateProperty.all(colorses.orange),
                       elevation: MaterialStateProperty.all(2),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -232,7 +252,8 @@ class _EditProductBarangState extends State<EditProductBarang> {
     );
   }
 
-  Widget buildInput(BuildContext context, String title, String hint, TextEditingController controller,
+  Widget buildInput(BuildContext context, String title, String hint,
+      TextEditingController controller,
       {TextInputType input = TextInputType.name}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +288,8 @@ class _EditProductBarangState extends State<EditProductBarang> {
     );
   }
 
-  Widget buildInput2(BuildContext context, String title, String hint, TextEditingController controller,
+  Widget buildInput2(BuildContext context, String title, String hint,
+      TextEditingController controller,
       {TextInputType input = TextInputType.name}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -385,7 +407,7 @@ class _EditProductBarangState extends State<EditProductBarang> {
   }
 
   Widget buildImage(BuildContext context) {
-    if (imageFile == null) {
+    if (imageFile == null && gambar_1 == null) {
       return GestureDetector(
         onTap: () async {
           final tmpFile = await getImage(2);
@@ -424,6 +446,39 @@ class _EditProductBarangState extends State<EditProductBarang> {
                 style: TextStyle(fontSize: 16, color: colorses.orange),
               ),
             ],
+          ),
+        ),
+      );
+    } else if (gambar_1 != null) {
+      return GestureDetector(
+        onTap: () async {
+          final tmpFile = await getImage(2);
+
+          setState(() {
+            imageFile = tmpFile;
+          });
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.width * 0.3,
+          width: MediaQuery.of(context).size.width * 0.34,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 4,
+                blurRadius: 4,
+                offset: Offset(0, 2), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.all(
+              Radius.circular(8.0),
+            ),
+            image: DecorationImage(
+              image:
+                  NetworkImage('${globalBarang}/asset/foto_produk/${gambar_1}'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       );
