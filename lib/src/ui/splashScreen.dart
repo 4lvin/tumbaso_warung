@@ -18,6 +18,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String _token;
+
   _authCheckSession() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -25,8 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print('connected');
       }
     } on SocketException catch (_) {
-      Toast.show("Cek Internet Anda", context,
-          duration: 7, gravity: Toast.BOTTOM);
+      Toast.show("Cek Internet Anda", context, duration: 7, gravity: Toast.BOTTOM);
     }
   }
 
@@ -57,9 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () => AwesomeNotifications()
-                    .requestPermissionToSendNotifications()
-                    .then((_) => nav()),
+                onPressed: () => AwesomeNotifications().requestPermissionToSendNotifications().then((_) => nav()),
                 child: Text('Izinkan'),
               ),
             ],
@@ -78,17 +76,29 @@ class _SplashScreenState extends State<SplashScreen> {
   _onActionNotif() {
     AwesomeNotifications().displayedStream.listen((event) {
       if (event.channelKey == 'barang_channel') {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            settings: const RouteSettings(name: '/controllerPage'),
+            builder: (context) => new ControllerPage(
+                  selected: 1,
+                )));
         // _selectedTransakasi = true;
         // _selectedIndex = 1;
         // setState(() {});
       } else if (event.channelKey == 'maem_channel') {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            settings: const RouteSettings(name: '/controllerPage'),
+            builder: (context) => new ControllerPage(
+              selected: 1,
+            )));
         // _selectedTransakasi = false;
         // _selectedIndex = 1;
         // setState(() {});
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 0,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            settings: const RouteSettings(name: '/controllerPage'),
+            builder: (context) => new ControllerPage(
+              selected: 0,
+            )));
         // _selectedTransakasi = false;
         // _selectedIndex = 0;
         // setState(() {});
@@ -97,17 +107,29 @@ class _SplashScreenState extends State<SplashScreen> {
 
     AwesomeNotifications().actionStream.listen((event) {
       if (event.channelKey == 'barang_channel') {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            settings: const RouteSettings(name: '/controllerPage'),
+            builder: (context) => new ControllerPage(
+              selected: 1,
+            )));
         // _selectedTransakasi = true;
         // _selectedIndex = 1;
         // setState(() {});
       } else if (event.channelKey == 'maem_channel') {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 1,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            settings: const RouteSettings(name: '/controllerPage'),
+            builder: (context) => new ControllerPage(
+              selected: 1,
+            )));
         // _selectedTransakasi = false;
         // _selectedIndex = 1;
         // setState(() {});
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ControllerPage(selected: 0,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            settings: const RouteSettings(name: '/controllerPage'),
+            builder: (context) => new ControllerPage(
+              selected: 0,
+            )));
         // _selectedTransakasi = false;
         // _selectedIndex = 0;
         // setState(() {});
@@ -147,21 +169,26 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Center(
               child: Container(
-                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/2 - 100),
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2 - 100),
                 width: 200,
                 height: 200,
-                child: SvgPicture.asset("assets/warung.svg",
-                    semanticsLabel: 'Tumbas'),
+                child: SvgPicture.asset("assets/warung.svg", semanticsLabel: 'Tumbas'),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height/5,),
-            Text("Bekerja sama dengan :",style: TextStyle(color: Colors.white),),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 5,
+            ),
+            Text(
+              "Bekerjasama dengan :",
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               width: 50,
               height: 50,
-              child: SvgPicture.asset("assets/pasmak.svg",
-                  semanticsLabel: 'pasmak'),
+              child: SvgPicture.asset("assets/pasmak.svg", semanticsLabel: 'pasmak'),
             ),
           ],
         ),

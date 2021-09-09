@@ -24,6 +24,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
   var nama = TextEditingController();
   var harga = TextEditingController();
   var berat = TextEditingController();
+  var stok = TextEditingController();
   var deskripsi = TextEditingController();
   var satuan = TextEditingController();
   var keterangan = TextEditingController();
@@ -34,9 +35,8 @@ class _NewProductBarangState extends State<NewProductBarang> {
   GetSubKategoriBarangModel _listSubkategori;
 
   Future getImage(int type) async {
-    PickedFile pickedImage = await ImagePicker().getImage(
-        source: type == 1 ? ImageSource.camera : ImageSource.gallery,
-        imageQuality: 50);
+    PickedFile pickedImage =
+        await ImagePicker().getImage(source: type == 1 ? ImageSource.camera : ImageSource.gallery, imageQuality: 50);
     return pickedImage;
   }
 
@@ -62,34 +62,20 @@ class _NewProductBarangState extends State<NewProductBarang> {
   }
 
   void _onSimpan() {
-    if (kategori == null ||
-        harga.text == "" ||
-        nama.text == "" ||
-        keterangan.text == "") {
-      Toast.show("Form tidak boleh kosong", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    if (kategori == null || harga.text == "" || nama.text == "" || keterangan.text == "") {
+      Toast.show("Form tidak boleh kosong", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     File file = imageFile != null ? File(imageFile.path) : null;
     Dialogs.showLoading(context, "Loading...");
     blocProdukPasmak
-        .simpanProductBarang(
-            file,
-            kategori,
-            sub_kategori ?? "",
-            nama.text,
-            harga.text,
-            satuan.text,
-            berat.text,
-            deskripsi.text,
-            keterangan.text,
-            minimum.text)
+        .simpanProductBarang(file, kategori, sub_kategori ?? "", nama.text, harga.text, satuan.text, berat.text, deskripsi.text,
+            keterangan.text, minimum.text, stok.text)
         .then((value) {
       if (value != 200) {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          Toast.show("Berhasil Menyimpan Data", context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          Toast.show("Berhasil Menyimpan Data", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         });
       } else {
         Dialogs.dismiss(context);
@@ -165,6 +151,13 @@ class _NewProductBarangState extends State<NewProductBarang> {
                 SizedBox(height: 10.0),
                 buildInput(
                   context,
+                  "Stok",
+                  "Masukkan Stok",
+                  stok,
+                ),
+                SizedBox(height: 10.0),
+                buildInput(
+                  context,
                   "Deskripsi",
                   "Masukkan Deskripsi",
                   deskripsi,
@@ -190,8 +183,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
                   height: 50,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(colorses.orange),
+                      backgroundColor: MaterialStateProperty.all(colorses.orange),
                       elevation: MaterialStateProperty.all(2),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -216,8 +208,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
     );
   }
 
-  Widget buildInput(BuildContext context, String title, String hint,
-      TextEditingController controller,
+  Widget buildInput(BuildContext context, String title, String hint, TextEditingController controller,
       {TextInputType input = TextInputType.name}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,8 +243,7 @@ class _NewProductBarangState extends State<NewProductBarang> {
     );
   }
 
-  Widget buildInput2(BuildContext context, String title, String hint,
-      TextEditingController controller,
+  Widget buildInput2(BuildContext context, String title, String hint, TextEditingController controller,
       {TextInputType input = TextInputType.name}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

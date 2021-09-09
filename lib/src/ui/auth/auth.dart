@@ -14,6 +14,7 @@ Future<void> signOutAccount() async {
   await rmvKdUser();
   await rmvNama();
   await rmvToken();
+  await rmvKdPasmak();
   await FirebaseAuth.instance.signOut();
   await GoogleSignIn().signOut();
 }

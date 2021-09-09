@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height/5,),
-                    Text("Bekerja sama dengan :",style: TextStyle(color: Colors.white),),
+                    Text("Bekerjasama dengan :",style: TextStyle(color: Colors.white),),
                     SizedBox(height: 10,),
                     Container(
                       width: 50,

@@ -94,9 +94,10 @@ class Repositories {
           String berat,
           String deskripsi,
           String keterangan,
-          String minimum) =>
+          String minimum,
+      String stok) =>
       apiProvider.simpanProdukBarang(file, kategori, subkategori, nama, harga,
-          satuan, berat, deskripsi, keterangan, minimum);
+          satuan, berat, deskripsi, keterangan, minimum, stok);
 
   Future editProdukBarang(
           File file,
@@ -109,9 +110,10 @@ class Repositories {
           String berat,
           String deskripsi,
           String keterangan,
-          String minimum) =>
+          String minimum,
+      String stok) =>
       apiProvider.editProdukBarang(file, id_barang, kategori, subkategori, nama,
-          harga, satuan, berat, deskripsi, keterangan, minimum);
+          harga, satuan, berat, deskripsi, keterangan, minimum,stok);
 
   Future getProfil() => apiProvider.getProfil();
 
