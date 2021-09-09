@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       if (login.data.telepone != "") {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          print(signIn.user);
+          // print(signIn.user);
           setToken(login.data.idToken);
           // setKota(login.data.kota.kode);
           setEmail(signIn.user.email);
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _firebaseMessaging.getToken().then((token) {
-      print(token);
+      print('token fcm: ' + token);
       setState(() {
         tokenUser = token;
       });
