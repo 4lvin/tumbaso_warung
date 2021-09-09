@@ -29,10 +29,10 @@ class ApiProviders {
   // String url = "https://tumbasonline.com/restapi";
 
   String url = "https://jongjava.tech/tumbas/restapi";
+  // String url = "https://tumbasonline.com/restapi";
 
-  // String url2 = "https://pasar.benmakmur.id/restapi";
-
-  String url2 = "https://tumbasonline.com/pasarmakmur/restapi";
+  String url2 = "https://pasar.benmakmur.id/restapi";
+  // String url2 = "https://tumbasonline.com/pasarmakmur/restapi";
 
   Future getSubkategori(String idKategori) async {
     var body = jsonEncode({'id_kategori': idKategori});
@@ -492,6 +492,7 @@ class ApiProviders {
           .post("$url/penjual/login_gmail",
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
+      print(checkId.body);
       if (checkId.statusCode == 200) {
         return GetLoginWithGmailModel.fromJson(json.decode(checkId.body));
       } else if (checkId.statusCode == 404) {
@@ -534,7 +535,8 @@ class ApiProviders {
       'longitude': longitude,
       'latitude': latitude,
       'telepone': telephone,
-      'kurir': kurir
+      'kurir': kurir,
+      'agen_id': "",
     });
     try {
       final checkId = await client
@@ -665,7 +667,8 @@ class ApiProviders {
       String berat,
       String deskripsi,
       String keterangan,
-      String minimum) async {
+      String minimum,
+      String stok) async {
     String _token;
     String _username;
     await getToken().then((value) {
@@ -689,6 +692,7 @@ class ApiProviders {
       request.fields['deskripsi'] = deskripsi;
       request.fields['keterangan'] = keterangan;
       request.fields['minimum'] = minimum;
+      request.fields['stok'] = stok;
 
       if (file != null) {
         request.files.add(client.MultipartFile(
@@ -736,7 +740,8 @@ class ApiProviders {
       String berat,
       String deskripsi,
       String keterangan,
-      String minimum) async {
+      String minimum,
+      String stok) async {
     String _token;
     String _username;
     await getToken().then((value) {
@@ -761,6 +766,7 @@ class ApiProviders {
       request.fields['deskripsi'] = deskripsi;
       request.fields['keterangan'] = keterangan;
       request.fields['minimum'] = minimum;
+      request.fields['stok'] = stok;
 
       if (file != null) {
         request.files.add(client.MultipartFile(

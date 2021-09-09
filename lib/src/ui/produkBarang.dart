@@ -333,12 +333,20 @@ class _ProdukBarangState extends State<ProdukBarang> {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
+                  // image: DecorationImage(
+                  //   fit: BoxFit.cover,
+                  //   image: 'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}' !=
+                  //           'https://tumbasonline.com/pasarmakmur/asset/foto_produk/no_image.png'
+                  //       ? NetworkImage(
+                  //           'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}')
+                  //       : AssetImage('assets/baru2.png'),
+                  // ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: 'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}' !=
-                            'https://tumbasonline.com/pasarmakmur/asset/foto_produk/no_image.png'
+                    image: 'https://pasar.benmakmur.id/asset/foto_produk/${barang.gambar}' !=
+                        'https://pasar.benmakmur.id/asset/foto_produk/no_image.png'
                         ? NetworkImage(
-                            'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}')
+                        'https://pasar.benmakmur.id/asset/foto_produk/${barang.gambar}')
                         : AssetImage('assets/baru2.png'),
                   ),
                 ),

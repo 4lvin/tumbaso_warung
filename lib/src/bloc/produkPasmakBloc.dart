@@ -18,27 +18,21 @@ class produkPasmakBloc {
   final _getTransaksiBarangFechter = PublishSubject<GetTransaksiBarangModel>();
   final _updateStatusBarangFechter = PublishSubject<ResLengkapiProfilModel>();
 
-  PublishSubject<GetKategoriBarangModel> get resKategori =>
-      _getKategoriFetcher.stream;
+  PublishSubject<GetKategoriBarangModel> get resKategori => _getKategoriFetcher.stream;
 
-  PublishSubject<GetSubKategoriBarangModel> get resSubKategori =>
-      _getSubKategoriFetcher.stream;
+  PublishSubject<GetSubKategoriBarangModel> get resSubKategori => _getSubKategoriFetcher.stream;
 
-  PublishSubject<GetEkspedisiModel> get resEkspedisi =>
-      _getEkspedisiFetcher.stream;
+  PublishSubject<GetEkspedisiModel> get resEkspedisi => _getEkspedisiFetcher.stream;
 
   PublishSubject<GetBarangModel> get resBarang => _getBarangFechter.stream;
 
-  PublishSubject<GetTransaksiBarangModel> get resTransaksiBarang =>
-      _getTransaksiBarangFechter.stream;
+  PublishSubject<GetTransaksiBarangModel> get resTransaksiBarang => _getTransaksiBarangFechter.stream;
 
-  PublishSubject<ResLengkapiProfilModel> get resStatusBarang =>
-      _updateStatusBarangFechter.stream;
+  PublishSubject<ResLengkapiProfilModel> get resStatusBarang => _updateStatusBarangFechter.stream;
 
   getKategoriBarang() async {
     try {
-      GetKategoriBarangModel getKategoriBarangModel =
-          await _repository.getKategoriBarang();
+      GetKategoriBarangModel getKategoriBarangModel = await _repository.getKategoriBarang();
       _getKategoriFetcher.sink.add(getKategoriBarangModel);
     } catch (error) {
       _getKategoriFetcher.sink.add(error);
@@ -47,63 +41,24 @@ class produkPasmakBloc {
 
   getSubKategoriBarang(String idKategori) async {
     try {
-      GetSubKategoriBarangModel getSubKategoriBarangModel =
-          await _repository.getSubKategoriBarang(idKategori);
+      GetSubKategoriBarangModel getSubKategoriBarangModel = await _repository.getSubKategoriBarang(idKategori);
       _getSubKategoriFetcher.sink.add(getSubKategoriBarangModel);
     } catch (error) {
       _getSubKategoriFetcher.sink.add(error);
     }
   }
 
-  Future simpanProductBarang(
-      File file,
-      String kategori,
-      String subkategori,
-      String nama,
-      String harga,
-      String satuan,
-      String berat,
-      String deskripsi,
-      String keterangan,
-      String minimum) async {
+  Future simpanProductBarang(File file, String kategori, String subkategori, String nama, String harga, String satuan,
+      String berat, String deskripsi, String keterangan, String minimum, String stok) async {
     int statusCode = await _repository.simpanProdukBarang(
-        file,
-        kategori,
-        subkategori,
-        nama,
-        harga,
-        satuan,
-        berat,
-        deskripsi,
-        keterangan,
-        minimum);
+        file, kategori, subkategori, nama, harga, satuan, berat, deskripsi, keterangan, minimum, stok);
     return statusCode;
   }
 
-  Future editProductBarang(
-      File file,
-      String id_barang,
-      String kategori,
-      String subkategori,
-      String nama,
-      String harga,
-      String satuan,
-      String berat,
-      String deskripsi,
-      String keterangan,
-      String minimum) async {
+  Future editProductBarang(File file, String id_barang, String kategori, String subkategori, String nama, String harga,
+      String satuan, String berat, String deskripsi, String keterangan, String minimum, String stok) async {
     int statusCode = await _repository.editProdukBarang(
-        file,
-        id_barang,
-        kategori,
-        subkategori,
-        nama,
-        harga,
-        satuan,
-        berat,
-        deskripsi,
-        keterangan,
-        minimum);
+        file, id_barang, kategori, subkategori, nama, harga, satuan, berat, deskripsi, keterangan, minimum, stok);
     return statusCode;
   }
 
@@ -127,8 +82,7 @@ class produkPasmakBloc {
 
   getTransaksiBarang(String status) async {
     try {
-      GetTransaksiBarangModel getTransaksi =
-          await _repository.getTransaksiBarang(status);
+      GetTransaksiBarangModel getTransaksi = await _repository.getTransaksiBarang(status);
       _getTransaksiBarangFechter.sink.add(getTransaksi);
     } catch (err) {
       _getTransaksiBarangFechter.sink.add(err);
@@ -137,8 +91,7 @@ class produkPasmakBloc {
 
   updateStatusBarang(String idProduk, String status) async {
     try {
-      ResLengkapiProfilModel updateTransaksi =
-          await _repository.updateStatusBarang(idProduk, status);
+      ResLengkapiProfilModel updateTransaksi = await _repository.updateStatusBarang(idProduk, status);
       _updateStatusBarangFechter.sink.add(updateTransaksi);
     } catch (err) {
       _updateStatusBarangFechter.sink.add(err);
