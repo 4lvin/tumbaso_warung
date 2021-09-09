@@ -5,6 +5,7 @@ import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/resources/globalApi.dart';
 import 'package:tumbaso_warung/src/ui/editProduct.dart';
 import 'package:tumbaso_warung/src/ui/newProduct.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
@@ -346,10 +347,10 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: 'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}' !=
-                            'https://jongjava.tech/tumbas/assets/foto_produk/no_image.png'
+                    image: '${globalMaem}/assets/foto_produk/${makanan.gambar.gambar1}' !=
+                            '${globalMaem}/assets/foto_produk/no_image.png'
                         ? NetworkImage(
-                            'https://jongjava.tech/tumbas/assets/foto_produk/${makanan.gambar.gambar1}')
+                            '${globalMaem}/assets/foto_produk/${makanan.gambar.gambar1}')
                         : AssetImage('assets/baru2.png'),
                   ),
                 ),

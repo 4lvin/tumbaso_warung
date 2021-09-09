@@ -7,6 +7,7 @@ import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
 import 'package:tumbaso_warung/src/models/getBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
+import 'package:tumbaso_warung/src/resources/globalApi.dart';
 import 'package:tumbaso_warung/src/ui/editProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/newProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
@@ -333,20 +334,12 @@ class _ProdukBarangState extends State<ProdukBarang> {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  // image: DecorationImage(
-                  //   fit: BoxFit.cover,
-                  //   image: 'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}' !=
-                  //           'https://tumbasonline.com/pasarmakmur/asset/foto_produk/no_image.png'
-                  //       ? NetworkImage(
-                  //           'https://tumbasonline.com/pasarmakmur/asset/foto_produk/${barang.gambar}')
-                  //       : AssetImage('assets/baru2.png'),
-                  // ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: 'https://pasar.benmakmur.id/asset/foto_produk/${barang.gambar}' !=
-                        'https://pasar.benmakmur.id/asset/foto_produk/no_image.png'
+                    image: '${globalBarang}/asset/foto_produk/${barang.gambar}' !=
+                            '${globalBarang}/asset/foto_produk/no_image.png'
                         ? NetworkImage(
-                        'https://pasar.benmakmur.id/asset/foto_produk/${barang.gambar}')
+                            '${globalBarang}/asset/foto_produk/${barang.gambar}')
                         : AssetImage('assets/baru2.png'),
                   ),
                 ),

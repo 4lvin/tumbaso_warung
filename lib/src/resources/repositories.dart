@@ -73,9 +73,10 @@ class Repositories {
           String latitude,
           String telephone,
           String kurir,
-          String token) =>
+          String token,
+          String agen) =>
       apiProvider.lengkapiProfil(email, nama, provinsiId, kotaId, kecId, alamat,
-          longitude, latitude, telephone, kurir, token);
+          longitude, latitude, telephone, kurir, token, agen);
 
   Future getKategoriBarang() => apiProvider.getKategoriBarang();
 
@@ -95,7 +96,7 @@ class Repositories {
           String deskripsi,
           String keterangan,
           String minimum,
-      String stok) =>
+          String stok) =>
       apiProvider.simpanProdukBarang(file, kategori, subkategori, nama, harga,
           satuan, berat, deskripsi, keterangan, minimum, stok);
 
@@ -111,9 +112,9 @@ class Repositories {
           String deskripsi,
           String keterangan,
           String minimum,
-      String stok) =>
+          String stok) =>
       apiProvider.editProdukBarang(file, id_barang, kategori, subkategori, nama,
-          harga, satuan, berat, deskripsi, keterangan, minimum,stok);
+          harga, satuan, berat, deskripsi, keterangan, minimum, stok);
 
   Future getProfil() => apiProvider.getProfil();
 

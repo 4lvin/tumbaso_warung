@@ -194,11 +194,23 @@ class MemberBloc {
       String latitude,
       String telephone,
       String kurir,
-      String token) async {
+      String token,
+      String agen) async {
     try {
       ResLengkapiProfilModel resLengkapiProfilModel =
-          await _repository.lengkapiProfil(email, nama, provinsiId, kotaId,
-              kecId, alamat, longitude, latitude, telephone, kurir, token);
+          await _repository.lengkapiProfil(
+              email,
+              nama,
+              provinsiId,
+              kotaId,
+              kecId,
+              alamat,
+              longitude,
+              latitude,
+              telephone,
+              kurir,
+              token,
+              agen);
       _updateProfilFetcher.sink.add(resLengkapiProfilModel);
     } catch (error) {
       _updateProfilFetcher.sink.add(error);
