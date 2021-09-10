@@ -10,7 +10,6 @@ import 'package:tumbaso_warung/src/ui/produkMaem.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -18,23 +17,33 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
   String nama;
+  String kurir;
 
   getSetoran() {
     getKdUser().then((kduser) {
       blocMember.getSetoranProduct(kduser);
     });
   }
+
   @override
   void initState() {
-    getNama().then((value){
-      if(mounted)
+    getNama().then((value) {
+      if (mounted)
         setState(() {
           nama = value;
         });
     });
     getKdUser();
+
+    blocMember.getProfil();
+    blocMember.resGetrofil.listen((event) {
+      setState(() {
+        kurir = event.data[0].pilihanKurir;
+      });
+    });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +60,9 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: colorses.dasar,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(31),bottomRight: Radius.circular(31)),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(31),
+                  bottomRight: Radius.circular(31)),
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -64,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
                       color: Colors.white,
-                      border: Border.all(width: 1,color: Colors.white),
+                      border: Border.all(width: 1, color: Colors.white),
                       image: DecorationImage(
                           image: AssetImage(
                             "assets/iconw.png",
@@ -73,19 +84,26 @@ class _HomePageState extends State<HomePage> {
                   width: 90,
                   height: 90,
                 ),
-                SizedBox(height: 8,),
-                Text("Hallo $nama",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "Hallo $nama",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
               ],
             ),
           ),
-          SizedBox(height: 24,),
+          SizedBox(
+            height: 24,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Column(
                 children: [
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                           context,
                           PageTransition(
@@ -97,42 +115,46 @@ class _HomePageState extends State<HomePage> {
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: colorses.orange,width: 3),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: colorses.orange, width: 3),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
                               blurRadius: 3,
                               offset: Offset(3, 5), // Shadow position
                             ),
-                          ]
-                      ),
+                          ]),
                       child: Center(
                         child: Container(
                           height: 70,
                           width: 70,
                           child: Image.asset(
-                              "assets/ic-menu-makan.png",
+                            "assets/ic-menu-makan.png",
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 12,),
-                  Text("Makanan",style: TextStyle(fontSize: 16),)
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "Makanan",
+                    style: TextStyle(fontSize: 16),
+                  )
                 ],
               ),
               Column(
                 children: [
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                           context,
                           PageTransition(
                               type: PageTransitionType.rightToLeft,
                               duration: Duration(milliseconds: 200),
-                              child: ProdukBarang()));
+                              child: ProdukBarang(kurir: kurir)));
                     },
                     child: Container(
                       width: 130,
@@ -140,15 +162,14 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: colorses.orange,width: 3),
+                          border: Border.all(color: colorses.orange, width: 3),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
                               blurRadius: 3,
                               offset: Offset(3, 5), // Shadow position
                             ),
-                          ]
-                      ),
+                          ]),
                       child: Center(
                         child: Container(
                           height: 70,
@@ -160,8 +181,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12,),
-                  Text("Barang",style: TextStyle(fontSize: 16),)
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "Barang",
+                    style: TextStyle(fontSize: 16),
+                  )
                 ],
               )
             ],
@@ -180,18 +206,27 @@ class _HomePageState extends State<HomePage> {
                             shadowColor: Colors.green,
                             color: Colors.green[50],
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5.0, vertical: 10.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Column(
                                     children: [
                                       Text('Setoran',
                                           style: TextStyle(
-                                              color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
+                                              color: Colors.grey[600],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400)),
                                       SizedBox(height: 5),
-                                      Text(formatCurrency.format(snapshot.data.data[i].setorPenjual),
-                                          style: TextStyle(color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold)),
+                                      Text(
+                                          formatCurrency.format(snapshot
+                                              .data.data[i].setorPenjual),
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   Row(
@@ -200,11 +235,17 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           Text('Tunggakan',
                                               style: TextStyle(
-                                                  color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
+                                                  color: Colors.grey[600],
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400)),
                                           SizedBox(height: 5),
-                                          Text(formatCurrency.format(snapshot.data.data[i].tunggakanSetor),
-                                              style:
-                                              TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold)),
+                                          Text(
+                                              formatCurrency.format(snapshot
+                                                  .data.data[i].tunggakanSetor),
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold)),
                                         ],
                                       ),
                                       IconButton(

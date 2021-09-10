@@ -13,6 +13,8 @@ import 'package:tumbaso_warung/src/ui/newProductBarang.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
 class ProdukBarang extends StatefulWidget {
+  ProdukBarang({this.kurir});
+  final String kurir;
   @override
   _ProdukBarangState createState() => _ProdukBarangState();
 }
@@ -66,13 +68,53 @@ class _ProdukBarangState extends State<ProdukBarang> {
         elevation: 0,
       ),
       body: body(size),
+      floatingActionButton: Container(
+        width: 180,
+        height: 45,
+        child: ElevatedButton(
+          onPressed: () {
+            if (widget.kurir != '') {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NewProductBarang()));
+            } else {
+              Toast.show("Anda harus melengkapi profil", context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            }
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(colorses.dasar),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/dinner.png",
+                width: 28,
+                height: 28,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  "Tambah menu",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget body(Size size) {
     return Column(
       children: [
-        buildToko(size),
+        // buildToko(size),
         Container(
           width: size.width,
           height: size.height * 0.78,
@@ -176,19 +218,15 @@ class _ProdukBarangState extends State<ProdukBarang> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  blocMember.getProfil();
-                  blocMember.resGetrofil.listen((event) {
-                    print(event.data[0].pilihanKurir);
-                    if (event.data[0].pilihanKurir != '') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NewProductBarang()));
-                    } else {
-                      Toast.show("Anda harus melengkapi profil", context,
-                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    }
-                  });
+                  if (widget.kurir != '') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NewProductBarang()));
+                  } else {
+                    Toast.show("Anda harus melengkapi profil", context,
+                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                  }
                 },
                 child: Container(
                   width: (size.width / 3) - 28,
