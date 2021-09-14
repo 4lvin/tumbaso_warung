@@ -162,7 +162,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
         body: Column(
           children: <Widget>[
             Container(
-              height: 100,
+              height: 110,
               width: MediaQuery.of(context).size.width,
               margin: EdgeInsets.all(20),
               padding: EdgeInsets.all(12),
@@ -377,33 +377,37 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   : Container()
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    makanan.namaProduk,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color:
-                            makanan.aktif == "1" ? Colors.black : Colors.grey),
-                  ),
-                  Text(
-                    makanan.deskripsi,
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
-              Text(
-                'Rp. ${makanan.hargaJual}',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: makanan.aktif == "1" ? Colors.black : Colors.grey),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      makanan.namaProduk,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: makanan.aktif == "1"
+                              ? Colors.black
+                              : Colors.grey),
+                    ),
+                    Text(
+                      makanan.deskripsi,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
+                ),
+                Text(
+                  'Rp. ${makanan.hargaJual}',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: makanan.aktif == "1" ? Colors.black : Colors.grey),
+                ),
+              ],
+            ),
           ),
           Spacer(),
           Column(
