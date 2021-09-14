@@ -73,12 +73,12 @@ class _ProdukBarangState extends State<ProdukBarang> {
         height: 45,
         child: ElevatedButton(
           onPressed: () {
-            if (widget.kurir != '') {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NewProductBarang()));
-            } else {
+            if (widget.kurir == null || widget.kurir == '') {
               Toast.show("Anda harus melengkapi profil", context,
                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            } else {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NewProductBarang()));
             }
           },
           style: ButtonStyle(

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
+import 'package:tumbaso_warung/src/models/getProfilModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/pref/preferences.dart';
 import 'package:tumbaso_warung/src/ui/produkBarang.dart';
