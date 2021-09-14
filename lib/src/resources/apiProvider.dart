@@ -544,18 +544,10 @@ class ApiProviders {
               },
               body: body)
           .timeout(const Duration(seconds: 11));
-      final res = await client
-          .post("$url2/penjual/ubah_profil",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (res.statusCode == 200) {
-        return ResLengkapiProfilModel.fromJson(json.decode(res.body));
-      } else if (res.statusCode == 404) {
-        return ResLengkapiProfilModel.fromJson(json.decode(res.body));
+      if (checkId.statusCode == 200) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkId.body));
+      } else if (checkId.statusCode == 404) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkId.body));
       } else {
         throw Exception('Failure response');
       }
