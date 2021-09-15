@@ -39,10 +39,10 @@ class _HomePageState extends State<HomePage> {
 
     blocMember.getProfil();
     blocMember.resGetrofil.listen((event) {
-      if(mounted)
-      setState(() {
-        kurir = event.data[0].pilihanKurir;
-      });
+      if (mounted)
+        setState(() {
+          kurir = event.data[0].pilihanKurir;
+        });
     });
     super.initState();
   }
@@ -63,13 +63,9 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: colorses.dasar,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(31),
-                  bottomRight: Radius.circular(31)),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(31), bottomRight: Radius.circular(31)),
               gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [colorses.dasar, colorses.dasar]),
+                  begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [colorses.dasar, colorses.dasar]),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,9 +106,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              duration: Duration(milliseconds: 200),
-                              child: ProdukMaem()));
+                              type: PageTransitionType.rightToLeft, duration: Duration(milliseconds: 200), child: ProdukMaem()));
                     },
                     child: Container(
                       width: 130,
@@ -153,14 +147,14 @@ class _HomePageState extends State<HomePage> {
                   InkWell(
                     onTap: () {
                       print(kurir);
-                      kurir == null? Toast.show("Data belum siap, silahkan tunggu sebentar!", context,
-                          duration: 3, gravity: Toast.BOTTOM) :
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              duration: Duration(milliseconds: 200),
-                              child: ProdukBarang(kurir: kurir)));
+                      kurir == null
+                          ? Toast.show("Data belum siap, silahkan tunggu sebentar!", context, duration: 3, gravity: Toast.BOTTOM)
+                          : Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  duration: Duration(milliseconds: 200),
+                                  child: ProdukBarang(kurir: kurir)));
                     },
                     child: Container(
                       width: 130,
@@ -212,27 +206,17 @@ class _HomePageState extends State<HomePage> {
                             shadowColor: Colors.green,
                             color: Colors.green[50],
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5.0, vertical: 10.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Column(
                                     children: [
                                       Text('Setoran',
-                                          style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w400)),
+                                          style: TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
                                       SizedBox(height: 5),
-                                      Text(
-                                          formatCurrency.format(snapshot
-                                              .data.data[i].setorPenjual),
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
+                                      Text(formatCurrency.format(snapshot.data.data[i].setorPenjual),
+                                          style: TextStyle(color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   Row(
@@ -240,18 +224,11 @@ class _HomePageState extends State<HomePage> {
                                       Column(
                                         children: [
                                           Text('Tunggakan',
-                                              style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w400)),
+                                              style:
+                                                  TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
                                           SizedBox(height: 5),
-                                          Text(
-                                              formatCurrency.format(snapshot
-                                                  .data.data[i].tunggakanSetor),
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold)),
+                                          Text(formatCurrency.format(snapshot.data.data[i].tunggakanSetor),
+                                              style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold)),
                                         ],
                                       ),
                                       IconButton(
