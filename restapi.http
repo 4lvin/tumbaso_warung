@@ -1,6 +1,6 @@
 @token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJhZ3VzcDA1MThAZ21haWwuY29tIn0.tJyOPjNDdm9EFtBS0e-l_nU_cSskjYxKWGTIi13KH34
-@url_barang = https://tumbasonline.com/pasarmakmur/restapi/
-# @url_barang = https://pasar.benmakmur.id/restapi/
+# @url_barang = https://tumbasonline.com/pasarmakmur/restapi/
+@url_barang = https://pasar.benmakmur.id/restapi/
 @url_maem = https://jongjava.tech/tumbas/restapi/
 
 // Login Penjual
@@ -8,8 +8,8 @@ POST {{url_barang}}/penjual/login_gmail HTTP/1.1
 content-type: application/json
 
 {
-    "email": "bagusp0518@gmail.com",
-	"nama": "Bagus Panji",
+    "email": "muhammadsyarwani955@gmail.com",
+	"nama": "Syarwani",
 	"token": "",
     "foto": ""
 }
@@ -21,7 +21,7 @@ content-type: application/json
 Authorization: {{token}}
 
 {
-    "email": "bagusp0518@gmail.com"
+    "email": "muhammadsyarwani955@gmail.com"
 }
 
 ###
