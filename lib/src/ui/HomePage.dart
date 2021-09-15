@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
 
     blocMember.getProfil();
     blocMember.resGetrofil.listen((event) {
+      if(mounted)
       setState(() {
         kurir = event.data[0].pilihanKurir;
       });
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Text(
                   "Hallo $nama",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
                 ),
               ],
             ),
@@ -151,14 +152,15 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   InkWell(
                     onTap: () {
-                      kurir == null?
+                      print(kurir);
+                      kurir == null? Toast.show("Data belum siap, silahkan tunggu sebentar!", context,
+                          duration: 3, gravity: Toast.BOTTOM) :
                       Navigator.push(
                           context,
                           PageTransition(
                               type: PageTransitionType.rightToLeft,
                               duration: Duration(milliseconds: 200),
-                              child: ProdukBarang(kurir: kurir))):Toast.show("Data belum siap, silahkan tunggu sebentar!", context,
-                          duration: 3, gravity: Toast.BOTTOM);
+                              child: ProdukBarang(kurir: kurir)));
                     },
                     child: Container(
                       width: 130,
