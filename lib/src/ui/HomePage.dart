@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
+import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/models/getProfilModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
@@ -150,12 +151,14 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   InkWell(
                     onTap: () {
+                      kurir == null?
                       Navigator.push(
                           context,
                           PageTransition(
                               type: PageTransitionType.rightToLeft,
                               duration: Duration(milliseconds: 200),
-                              child: ProdukBarang(kurir: kurir)));
+                              child: ProdukBarang(kurir: kurir))):Toast.show("Data belum siap, silahkan tunggu sebentar!", context,
+                          duration: 3, gravity: Toast.BOTTOM);
                     },
                     child: Container(
                       width: 130,

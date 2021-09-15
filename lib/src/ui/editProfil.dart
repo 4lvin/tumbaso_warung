@@ -93,7 +93,7 @@ class _EditProfilState extends State<EditProfil> {
       if (mounted)
         setState(() {
           var profil = event.data[0];
-          _alamat.text = profil.alamatLengkap;
+          _alamat.text = profil.alamat;
           _nama.text = profil.nama;
           _noTelp.text = profil.telepone;
           _selectedProvinsi = profil.provinsiId;
@@ -109,10 +109,11 @@ class _EditProfilState extends State<EditProfil> {
           });
           blocMember.getKota(profil.provinsiId);
           blocMember.getKecamatan(profil.kotaId);
+          blocMember.getProvinsi();
         });
     });
 
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 1), () {
       blocMember.resProvinsi.listen((prov) {
         for (var i = 0; i < prov.data.length; i++) {
           if (prov.data[i].idProvinsi == _selectedProvinsi) {

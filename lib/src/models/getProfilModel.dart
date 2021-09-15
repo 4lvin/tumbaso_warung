@@ -34,56 +34,72 @@ class GetProfilModel {
 
 class Datum {
   Datum({
-    this.idReseller,
+    this.idPenjual,
+    this.idPenjualMakmur,
     this.email,
     this.nama,
-    this.pilihanKurir,
-    this.status,
+    this.username,
+    this.alamat,
+    this.namaToko,
+    this.latitude,
+    this.longitude,
+    this.telepone,
     this.provinsiId,
     this.kotaId,
     this.kecamatanId,
-    this.alamatLengkap,
-    this.telepone,
+    this.pilihanKurir,
   });
 
-  String idReseller;
+  String idPenjual;
+  String idPenjualMakmur;
   String email;
   String nama;
-  String pilihanKurir;
-  String status;
+  String username;
+  String alamat;
+  String namaToko;
+  String latitude;
+  String longitude;
+  String telepone;
   String provinsiId;
   String kotaId;
   String kecamatanId;
-  String alamatLengkap;
-  String telepone;
+  String pilihanKurir;
 
   factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    idReseller: json["id_reseller"],
+    idPenjual: json["id_penjual"],
+    idPenjualMakmur: json["id_penjual_makmur"],
     email: json["email"],
     nama: json["nama"],
-    pilihanKurir: json["pilihan_kurir"],
-    status: json["status"],
+    username: json["username"],
+    alamat: json["alamat"],
+    namaToko: json["nama_toko"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
+    telepone: json["telepone"],
     provinsiId: json["provinsi_id"],
     kotaId: json["kota_id"],
     kecamatanId: json["kecamatan_id"],
-    alamatLengkap: json["alamat_lengkap"],
-    telepone: json["telepone"],
+    pilihanKurir: json["pilihan_kurir"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id_reseller": idReseller,
+    "id_penjual": idPenjual,
+    "id_penjual_makmur": idPenjualMakmur,
     "email": email,
     "nama": nama,
-    "pilihan_kurir": pilihanKurir,
-    "status": status,
+    "username": username,
+    "alamat": alamat,
+    "nama_toko": namaToko,
+    "latitude": latitude,
+    "longitude": longitude,
+    "telepone": telepone,
     "provinsi_id": provinsiId,
     "kota_id": kotaId,
     "kecamatan_id": kecamatanId,
-    "alamat_lengkap": alamatLengkap,
-    "telepone": telepone,
+    "pilihan_kurir": pilihanKurir,
   };
 }
