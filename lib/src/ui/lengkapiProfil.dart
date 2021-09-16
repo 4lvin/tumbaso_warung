@@ -346,10 +346,8 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-              height: 10,
-            ),
+          Container(
+            height: 20,
           ),
           InkWell(
             onTap: () {

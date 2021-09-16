@@ -15,23 +15,21 @@ class GetBarangModel {
   List<DatumBarang> data;
   String message;
 
-  factory GetBarangModel.fromRawJson(String str) =>
-      GetBarangModel.fromJson(json.decode(str));
+  factory GetBarangModel.fromRawJson(String str) => GetBarangModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory GetBarangModel.fromJson(Map<String, dynamic> json) => GetBarangModel(
-        status: json["status"],
-        data: List<DatumBarang>.from(
-            json["data"].map((x) => DatumBarang.fromJson(x))),
-        message: json["message"],
-      );
+    status: json["status"],
+    data: List<DatumBarang>.from(json["data"].map((x) => DatumBarang.fromJson(x))),
+    message: json["message"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "message": message,
-      };
+    "status": status,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "message": message,
+  };
 }
 
 class DatumBarang {
@@ -41,6 +39,7 @@ class DatumBarang {
     this.idKategoriProdukSub,
     this.idReseller,
     this.namaProduk,
+    this.stok,
     this.satuan,
     this.harga,
     this.tentangProduk,
@@ -52,53 +51,55 @@ class DatumBarang {
   });
 
   String idProduk;
-  dynamic idKategoriProduk;
-  dynamic idKategoriProdukSub;
+  String idKategoriProduk;
+  String idKategoriProdukSub;
   String idReseller;
   String namaProduk;
+  String stok;
   String satuan;
   String harga;
   dynamic tentangProduk;
   String keterangan;
   String aktif;
   String minimum;
-  dynamic feeProduk;
+  String feeProduk;
   String gambar;
 
-  factory DatumBarang.fromRawJson(String str) =>
-      DatumBarang.fromJson(json.decode(str));
+  factory DatumBarang.fromRawJson(String str) => DatumBarang.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory DatumBarang.fromJson(Map<String, dynamic> json) => DatumBarang(
-        idProduk: json["id_produk"],
-        idKategoriProduk: json["id_kategori_produk"],
-        idKategoriProdukSub: json["id_kategori_produk_sub"],
-        idReseller: json["id_reseller"],
-        namaProduk: json["nama_produk"],
-        satuan: json["satuan"],
-        harga: json["harga"],
-        tentangProduk: json["tentang_produk"],
-        keterangan: json["keterangan"],
-        aktif: json["aktif"],
-        minimum: json["minimum"],
-        feeProduk: json["fee_produk"],
-        gambar: json["gambar"],
-      );
+    idProduk: json["id_produk"],
+    idKategoriProduk: json["id_kategori_produk"],
+    idKategoriProdukSub: json["id_kategori_produk_sub"],
+    idReseller: json["id_reseller"],
+    namaProduk: json["nama_produk"],
+    stok: json["stok"],
+    satuan: json["satuan"],
+    harga: json["harga"],
+    tentangProduk: json["tentang_produk"],
+    keterangan: json["keterangan"],
+    aktif: json["aktif"],
+    minimum: json["minimum"],
+    feeProduk: json["fee_produk"],
+    gambar: json["gambar"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id_produk": idProduk,
-        "id_kategori_produk": idKategoriProduk,
-        "id_kategori_produk_sub": idKategoriProdukSub,
-        "id_reseller": idReseller,
-        "nama_produk": namaProduk,
-        "satuan": satuan,
-        "harga": harga,
-        "tentang_produk": tentangProduk,
-        "keterangan": keterangan,
-        "aktif": aktif,
-        "minimum": minimum,
-        "fee_produk": feeProduk,
-        "gambar": gambar,
-      };
+    "id_produk": idProduk,
+    "id_kategori_produk": idKategoriProduk,
+    "id_kategori_produk_sub": idKategoriProdukSub,
+    "id_reseller": idReseller,
+    "nama_produk": namaProduk,
+    "stok": stok,
+    "satuan": satuan,
+    "harga": harga,
+    "tentang_produk": tentangProduk,
+    "keterangan": keterangan,
+    "aktif": aktif,
+    "minimum": minimum,
+    "fee_produk": feeProduk,
+    "gambar": gambar,
+  };
 }

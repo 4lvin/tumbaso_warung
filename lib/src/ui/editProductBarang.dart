@@ -65,6 +65,7 @@ class _EditProductBarangState extends State<EditProductBarang> {
     kategori = widget.barang.idKategoriProduk;
     sub_kategori = widget.barang.idKategoriProdukSub;
     gambar_1 = widget.barang.gambar;
+    stok.text = widget.barang.stok;
 
     setState(() {});
   }

@@ -113,7 +113,7 @@ class _EditProfilState extends State<EditProfil> {
         });
     });
 
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(seconds: 2), () {
       blocMember.resProvinsi.listen((prov) {
         for (var i = 0; i < prov.data.length; i++) {
           if (prov.data[i].idProvinsi == _selectedProvinsi) {
