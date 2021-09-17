@@ -39,6 +39,7 @@ class DatumBarang {
     this.idKategoriProdukSub,
     this.idReseller,
     this.namaProduk,
+    this.berat,
     this.stok,
     this.satuan,
     this.harga,
@@ -55,10 +56,11 @@ class DatumBarang {
   String idKategoriProdukSub;
   String idReseller;
   String namaProduk;
+  String berat;
   String stok;
   String satuan;
   String harga;
-  dynamic tentangProduk;
+  String tentangProduk;
   String keterangan;
   String aktif;
   String minimum;
@@ -75,6 +77,7 @@ class DatumBarang {
     idKategoriProdukSub: json["id_kategori_produk_sub"],
     idReseller: json["id_reseller"],
     namaProduk: json["nama_produk"],
+    berat: json["berat"],
     stok: json["stok"],
     satuan: json["satuan"],
     harga: json["harga"],
@@ -92,6 +95,7 @@ class DatumBarang {
     "id_kategori_produk_sub": idKategoriProdukSub,
     "id_reseller": idReseller,
     "nama_produk": namaProduk,
+    "berat": berat,
     "stok": stok,
     "satuan": satuan,
     "harga": harga,
