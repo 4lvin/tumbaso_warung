@@ -125,4 +125,12 @@ class Repositories {
 
   Future updateStatusBarang(String idProduk, String status) =>
       apiProvider.updateStatusBarang(idProduk, status);
+
+  Future updateStatusTransaksiBarang(String idPenjualan, String status) =>
+      apiProvider.updateStatusTransaksiBarang(idPenjualan, status);
+
+  Future inputResi(String idPenjualan, String inputResi) =>
+      apiProvider.inputResi(idPenjualan, inputResi);
+
+  Future cekResi(String kodeTransaksi) => apiProvider.cekResi(kodeTransaksi);
 }

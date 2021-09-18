@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tumbaso_warung/src/models/getBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getEkspedisiModel.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
+import 'package:tumbaso_warung/src/models/getResiModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/models/resLengkapiProfilModel.dart';
@@ -17,6 +18,10 @@ class produkPasmakBloc {
   final _getBarangFechter = PublishSubject<GetBarangModel>();
   final _getTransaksiBarangFechter = PublishSubject<GetTransaksiBarangModel>();
   final _updateStatusBarangFechter = PublishSubject<ResLengkapiProfilModel>();
+  final _updateStatusTransaksiBarangFechter =
+      PublishSubject<ResLengkapiProfilModel>();
+  final _inputResiFecher = PublishSubject<ResLengkapiProfilModel>();
+  final _cekResiFecher = PublishSubject<CekResiModel>();
 
   PublishSubject<GetKategoriBarangModel> get resKategori =>
       _getKategoriFetcher.stream;
@@ -34,6 +39,14 @@ class produkPasmakBloc {
 
   PublishSubject<ResLengkapiProfilModel> get resStatusBarang =>
       _updateStatusBarangFechter.stream;
+
+  PublishSubject<ResLengkapiProfilModel> get resStatusTransaksiBarang =>
+      _updateStatusTransaksiBarangFechter.stream;
+
+  PublishSubject<ResLengkapiProfilModel> get resInputResi =>
+      _inputResiFecher.stream;
+
+  PublishSubject<CekResiModel> get resCekResi => _cekResiFecher.stream;
 
   getKategoriBarang() async {
     try {
@@ -142,11 +155,40 @@ class produkPasmakBloc {
 
   updateStatusBarang(String idProduk, String status) async {
     try {
-      ResLengkapiProfilModel updateTransaksi =
+      ResLengkapiProfilModel updateStatus =
           await _repository.updateStatusBarang(idProduk, status);
-      _updateStatusBarangFechter.sink.add(updateTransaksi);
+      _updateStatusBarangFechter.sink.add(updateStatus);
     } catch (err) {
       _updateStatusBarangFechter.sink.add(err);
+    }
+  }
+
+  updateStatusTransaksiBarang(String idPenjualan, String status) async {
+    try {
+      ResLengkapiProfilModel updateTransaksi =
+          await _repository.updateStatusTransaksiBarang(idPenjualan, status);
+      _updateStatusTransaksiBarangFechter.sink.add(updateTransaksi);
+    } catch (err) {
+      _updateStatusTransaksiBarangFechter.sink.add(err);
+    }
+  }
+
+  inputResi(String idPenjualan, String inputResi) async {
+    try {
+      ResLengkapiProfilModel updateTransaksi =
+          await _repository.inputResi(idPenjualan, inputResi);
+      _inputResiFecher.sink.add(updateTransaksi);
+    } catch (err) {
+      _inputResiFecher.sink.add(err);
+    }
+  }
+
+  cekResi(String kodeTransaksi) async {
+    try {
+      CekResiModel cekResi = await _repository.cekResi(kodeTransaksi);
+      _cekResiFecher.sink.add(cekResi);
+    } catch (err) {
+      _cekResiFecher.sink.add(err);
     }
   }
 
@@ -157,6 +199,9 @@ class produkPasmakBloc {
     _getBarangFechter.close();
     _getTransaksiBarangFechter.close();
     _updateStatusBarangFechter.close();
+    _updateStatusTransaksiBarangFechter.close();
+    _inputResiFecher.close();
+    _cekResiFecher.close();
   }
 }
 
