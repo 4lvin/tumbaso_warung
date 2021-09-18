@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:tumbaso_warung/src/app.dart';
 import 'package:tumbaso_warung/src/ui/utils/notification.dart';
 
@@ -10,7 +11,7 @@ void main() async {
   await FirebaseMessaging.instance.subscribeToTopic('warung');
   CustomNotification().awesomeNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(App());
+  await initializeDateFormatting('id_ID', null).then((_) => runApp(App()));
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
