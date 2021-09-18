@@ -690,6 +690,7 @@ class ApiProviders {
       request.fields['keterangan'] = keterangan;
       request.fields['minimum'] = minimum;
       request.fields['stok'] = stok;
+      request.fields['fee_produk'] = "0";
 
       if (file != null) {
         request.files.add(client.MultipartFile(
@@ -764,6 +765,7 @@ class ApiProviders {
       request.fields['keterangan'] = keterangan;
       request.fields['minimum'] = minimum;
       request.fields['stok'] = stok;
+      request.fields['fee_produk'] = "0";
 
       if (file != null) {
         request.files.add(client.MultipartFile(
@@ -814,7 +816,7 @@ class ApiProviders {
     });
     try {
       final prov = await client
-          .post("$url2/penjual/get_profil",
+          .post("$url/penjual/get_profil",
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": _token

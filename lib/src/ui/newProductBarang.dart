@@ -7,6 +7,7 @@ import 'package:tumbaso_warung/src/bloc/memberBloc.dart';
 import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
 import 'package:tumbaso_warung/src/models/getKategoriBarangModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
+import 'package:tumbaso_warung/src/ui/produkBarang.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/loading.dart';
 
@@ -80,7 +81,11 @@ class _NewProductBarangState extends State<NewProductBarang> {
       } else {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
-          Navigator.of(context).pop();
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => ProdukBarang()),
+            ModalRoute.withName('/controllerPage'),
+          );
         });
       }
     });

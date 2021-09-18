@@ -57,14 +57,15 @@ class _EditProductBarangState extends State<EditProductBarang> {
   initEdit() {
     nama.text = widget.barang.namaProduk;
     harga.text = widget.barang.harga;
-    // berat.text = widget.barang.berat;
-    // deskripsi.text = widget.barang.deskripsi;
+    berat.text = widget.barang.berat;
+    deskripsi.text = widget.barang.tentangProduk;
     satuan.text = widget.barang.satuan;
     keterangan.text = widget.barang.keterangan;
     minimum.text = widget.barang.minimum;
     kategori = widget.barang.idKategoriProduk;
     sub_kategori = widget.barang.idKategoriProdukSub;
     gambar_1 = widget.barang.gambar;
+    stok.text = widget.barang.stok;
 
     setState(() {});
   }
