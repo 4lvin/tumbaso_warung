@@ -1,15 +1,17 @@
-@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJhZ3VzcDA1MThAZ21haWwuY29tIn0.tJyOPjNDdm9EFtBS0e-l_nU_cSskjYxKWGTIi13KH34
-# @url_barang = https://tumbasonline.com/pasarmakmur/restapi/
-@url_barang = https://pasar.benmakmur.id/restapi/
+@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBpdHVuZ3MwNjBAZ21haWwuY29tIn0.mGnwo56UMZyLLNjquUUGsBTaVTMQwDtGTTQfcDMPsuI
+@url_barang = https://tumbasonline.com/pasarmakmur/restapi/
 @url_maem = https://jongjava.tech/tumbas/restapi/
 
+# @url_barang = https://pasar.benmakmur.id/restapi/
+# @url_maem = https://tumbasonline.com/restapi/
+
 // Login Penjual
-POST {{url_barang}}/penjual/login_gmail HTTP/1.1
+POST {{url_maem}}/penjual/login_gmail HTTP/1.1
 content-type: application/json
 
 {
-    "email": "muhammadsyarwani955@gmail.com",
-	"nama": "Syarwani",
+    "email": "pitungs060@gmail.com",
+	"nama": "bagus panji",
 	"token": "",
     "foto": ""
 }
@@ -43,8 +45,8 @@ Authorization: {{token}}
 
 {
     "email": "pitungs060@gmail.com",
-    "id_transaksi": 133, 
-	"status": 4
+    "id_transaksi": 128, 
+	"status": "proses"
 }
 
 ###
@@ -54,8 +56,29 @@ content-type: application/json
 Authorization: {{token}}
 
 {
-    "email": "bagusp0818@gmail.com",
-    "id_penjual": 84
+    "email": "pitungs060@gmail.com",
+    "id_penjual": 75
+}
+
+###
+// Update Resi
+POST {{ url_barang }}/penjual/update_resi HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "email": "pitungs060@gmail.com",
+    "id_transaksi": 128, 
+	"no_resi": "0112852058652511"
+}
+
+###
+// Cek Resi
+POST {{ url_barang }}/umum/get_resi HTTP/1.1
+content-type: application/json
+
+{
+    "kode_transaksi": "TRX119.20210827192525"
 }
 
 ###
