@@ -20,7 +20,7 @@ class _HistoryBarangState extends State<HistoryBarang> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  final currencyFormatter = NumberFormat('#,##0', 'id_ID');
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
@@ -120,8 +120,8 @@ class _HistoryBarangState extends State<HistoryBarang> {
   Widget buildItem(
       BuildContext context, Size size, TransaksiBarangDatum transaksi) {
     int count = transaksi.pemesananDetail.length;
-    int status = int.parse(transaksi.proses);
     String date = TimeConvert.timeAgo(transaksi.waktuTransaksi);
+    List<String> dateArray = date.split(' ');
 
     String textStatus = '';
     Color colorStatus = Colors.white;
@@ -168,7 +168,9 @@ class _HistoryBarangState extends State<HistoryBarang> {
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
-                  date,
+                  dateArray[1] == 'minggu' && int.parse(dateArray[0]) > 1
+                      ? '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(transaksi.waktuTransaksi)}'
+                      : date,
                   style: TextStyle(fontSize: 10, color: Colors.grey),
                 ),
               ],

@@ -22,7 +22,7 @@ class _HistoryMaemState extends State<HistoryMaem> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  final currencyFormatter = NumberFormat('#,##0', 'id_ID');
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
