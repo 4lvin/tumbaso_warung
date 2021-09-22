@@ -462,6 +462,7 @@ class ApiProviders {
           headers: {
             "Content-Type": "application/json"
           }).timeout(const Duration(seconds: 11));
+      print(data.body);
       if (data.statusCode == 200) {
         return GetKecamatanModel.fromJson(json.decode(data.body));
       } else {
@@ -489,7 +490,6 @@ class ApiProviders {
           .post("$url/penjual/login_gmail",
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
-      print(checkId.body);
       if (checkId.statusCode == 200) {
         return GetLoginWithGmailModel.fromJson(json.decode(checkId.body));
       } else if (checkId.statusCode == 404) {
@@ -513,6 +513,7 @@ class ApiProviders {
   Future lengkapiProfil(
       String email,
       String nama,
+      String namaToko,
       String provinsiId,
       String kotaId,
       String kecId,
@@ -526,6 +527,7 @@ class ApiProviders {
     var body = jsonEncode({
       'email': email,
       'nama': nama,
+      'nama_toko': namaToko,
       'provinsi_id': provinsiId,
       'kota_id': kotaId,
       'kecamatan_id': kecId,

@@ -186,6 +186,7 @@ class MemberBloc {
   lengkapiProfil(
       String email,
       String nama,
+      String namaToko,
       String provinsiId,
       String kotaId,
       String kecId,
@@ -201,6 +202,7 @@ class MemberBloc {
           await _repository.lengkapiProfil(
               email,
               nama,
+              namaToko,
               provinsiId,
               kotaId,
               kecId,
