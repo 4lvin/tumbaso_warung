@@ -116,18 +116,17 @@ class _EditProductBarangState extends State<EditProductBarang> {
             stok.text)
         .then((value) {
       if (value != 200) {
-        Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
           Toast.show("Berhasil Menyimpan Data", context,
               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         });
       } else {
-        Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
           Navigator.of(context).pop();
         });
       }
     });
+    Dialogs.dismiss(context);
   }
 
   @override

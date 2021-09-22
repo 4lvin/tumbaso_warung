@@ -22,7 +22,7 @@ class ProdukBarang extends StatefulWidget {
 class _ProdukBarangState extends State<ProdukBarang> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  final currencyFormatter = NumberFormat('#,##0', 'id_ID');
 
   GetKategoriBarangModel _listKategori;
 
@@ -112,70 +112,66 @@ class _ProdukBarangState extends State<ProdukBarang> {
   }
 
   Widget body(Size size) {
-    return Column(
-      children: [
-        // buildToko(size),
-        Container(
-          width: size.width,
-          height: size.height * 0.78,
-          // color: Colors.amber,
-          padding: EdgeInsets.all(20),
-          child: StreamBuilder<GetBarangModel>(
-            stream: blocProdukPasmak.resBarang,
-            builder: (_, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data.data.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 18.0),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.notifications_off,
-                            color: Colors.grey,
-                            size: 50,
-                          ),
-                          Text(
-                            "Belum mempunyai Barang",
-                            style: TextStyle(color: Colors.grey),
-                          )
-                        ],
+    return Container(
+      width: size.width,
+      height: size.height,
+      // color: Colors.amber,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: StreamBuilder<GetBarangModel>(
+        stream: blocProdukPasmak.resBarang,
+        builder: (_, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.data.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.notifications_off,
+                        color: Colors.grey,
+                        size: 50,
                       ),
-                    ),
-                  );
-                } else {
-                  return SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: false,
-                    header: WaterDropMaterialHeader(
-                      backgroundColor: colorses.dasar,
-                    ),
-                    controller: _refreshController,
-                    onRefresh: _onRefresh,
-                    onLoading: _onLoading,
-                    child: GridView.builder(
-                      itemCount: snapshot.data.data.length,
-                      itemBuilder: (context, index) =>
-                          buildItem(size, snapshot.data.data[index]),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 3 / 4.4,
-                        crossAxisSpacing: 18,
-                        mainAxisSpacing: 18,
-                      ),
-                    ),
-                  );
-                }
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ),
-      ],
+                      Text(
+                        "Belum mempunyai Barang",
+                        style: TextStyle(color: Colors.grey),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                header: WaterDropMaterialHeader(
+                  backgroundColor: colorses.dasar,
+                ),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                onLoading: _onLoading,
+                child: GridView.builder(
+                  padding: EdgeInsets.only(top: 10),
+                  itemCount: snapshot.data.data.length,
+                  itemBuilder: (context, index) =>
+                      buildItem(size, snapshot.data.data[index]),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 4.4,
+                    crossAxisSpacing: 18,
+                    mainAxisSpacing: 18,
+                  ),
+                ),
+              );
+            }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 

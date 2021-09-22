@@ -10,6 +10,7 @@ import 'package:tumbaso_warung/src/models/getLoginWithGmailModel.dart';
 import 'package:tumbaso_warung/src/models/getProdukModel.dart';
 import 'package:tumbaso_warung/src/models/getProfilModel.dart';
 import 'package:tumbaso_warung/src/models/getProvinsiModel.dart';
+import 'package:tumbaso_warung/src/models/getResiModel.dart';
 import 'package:tumbaso_warung/src/models/getSetoranModel.dart';
 import 'package:tumbaso_warung/src/models/getStatusModel.dart';
 import 'package:tumbaso_warung/src/models/getSubKategoriModel.dart';
@@ -804,6 +805,46 @@ class ApiProviders {
     }
   }
 
+  Future updateStatusBarang(String idProduk, String status) async {
+    String email;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      email = value;
+    });
+    var body =
+        jsonEncode({'email': email, 'id_produk': idProduk, 'status': status});
+    try {
+      final checkid = await client
+          .post("$url2/penjual/update_status_produk",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (checkid.statusCode == 200) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else if (checkid.statusCode == 404) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future getProfil() async {
     String _email;
     String _token;
@@ -907,7 +948,7 @@ class ApiProviders {
     }
   }
 
-  Future updateStatusBarang(String idProduk, String status) async {
+  Future updateStatusTransaksiBarang(String idPenjualan, String status) async {
     String email;
     String _token;
     await getToken().then((value) {
@@ -916,11 +957,11 @@ class ApiProviders {
     await getEmail().then((value) {
       email = value;
     });
-    var body =
-        jsonEncode({'email': email, 'id_produk': idProduk, 'status': status});
+    var body = jsonEncode(
+        {'email': email, 'id_transaksi': idPenjualan, 'status': status});
     try {
       final checkid = await client
-          .post("$url2/penjual/update_status_produk",
+          .post("$url2/penjual/update_transaksi",
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": _token
@@ -931,6 +972,76 @@ class ApiProviders {
         return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
       } else if (checkid.statusCode == 404) {
         return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future inputResi(String idPenjualan, String noResi) async {
+    String email;
+    String _token;
+    await getToken().then((value) {
+      _token = value;
+    });
+    await getEmail().then((value) {
+      email = value;
+    });
+    var body = jsonEncode(
+        {'email': email, 'id_transaksi': idPenjualan, 'no_resi': noResi});
+    try {
+      final checkid = await client
+          .post("$url2/penjual/update_resi",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": _token
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (checkid.statusCode == 200) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else if (checkid.statusCode == 404) {
+        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
+      } else {
+        throw Exception('Failure response');
+      }
+    } on SocketException catch (e) {
+      throw Exception(e.toString());
+    } on HttpException {
+      {
+        throw Exception("tidak menemukan post");
+      }
+    } on FormatException {
+      throw Exception("request salah");
+    } on TimeoutException catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future cekResi(String kodeTransaksi) async {
+    var body = jsonEncode({'kode_transaksi': kodeTransaksi});
+    try {
+      final checkid = await client
+          .post("$url2/umum/get_resi",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: body)
+          .timeout(const Duration(seconds: 11));
+      if (checkid.statusCode == 200) {
+        return CekResiModel.fromJson(checkid.body);
+      } else if (checkid.statusCode == 404) {
+        return CekResiModel.fromJson(checkid.body);
       } else {
         throw Exception('Failure response');
       }

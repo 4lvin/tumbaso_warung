@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:toast/toast.dart';
 import 'package:tumbaso_warung/src/bloc/produkPasmakBloc.dart';
+import 'package:tumbaso_warung/src/models/getResiModel.dart';
 import 'package:tumbaso_warung/src/models/getTransaksiBarangModel.dart';
 import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/timeago.dart';
@@ -17,10 +18,12 @@ class TransaksiBarang extends StatefulWidget {
 }
 
 class _TransaksiBarangState extends State<TransaksiBarang> {
+  final resiController = TextEditingController();
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  final currencyFormatter = NumberFormat('#,##0', 'id_ID');
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
@@ -44,6 +47,41 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
   void dispose() {
     _refreshController.dispose();
     super.dispose();
+  }
+
+  void updateStatus(String idPenjualan, String status) {
+    blocProdukPasmak.updateStatusTransaksiBarang(idPenjualan, status);
+    blocProdukPasmak.resStatusTransaksiBarang.listen((event) {
+      if (event.status == true) {
+        Toast.show("Status Berhasil di Update", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Navigator.of(context).pop();
+      }
+    }).onDone(() => _onRefresh());
+  }
+
+  void cekResi(String idTransaksi) {
+    if (resiController.text == '') {
+      Toast.show("No Resi tidak boleh kosong", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    } else {
+      print(resiController.text);
+      blocProdukPasmak.inputResi(idTransaksi, resiController.text);
+      blocProdukPasmak.resInputResi.listen((event) {
+        if (event.status == true) {
+          setState(() {
+            resiController.text == '';
+          });
+          updateStatus(idTransaksi, 'kirim');
+          Toast.show("Input Berhasil di Kirim", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          Navigator.of(context).pop();
+        } else {
+          Toast.show("No Resi tidak di temukan", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        }
+      });
+    }
   }
 
   @override
@@ -91,9 +129,9 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                     return SmartRefresher(
                       enablePullDown: true,
                       enablePullUp: false,
-                      header: WaterDropMaterialHeader(
-                        backgroundColor: colorses.dasar,
-                      ),
+                      // header: WaterDropMaterialHeader(
+                      //   backgroundColor: colorses.dasar,
+                      // ),
                       controller: _refreshController,
                       onRefresh: _onRefresh,
                       onLoading: _onLoading,
@@ -122,6 +160,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
     int count = transaksi.pemesananDetail.length;
     int status = int.parse(transaksi.proses);
     String date = TimeConvert.timeAgo(transaksi.waktuTransaksi);
+    List<String> dateArray = date.split(' ');
 
     String textStatus = '';
     Color colorStatus = Colors.white;
@@ -135,7 +174,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
     } else if (status == 2) {
       textStatus = 'Menunggu Diproses';
       colorStatus = Color(0xFFF08B5E);
-    } else if (status == 1 && transaksi.noResi != null) {
+    } else if (status == 3) {
       textStatus = 'Dalam Proses Perjalanan';
       colorStatus = colorses.dasar;
     } else {
@@ -150,10 +189,10 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
           detailPesanan(context, size, 2, transaksi);
         } else if (status == 2) {
           detailPesanan(context, size, 3, transaksi);
-        } else if (status == 1 && transaksi.noResi != null) {
-          trackingPesanan(size);
+        } else if (status == 3) {
+          trackingPesanan(size, transaksi.kodeTransaksi);
         } else {
-          trackingPesanan(size);
+          trackingPesanan(size, transaksi.kodeTransaksi);
         }
       },
       child: Container(
@@ -191,7 +230,9 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
-                  date,
+                  dateArray[1] == 'minggu' && int.parse(dateArray[0]) > 1
+                      ? '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(transaksi.waktuTransaksi)}'
+                      : date,
                   style: TextStyle(fontSize: 10, color: Colors.grey),
                 ),
               ],
@@ -219,7 +260,9 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
 
   // dialog Detail Pesanan
 
-  Future<Object> trackingPesanan(Size size) {
+  Future<Object> trackingPesanan(Size size, String kodeTransaksi) {
+    blocProdukPasmak.cekResi(kodeTransaksi);
+
     return showGeneralDialog(
       barrierLabel: "tracking",
       barrierDismissible: true,
@@ -278,116 +321,40 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                     'Status Pengiriman',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(height: 40),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              height: 20,
-                              width: 20,
-                              color: colorses.dasar,
+                  SizedBox(height: 20),
+                  StreamBuilder<CekResiModel>(
+                    stream: blocProdukPasmak.resCekResi,
+                    builder: (_, snap) {
+                      if (snap.hasData) {
+                        if (snap.data.data.isNotEmpty) {
+                          return Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: snap.data.data.length,
+                              itemBuilder: (_, i) {
+                                var e = snap.data.data[i];
+                                return statusTracking(
+                                  e.status,
+                                  '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(e.tanggal)}',
+                                  e.destinasi,
+                                  notLast: i == (snap.data.data.length - 1)
+                                      ? false
+                                      : true,
+                                );
+                              },
                             ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      } else {
+                        return Expanded(
+                          child: Center(
+                            child: CircularProgressIndicator(),
                           ),
-                          Container(
-                            height: 40,
-                            child: VerticalDivider(
-                              color: colorses.dasar,
-                              thickness: 1,
-                              indent: 4,
-                              endIndent: 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 6),
-                          Text(
-                            '12 - Agustus - 2021 | 13:00',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          Text(
-                            'Paket sedang dalam perjalanan ke lokasi anda.',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              height: 20,
-                              width: 20,
-                              color: colorses.dasar,
-                            ),
-                          ),
-                          Container(
-                            height: 40,
-                            child: VerticalDivider(
-                              color: colorses.dasar,
-                              thickness: 1,
-                              indent: 4,
-                              endIndent: 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 6),
-                          Text(
-                            '12 - Agustus - 2021 | 13:00',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          Text(
-                            'Paket telah di kirim dari PURWOSARI tempat sortir.',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: 20,
-                          width: 20,
-                          color: colorses.dasar,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 6),
-                          Text(
-                            '12 - Agustus - 2021 | 13:00',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          Text(
-                            'Paket telah di trema oleh kurir jasa kirim JNT.',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ],
+                        );
+                      }
+                    },
                   ),
                 ],
               ),
@@ -395,6 +362,58 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
           ),
         );
       },
+    );
+  }
+
+  Widget statusTracking(String status, String time, String keterangan,
+      {bool notLast = true}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                height: 20,
+                width: 20,
+                color: colorses.dasar,
+              ),
+            ),
+            Visibility(
+              visible: notLast,
+              child: Container(
+                height: 40,
+                child: VerticalDivider(
+                  color: colorses.dasar,
+                  thickness: 1,
+                  indent: 4,
+                  endIndent: 4,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 6),
+            Text(
+              status,
+              style: TextStyle(fontSize: 12, color: colorses.dasar),
+            ),
+            Text(
+              time,
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            Text(
+              keterangan,
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -407,7 +426,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
 
     int total = 0;
     transaksi.pemesananDetail.forEach((prod) {
-      total += prod.harga;
+      total += prod.harga * prod.qty;
     });
 
     return showGeneralDialog(
@@ -612,121 +631,100 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                     ),
                   ),
                   Spacer(),
-                  status == 1
-                      ? Container()
-                      : Container(
-                          width: size.width,
-                          height: 130,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.grey[300], width: 2),
-                            borderRadius: BorderRadius.circular(15),
+                  Visibility(
+                    visible: status == 1 ? false : true,
+                    child: Container(
+                      width: size.width,
+                      height: 130,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey[300], width: 2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/delivery-man.svg",
+                            semanticsLabel: 'Acme Logo',
+                            height: 34,
+                            width: 34,
+                            color: Colors.grey,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/delivery-man.svg",
-                                semanticsLabel: 'Acme Logo',
-                                height: 34,
-                                width: 34,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'Kirimkan pesanan ke jasa pengiriman sebelum Senin, 15 - 08 - 2021',
-                                textAlign: TextAlign.center,
-                                style:
-                                    TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                            ],
+                          SizedBox(height: 10),
+                          Text(
+                            'Segera kirimkan pesanan ke jasa pengiriman',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                          Visibility(
+                            visible: status == 3 ? true : false,
+                            child: Text(
+                              'Untuk pembatalan pemesanan dengan alasan seperi barang habis silahkan hubungi admin',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 14, color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Visibility(
+                    visible: status == 3 ? true : false,
+                    child: Container(
+                      width: size.width,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            updateStatus(transaksi.idPenjualan, 'proses'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(colorses.dasar),
+                          shadowColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
                         ),
-                  SizedBox(height: 20),
-                  status == 3
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: size.width * 0.3,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.white),
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      Colors.white),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      side: BorderSide(
-                                          width: 1.5, color: colorses.orange),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Habis',
-                                  style: TextStyle(
-                                      fontSize: 16, color: colorses.orange),
-                                ),
-                              ),
+                        child: Text(
+                          'Telah dikemas',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: status == 2 ? true : false,
+                    child: Container(
+                      width: size.width,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            inputNoResi(context, transaksi.idPenjualan),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(colorses.dasar),
+                          shadowColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            Container(
-                              width: size.width * 0.56,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(colorses.dasar),
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      Colors.white),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Telah dikemas',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      : status == 2
-                          ? Container(
-                              width: size.width,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () => inputNoResi(context),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(colorses.dasar),
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      Colors.white),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Masukkan No. Resi',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                ),
-                              ),
-                            )
-                          : Container(),
+                          ),
+                        ),
+                        child: Text(
+                          'Masukkan No. Resi',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -736,7 +734,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
     );
   }
 
-  inputNoResi(BuildContext context) {
+  inputNoResi(BuildContext context, String idPenjualan) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -766,6 +764,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                       ),
                     ),
                     TextFormField(
+                      controller: resiController,
                       decoration: InputDecoration(
                         hintText: "Masukkan Nomor Resi",
                         hintStyle: TextStyle(color: Colors.grey),
@@ -798,7 +797,7 @@ class _TransaksiBarangState extends State<TransaksiBarang> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () => cekResi(idPenjualan),
                         child: Text('Simpan'),
                       ),
                     )
