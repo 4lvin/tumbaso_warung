@@ -26,6 +26,7 @@ class EditProfil extends StatefulWidget {
 class _EditProfilState extends State<EditProfil> {
   TextEditingController _alamat = TextEditingController();
   TextEditingController _nama = TextEditingController();
+  TextEditingController _namaToko = TextEditingController();
   TextEditingController _noTelp = TextEditingController();
   int _provinsi;
   String _selectedProvinsi;
@@ -95,6 +96,7 @@ class _EditProfilState extends State<EditProfil> {
           var profil = event.data[0];
           _alamat.text = profil.alamat;
           _nama.text = profil.nama;
+          _namaToko.text = profil.namaToko;
           _noTelp.text = profil.telepone;
           _selectedProvinsi = profil.provinsiId;
           _selectedKota = profil.kotaId;
@@ -169,6 +171,7 @@ class _EditProfilState extends State<EditProfil> {
       blocMember.lengkapiProfil(
           widget.email,
           _nama.text,
+          _namaToko.text,
           _selectedProvinsi,
           _selectedKota,
           _selectedKec,
@@ -233,9 +236,29 @@ class _EditProfilState extends State<EditProfil> {
                 controller: _nama,
                 cursorColor: colorses.dasar,
                 decoration: InputDecoration(
-                  hintText: "Nama Toko",
+                  hintText: "Nama",
                   border: InputBorder.none,
                   errorText: _nama.text.length < 3 && _validate
+                      ? 'Nama harus diisi !'
+                      : null,
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+              width: MediaQuery.of(context).size.width * 0.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: colorses.dasar),
+              ),
+              child: TextField(
+                controller: _namaToko,
+                cursorColor: colorses.dasar,
+                decoration: InputDecoration(
+                  hintText: "Nama Toko",
+                  border: InputBorder.none,
+                  errorText: _namaToko.text.length < 3 && _validate
                       ? 'Nama Toko harus diisi !'
                       : null,
                 ),

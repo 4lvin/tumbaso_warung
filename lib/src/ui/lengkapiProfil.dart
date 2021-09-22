@@ -27,6 +27,7 @@ class LengkapiProfil extends StatefulWidget {
 class _LengkapiProfilState extends State<LengkapiProfil> {
   TextEditingController _alamat = TextEditingController();
   TextEditingController _nama = TextEditingController();
+  TextEditingController _namaToko = TextEditingController();
   TextEditingController _noTelp = TextEditingController();
   TextEditingController _agen = TextEditingController();
   int _provinsi;
@@ -109,9 +110,29 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
               controller: _nama,
               cursorColor: colorses.dasar,
               decoration: InputDecoration(
-                hintText: "Nama Toko",
+                hintText: "Nama",
                 border: InputBorder.none,
                 errorText: _nama.text.length < 3 && _validate
+                    ? 'Nama harus diisi !'
+                    : null,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+            width: MediaQuery.of(context).size.width * 0.8,
+            decoration: BoxDecoration(
+              border: Border.all(color: colorses.dasar, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: TextField(
+              controller: _namaToko,
+              cursorColor: colorses.dasar,
+              decoration: InputDecoration(
+                hintText: "Nama Toko",
+                border: InputBorder.none,
+                errorText: _namaToko.text.length < 3 && _validate
                     ? 'Nama Toko harus diisi !'
                     : null,
               ),
@@ -367,6 +388,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                 blocMember.lengkapiProfil(
                     widget.email,
                     _nama.text,
+                    _namaToko.text,
                     _selectedProvinsi,
                     _selectedKota,
                     _selectedKec,
