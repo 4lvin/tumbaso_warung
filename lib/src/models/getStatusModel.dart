@@ -11,9 +11,9 @@ class GetStatusModel {
     this.message,
   });
 
-  bool status;
-  List<Datum> data;
-  String message;
+  bool? status;
+  List<Datum>? data;
+  String? message;
 
   factory GetStatusModel.fromRawJson(String str) => GetStatusModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetStatusModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -43,13 +43,13 @@ class Datum {
     this.aktif,
   });
 
-  String idPenjual;
-  String email;
-  String nama;
-  String alamat;
-  String longitude;
-  String latitude;
-  String aktif;
+  String? idPenjual;
+  String? email;
+  String? nama;
+  String? alamat;
+  String? longitude;
+  String? latitude;
+  String? aktif;
 
   factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
 

@@ -11,9 +11,9 @@ class GetLoginWithGmailModel {
     this.message,
   });
 
-  bool status;
-  Data data;
-  String message;
+  bool? status;
+  Data? data;
+  String? message;
 
   factory GetLoginWithGmailModel.fromRawJson(String str) => GetLoginWithGmailModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetLoginWithGmailModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data!.toJson(),
     "message": message,
   };
 }
@@ -44,14 +44,14 @@ class Data {
     this.latitude,
   });
 
-  String idToken;
-  Key key;
-  String email;
-  String username;
-  String nama;
-  String telepone;
-  String longitude;
-  String latitude;
+  String? idToken;
+  Key? key;
+  String? email;
+  String? username;
+  String? nama;
+  String? telepone;
+  String? longitude;
+  String? latitude;
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
 
@@ -70,7 +70,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
     "id_token": idToken,
-    "key": key.toJson(),
+    "key": key!.toJson(),
     "email": email,
     "username": username,
     "nama": nama,
@@ -86,8 +86,8 @@ class Key {
     this.idPenjualMakmur,
   });
 
-  String idPenjual;
-  String idPenjualMakmur;
+  String? idPenjual;
+  String? idPenjualMakmur;
 
   factory Key.fromRawJson(String str) => Key.fromJson(json.decode(str));
 

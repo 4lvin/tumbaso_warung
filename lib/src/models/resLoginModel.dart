@@ -11,9 +11,9 @@ class ResLoginModel {
     this.message,
   });
 
-  bool status;
-  Data data;
-  String message;
+  bool? status;
+  Data? data;
+  String? message;
 
   factory ResLoginModel.fromRawJson(String str) => ResLoginModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class ResLoginModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data!.toJson(),
     "message": message,
   };
 }
@@ -43,13 +43,13 @@ class Data {
     this.latitude,
   });
 
-  String idToken;
-  String idPenjual;
-  String username;
-  String namaLengkap;
-  String telepone;
-  String longitude;
-  String latitude;
+  String? idToken;
+  String? idPenjual;
+  String? username;
+  String? namaLengkap;
+  String? telepone;
+  String? longitude;
+  String? latitude;
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
 

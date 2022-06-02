@@ -11,9 +11,9 @@ class GetBarangModel {
     this.message,
   });
 
-  bool status;
-  List<DatumBarang> data;
-  String message;
+  bool? status;
+  List<DatumBarang>? data;
+  String? message;
 
   factory GetBarangModel.fromRawJson(String str) => GetBarangModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetBarangModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -51,21 +51,21 @@ class DatumBarang {
     this.gambar,
   });
 
-  String idProduk;
-  String idKategoriProduk;
-  String idKategoriProdukSub;
-  String idReseller;
-  String namaProduk;
-  String berat;
-  String stok;
-  String satuan;
-  String harga;
-  String tentangProduk;
-  String keterangan;
-  String aktif;
-  String minimum;
-  String feeProduk;
-  String gambar;
+  String? idProduk;
+  String? idKategoriProduk;
+  String? idKategoriProdukSub;
+  String? idReseller;
+  String? namaProduk;
+  String? berat;
+  String? stok;
+  String? satuan;
+  String? harga;
+  String? tentangProduk;
+  String? keterangan;
+  String? aktif;
+  String? minimum;
+  String? feeProduk;
+  String? gambar;
 
   factory DatumBarang.fromRawJson(String str) => DatumBarang.fromJson(json.decode(str));
 

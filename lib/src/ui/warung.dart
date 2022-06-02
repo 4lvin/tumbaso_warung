@@ -16,8 +16,8 @@ class WarungPage extends StatefulWidget {
 
 class _WarungPageState extends State<WarungPage> {
   bool onOff = false;
-  String nama;
-  String email;
+  String? nama;
+  String? email;
 
   getSetoran() {
     getKdUser().then((kduser) {
@@ -113,7 +113,7 @@ class _WarungPageState extends State<WarungPage> {
                                     type: PageTransitionType.rightToLeft,
                                     duration: Duration(milliseconds: 200),
                                     child: EditProfil(
-                                      email: email,
+                                      email: email!,
                                     )));
                           },
                           child: Container(

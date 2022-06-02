@@ -15,9 +15,9 @@ class GetSetoranModel {
         this.message,
     });
 
-    bool status;
-    List<Datum> data;
-    String message;
+    bool? status;
+    List<Datum>? data;
+    String? message;
 
     factory GetSetoranModel.fromJson(Map<String, dynamic> json) => GetSetoranModel(
         status: json["status"],
@@ -27,7 +27,7 @@ class GetSetoranModel {
 
     Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
         "message": message,
     };
 }
@@ -40,10 +40,10 @@ class Datum {
         this.tanggal,
     });
 
-    String penjualId;
-    int setorPenjual;
-    int tunggakanSetor;
-    DateTime tanggal;
+    String? penjualId;
+    int? setorPenjual;
+    int? tunggakanSetor;
+    DateTime? tanggal;
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         penjualId: json["penjual_id"],
@@ -56,6 +56,6 @@ class Datum {
         "penjual_id": penjualId,
         "setor_penjual": setorPenjual,
         "tunggakan_setor": tunggakanSetor,
-        "tanggal": "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "tanggal": "${tanggal!.year.toString().padLeft(4, '0')}-${tanggal!.month.toString().padLeft(2, '0')}-${tanggal!.day.toString().padLeft(2, '0')}",
     };
 }

@@ -25,32 +25,31 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
   // FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
-  String tokenUser;
+  String? tokenUser;
 
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future _signIn() async {
     Dialogs.showLoading(context, "Loading...");
-    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
     UserCredential signIn =
-        await signIntoFirebase(googleSignInAccount).catchError((onError) {
+        await signIntoFirebase(googleSignInAccount!).catchError((onError) {
       Dialogs.dismiss(context);
-      Toast.show(onError.toString(), context,
-          duration: 3, gravity: Toast.BOTTOM);
+      Toast.show(onError.toString(),
+          duration: 3, gravity: Toast.bottom);
     });
-    blocMember.loginGmail(signIn.user.email, signIn.user.photoURL,
-        signIn.user.displayName, tokenUser);
+    blocMember.loginGmail(signIn.user!.email!, signIn.user!.photoURL!,
+        signIn.user!.displayName!, tokenUser!);
     blocMember.resLoginGmail.listen((login) {
-      if (login.data.telepone != "") {
+      if (login.data!.telepone != "") {
         Dialogs.dismiss(context);
         Future.delayed(Duration(seconds: 1)).then((value) {
           // print(signIn.user);
-          setToken(login.data.idToken);
+          setToken(login.data!.idToken!);
           // setKota(login.data.kota.kode);
-          setEmail(signIn.user.email);
-          setNama(login.data.nama);
-          setKdUser(login.data.key.idPenjual);
-          setKdPasmak(login.data.key.idPenjualMakmur);
+          setEmail(signIn.user!.email!);
+          setNama(login.data!.nama!);
+          setKdUser(login.data!.key!.idPenjual!);
           Navigator.pushReplacementNamed(context, '/controllerPage');
         });
       } else {
@@ -61,11 +60,10 @@ class _LoginPageState extends State<LoginPage> {
               type: PageTransitionType.rightToLeft,
               duration: Duration(milliseconds: 400),
               child: LengkapiProfil(
-                  email: signIn.user.email,
-                  token: login.data.idToken,
-                  kdUser: login.data.key.idPenjual,
-                  nama: login.data.nama,
-                  kdPasmak: login.data.key.idPenjualMakmur)));
+                  email: signIn.user!.email!,
+                  token: login.data!.idToken!,
+                  kdUser: login.data!.key!.idPenjual!,
+                  nama: login.data!.nama!)));
         });
       }
     });
@@ -75,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _firebaseMessaging.getToken().then((token) {
-      print('token fcm: ' + token);
+      print('token fcm: ' + token!);
       setState(() {
         tokenUser = token;
       });
@@ -106,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     SafeArea(
                       child: Container(
-                        height: 200,
+                        height: 150,
                         margin: EdgeInsets.only(
                             top: MediaQuery.of(context).size.height / 7),
                         width: MediaQuery.of(context).size.width,
@@ -120,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       "Aplikasi untuk warung atau toko",
                       style: TextStyle(
-                          fontSize: 21,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),

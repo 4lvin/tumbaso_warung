@@ -11,9 +11,9 @@ class GetKecamatanModel {
     this.message,
   });
 
-  bool status;
-  List<ResultKec> data;
-  String message;
+  bool? status;
+  List<ResultKec>? data;
+  String? message;
 
   factory GetKecamatanModel.fromRawJson(String str) => GetKecamatanModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetKecamatanModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -39,9 +39,9 @@ class ResultKec {
     this.namaKecamatan,
   });
 
-  String idKecamatan;
-  String kabupatenId;
-  String namaKecamatan;
+  String? idKecamatan;
+  String? kabupatenId;
+  String? namaKecamatan;
 
   factory ResultKec.fromRawJson(String str) => ResultKec.fromJson(json.decode(str));
 

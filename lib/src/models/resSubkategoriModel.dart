@@ -17,9 +17,9 @@ class ResSubkategoriModel {
     this.message,
   });
 
-  bool status;
-  List<Datum> data;
-  String message;
+  bool? status;
+  List<Datum>? data;
+  String? message;
 
   factory ResSubkategoriModel.fromJson(Map<String, dynamic> json) =>
       ResSubkategoriModel(
@@ -30,7 +30,7 @@ class ResSubkategoriModel {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
         "message": message,
       };
 }
@@ -41,8 +41,8 @@ class Datum {
     this.namaSubkategori,
   });
 
-  String idSubkategori;
-  String namaSubkategori;
+  String? idSubkategori;
+  String? namaSubkategori;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         idSubkategori: json["id_subkategori"],

@@ -48,32 +48,6 @@ class Repositories {
 
   Future getSubKategoriBarang(String idKategori) => apiProvider.getSubKategoriBarang(idKategori);
 
-  Future getBarang() => apiProvider.getBarang();
-
-  Future simpanProdukBarang(File file, String kategori, String subkategori, String nama, String harga, String satuan,
-          String berat, String deskripsi, String keterangan, String minimum, String stok) =>
-      apiProvider.simpanProdukBarang(
-          file, kategori, subkategori, nama, harga, satuan, berat, deskripsi, keterangan, minimum, stok);
-
-  Future editProdukBarang(File file, String id_barang, String kategori, String subkategori, String nama, String harga,
-          String satuan, String berat, String deskripsi, String keterangan, String minimum, String stok) =>
-      apiProvider.editProdukBarang(
-          file, id_barang, kategori, subkategori, nama, harga, satuan, berat, deskripsi, keterangan, minimum, stok);
-
-  Future getProfil() => apiProvider.getProfil();
-
-  Future getEkspedisi() => apiProvider.getEkspedisi();
-
-  Future getTransaksiBarang(String status) => apiProvider.getTransaksiBarang(status);
-
-  Future updateStatusBarang(String idProduk, String status) =>
-      apiProvider.updateStatusBarang(idProduk, status);
-
-  Future updateStatusTransaksiBarang(String idPenjualan, String status) =>
-      apiProvider.updateStatusTransaksiBarang(idPenjualan, status);
-
-  Future inputResi(String idPenjualan, String inputResi) =>
-      apiProvider.inputResi(idPenjualan, inputResi);
-
-  Future cekResi(String kodeTransaksi) => apiProvider.cekResi(kodeTransaksi);
+  Future getProfil(String email,
+      String token) => apiProvider.getProfil(email, token);
 }

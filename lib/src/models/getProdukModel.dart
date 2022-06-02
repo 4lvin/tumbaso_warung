@@ -16,9 +16,9 @@ class GetProdukModel {
     this.message,
   });
 
-  bool status;
-  List<Datum> data;
-  String message;
+  bool? status;
+  List<Datum>? data;
+  String? message;
 
   factory GetProdukModel.fromJson(Map<String, dynamic> json) => GetProdukModel(
         status: json["status"],
@@ -28,7 +28,7 @@ class GetProdukModel {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
         "message": message,
       };
 }
@@ -48,17 +48,17 @@ class Datum {
     this.gambar,
   });
 
-  String idProduk;
-  Kategori kategori;
-  String idSubkategori;
-  String namaProduk;
-  String hargaJual;
-  String berat;
-  String potongan;
-  String deskripsi;
-  String aktif;
-  Penjual penjual;
-  Gambar gambar;
+  String? idProduk;
+  Kategori? kategori;
+  String? idSubkategori;
+  String? namaProduk;
+  String? hargaJual;
+  String? berat;
+  String? potongan;
+  String? deskripsi;
+  String? aktif;
+  Penjual? penjual;
+  Gambar? gambar;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         idProduk: json["id_produk"],
@@ -76,7 +76,7 @@ class Datum {
 
   Map<String, dynamic> toJson() => {
         "id_produk": idProduk,
-        "kategori": kategori.toJson(),
+        "kategori": kategori!.toJson(),
         "id_subkategori": idSubkategori,
         "nama_produk": namaProduk,
         "harga_jual": hargaJual,
@@ -84,8 +84,8 @@ class Datum {
         "potongan": potongan,
         "deskripsi": deskripsi,
         "aktif": aktif,
-        "penjual": penjual.toJson(),
-        "gambar": gambar.toJson(),
+        "penjual": penjual!.toJson(),
+        "gambar": gambar!.toJson(),
       };
 }
 
@@ -96,9 +96,9 @@ class Gambar {
     this.gambar3,
   });
 
-  String gambar1;
-  String gambar2;
-  String gambar3;
+  String? gambar1;
+  String? gambar2;
+  String? gambar3;
 
   factory Gambar.fromJson(Map<String, dynamic> json) => Gambar(
         gambar1: json["gambar_1"],
@@ -119,8 +119,8 @@ class Kategori {
     this.namaKategori,
   });
 
-  String idKategori;
-  String namaKategori;
+  String? idKategori;
+  String? namaKategori;
 
   factory Kategori.fromJson(Map<String, dynamic> json) => Kategori(
         idKategori: json["id_kategori"],
@@ -145,14 +145,14 @@ class Penjual {
     this.latitude,
   });
 
-  String penjualId;
-  String nama;
-  String namaToko;
-  String status;
-  String kecamatanId;
-  String alamat;
-  String longitude;
-  String latitude;
+  String? penjualId;
+  String? nama;
+  String? namaToko;
+  String? status;
+  String? kecamatanId;
+  String? alamat;
+  String? longitude;
+  String? latitude;
 
   factory Penjual.fromJson(Map<String, dynamic> json) => Penjual(
         penjualId: json["penjual_id"],

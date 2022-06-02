@@ -8,7 +8,7 @@ import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 class DetailPesanan extends StatefulWidget {
   DetailPesanan({this.pesanan});
 
-  Datum pesanan;
+  Datum? pesanan;
 
   @override
   _DetailPesananState createState() => _DetailPesananState();
@@ -18,8 +18,8 @@ class _DetailPesananState extends State<DetailPesanan> {
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
   final String _baseImage = "http://jongjava.tech/tumbas/assets/foto_produk/";
   // final String _baseImage = "https://tumbasonline.com/assets/foto_produk/";
-  String token;
-  String username;
+  String? token;
+  String? username;
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text("Kode Transaksi : "),
                     ),
-                    Text(widget.pesanan.kodeTransaksi),
+                    Text(widget.pesanan!.kodeTransaksi??""),
                   ],
                 ),
                 Row(
@@ -75,8 +75,8 @@ class _DetailPesananState extends State<DetailPesanan> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(18),
                           color: setColorStatus(
-                              widget.pesanan.status.idStatusPesanan)),
-                      child: Text(widget.pesanan.status.namaStatusPesanan,
+                              widget.pesanan!.status!.idStatusPesanan)),
+                      child: Text(widget.pesanan!.status!.namaStatusPesanan??"",
                           style: TextStyle(color: Colors.white)),
                     ),
                   ],
@@ -93,7 +93,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(18),
                               color: colorses.dasar),
-                          child: Text(widget.pesanan.detailPengiriman.kurir,
+                          child: Text(widget.pesanan!.detailPengiriman!.kurir??"",
                               style: TextStyle(color: Colors.black)),
                         ),
                         Container(
@@ -104,7 +104,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                                 color: Colors.black45,
                                 image: DecorationImage(
                                     image: NetworkImage(_baseImage +
-                                        widget.pesanan.detailPengiriman.foto),
+                                        widget.pesanan!.detailPengiriman!.foto!),
                                     fit: BoxFit.cover)))
                       ],
                     ),
@@ -136,14 +136,14 @@ class _DetailPesananState extends State<DetailPesanan> {
                     ],
                   ),
                 ),
-                for (int i = 0; i < widget.pesanan.produk.length; i++)
+                for (int i = 0; i < widget.pesanan!.produk!.length; i++)
                   Container(
                       // height: 110.0,
                       margin: EdgeInsets.symmetric(horizontal: 25, vertical: 1),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: Colors.grey[300],
+                            color: Colors.grey,
                             width: 1.0,
                           ),
                         ),
@@ -164,20 +164,20 @@ class _DetailPesananState extends State<DetailPesanan> {
                                   width: MediaQuery.of(context).size.width / 3 +
                                       10,
                                   child: Text(
-                                      widget.pesanan.produk[i].namaProduk,
+                                      widget.pesanan!.produk?[i].namaProduk??"",
                                       style: TextStyle(fontSize: 14.0))),
                               Container(
                                   width: 50,
                                   child: Center(
                                       child:
-                                          Text(widget.pesanan.produk[i].qty))),
+                                          Text(widget.pesanan!.produk?[i].qty??""))),
                               Container(
                                 width:
                                     MediaQuery.of(context).size.width / 3 - 30,
                                 child: Center(
                                   child: Text(
                                       formatCurrency.format(
-                                          widget.pesanan.produk[i].harga),
+                                          widget.pesanan!.produk?[i].harga),
                                       style: TextStyle(
                                           color: Colors.red, fontSize: 14.0)),
                                 ),
@@ -230,7 +230,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
-                              color: Colors.grey[200],
+                              color: Colors.grey,
                               width: 1.0,
                             ),
                           ),
@@ -241,7 +241,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                             Text("Total Pembayaran"),
                             Text(
                                 formatCurrency
-                                    .format(widget.pesanan.totalHarga),
+                                    .format(widget.pesanan!.totalHarga),
                                 style: TextStyle(fontWeight: FontWeight.bold))
                           ],
                         ),
@@ -258,14 +258,14 @@ class _DetailPesananState extends State<DetailPesanan> {
   }
 
   setColorStatus(statusId) {
-    Color status;
+    Color? status;
     switch (statusId) {
       case '3':
       case '4':
         status = Colors.blue;
         break;
       case '5':
-        status = Colors.yellow[900];
+        status = Colors.yellow;
         break;
       case '6':
         status = Colors.green;

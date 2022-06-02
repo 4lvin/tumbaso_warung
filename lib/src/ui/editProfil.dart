@@ -17,7 +17,7 @@ import 'package:tumbaso_warung/src/ui/utils/loading.dart';
 class EditProfil extends StatefulWidget {
   EditProfil({this.email});
 
-  String email;
+  String? email;
 
   @override
   _EditProfilState createState() => _EditProfilState();
@@ -28,34 +28,35 @@ class _EditProfilState extends State<EditProfil> {
   TextEditingController _nama = TextEditingController();
   TextEditingController _namaToko = TextEditingController();
   TextEditingController _noTelp = TextEditingController();
-  int _provinsi;
-  String _selectedProvinsi;
+  TextEditingController _provinsi = TextEditingController();
+  TextEditingController _kota = TextEditingController();
+  TextEditingController _kecamatan = TextEditingController();
+  String? _selectedProvinsi;
   bool _validate = false;
   List<DropdownMenuItem> itemsKot = [];
-  int _kotaInt;
-  int _kecInt;
-  String _selectedKec;
+  int? _kotaInt;
+  int? _kecInt;
+  String? _selectedKec;
   var longitude;
   var latitude;
-  Position positionStream;
-  String token;
+  Position? positionStream;
+  String? token;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  PersistentBottomSheetController _controller;
-  List<Datum> ekspedisi = List<Datum>();
+  PersistentBottomSheetController? _controller;
+  List<Datum> ekspedisi = <Datum>[];
   bool check = false;
-  List<bool> _isChecked;
-  List namaEkspedisi;
+  List<bool>? _isChecked;
+  List? namaEkspedisi;
 
-  String _selectedKota;
+  String? _selectedKota;
   String _agen = "";
 
   currentPosition() async {
-    positionStream = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    positionStream = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     if (mounted) {
       setState(() {
-        longitude = positionStream.longitude;
-        latitude = positionStream.latitude;
+        longitude = positionStream!.longitude;
+        latitude = positionStream!.latitude;
       });
     }
   }
@@ -71,75 +72,87 @@ class _EditProfilState extends State<EditProfil> {
         });
     });
     blocMember.getProvinsi();
-    blocProdukPasmak.getEkspedisi();
-    blocProdukPasmak.resEkspedisi.listen((event) {
-      ekspedisi.addAll(event.data);
-      if (mounted)
-        setState(() {
-          _isChecked = List<bool>.filled(event.data.length, false);
-          namaEkspedisi = List.filled(_isChecked.length, "").toList();
-        });
-    });
+    // blocProdukPasmak.getEkspedisi();
+    // blocProdukPasmak.resEkspedisi.listen((event) {
+    //   ekspedisi.addAll(event.data);
+    //   if (mounted)
+    //     setState(() {
+    //       _isChecked = List<bool>.filled(event.data.length, false);
+    //       namaEkspedisi = List.filled(_isChecked.length, "").toList();
+    //     });
+    // });
     blocMember.resKota.listen((data) {
-      for (int i = 0; i < data.data.length; i++) {
+      for (int i = 0; i < data.data!.length; i++) {
         itemsKot.add(new DropdownMenuItem(
-          child: new Text(data.data[i].namaKabupaten,
-              style: TextStyle(fontSize: 14.0)),
-          value: data.data[i].namaKabupaten,
+          child: new Text(data.data![i].namaKabupaten!, style: TextStyle(fontSize: 14.0)),
+          value: data.data?[i].namaKabupaten,
         ));
       }
     });
-    blocMember.getProfil();
+    getToken().then((token){
+      getEmail().then((email){
+        blocMember.getProfil(email,token);
+      });
+    });
     blocMember.resGetrofil.listen((event) {
       if (mounted)
         setState(() {
-          var profil = event.data[0];
-          _alamat.text = profil.alamat;
-          _nama.text = profil.nama;
-          _namaToko.text = profil.namaToko;
-          _noTelp.text = profil.telepone;
+          var profil = event.data![0];
+          _alamat.text = profil.alamat!;
+          _nama.text = profil.nama!;
+          _namaToko.text = profil.namaToko!;
+          _noTelp.text = profil.telepone!;
           _selectedProvinsi = profil.provinsiId;
           _selectedKota = profil.kotaId;
           _selectedKec = profil.kecamatanId;
           // _agen = profil.agen;
-          String kurir = profil.pilihanKurir;
-          List<String> listKurir = kurir.split(',');
-          namaEkspedisi.clear();
-          listKurir.forEach((e) {
-            _isChecked[int.parse(e)] = true;
-            namaEkspedisi.add(e);
-          });
-          blocMember.getKota(profil.provinsiId);
-          blocMember.getKecamatan(profil.kotaId);
           blocMember.getProvinsi();
+          blocMember.getKota(profil.provinsiId!);
+          blocMember.getKecamatan(profil.kotaId!);
+          // String kurir = profil.pilihanKurir!;
+          // if (kurir != ""||kurir!=null) {
+          //   List<String> listKurir = kurir.split(',');
+          //   namaEkspedisi.clear();
+          //   listKurir.forEach((e) {
+          //     _isChecked[int.parse(e)] = true;
+          //     namaEkspedisi.add(e);
+          //   });
+          // }
         });
     });
 
     Timer(Duration(seconds: 2), () {
       blocMember.resProvinsi.listen((prov) {
-        for (var i = 0; i < prov.data.length; i++) {
-          if (prov.data[i].idProvinsi == _selectedProvinsi) {
-            setState(() {
-              _provinsi = i;
-            });
+        for (var i = 0; i < prov.data!.length; i++) {
+          if (prov.data![i].idProvinsi == _selectedProvinsi) {
+            if (mounted)
+              setState(() {
+                _provinsi.text = prov.data![i].namaProvinsi!;
+              });
           }
         }
       });
+    });
+    Timer(Duration(seconds: 1), () {
       blocMember.resKota.listen((kota) {
-        for (var i = 0; i < kota.data.length; i++) {
-          if (kota.data[i].idKabupaten == _selectedKota) {
-            setState(() {
-              _kotaInt = i;
-            });
+        for (var i = 0; i < kota.data!.length; i++) {
+          if (kota.data![i].idKabupaten == _selectedKota) {
+            if (mounted)
+              setState(() {
+                _kota.text = kota.data![i].namaKabupaten!;
+              });
           }
         }
       });
+    });
+    Timer(Duration(seconds: 1), () {
       blocMember.resKecamatan.listen((kec) {
-        for (var i = 0; i < kec.data.length; i++) {
-          if (kec.data[i].idKecamatan == _selectedKec) {
-            setState(() {
-              _kecInt = i;
-            });
+        for (var i = 0; i < kec.data!.length; i++) {
+          if (kec.data![i].idKecamatan == _selectedKec) {
+            if (mounted)
+              setState(() {
+                _kecamatan.text = kec.data![i].namaKecamatan!;
+              });
           }
         }
       });
@@ -148,14 +161,14 @@ class _EditProfilState extends State<EditProfil> {
   }
 
   _onSave() async {
-    String kurir = '';
-    namaEkspedisi.forEach((element) {
-      if (kurir == '') {
-        kurir = element;
-      } else {
-        kurir = kurir + ',' + element;
-      }
-    });
+    // String kurir = '';
+    // namaEkspedisi.forEach((element) {
+    //   if (kurir == '') {
+    //     kurir = element;
+    //   } else {
+    //     kurir = kurir + ',' + element;
+    //   }
+    // });
     if (_nama.text.isEmpty ||
         _selectedProvinsi == null ||
         _selectedKota == null ||
@@ -168,30 +181,17 @@ class _EditProfilState extends State<EditProfil> {
         });
     } else {
       Dialogs.showLoading(context, "Loading...");
-      blocMember.lengkapiProfil(
-          widget.email,
-          _nama.text,
-          _namaToko.text,
-          _selectedProvinsi,
-          _selectedKota,
-          _selectedKec,
-          _alamat.text,
-          longitude.toString(),
-          latitude.toString(),
-          _noTelp.text,
-          kurir,
-          token,
-          _agen);
+      blocMember.lengkapiProfil(widget.email!, _nama.text, _namaToko.text, _selectedProvinsi!, _selectedKota!, _selectedKec!,
+          _alamat.text, longitude.toString(), latitude.toString(), _noTelp.text, "", token!, _agen);
       blocMember.resUpdateProfil.listen((event) {
-        if (event.status) {
+        if (event.status!) {
           Dialogs.dismiss(context);
           Future.delayed(Duration(seconds: 1)).then((value) {
             Navigator.pushReplacementNamed(context, '/controllerPage');
           });
         } else {
           Dialogs.dismiss(context);
-          Toast.show(event.message, context,
-              duration: 3, gravity: Toast.BOTTOM);
+          Toast.show(event.message!, duration: 3, gravity: Toast.bottom);
         }
       });
     }
@@ -238,9 +238,7 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "Nama",
                   border: InputBorder.none,
-                  errorText: _nama.text.length < 3 && _validate
-                      ? 'Nama harus diisi !'
-                      : null,
+                  errorText: _nama.text.length < 3 && _validate ? 'Nama harus diisi !' : null,
                 ),
               ),
             ),
@@ -258,9 +256,7 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "Nama Toko",
                   border: InputBorder.none,
-                  errorText: _namaToko.text.length < 3 && _validate
-                      ? 'Nama Toko harus diisi !'
-                      : null,
+                  errorText: _namaToko.text.length < 3 && _validate ? 'Nama Toko harus diisi !' : null,
                 ),
               ),
             ),
@@ -270,49 +266,19 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 2, color: colorses.dasar),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 2, color: colorses.dasar),
+                  color: Colors.grey[200]),
+              child: TextField(
+                style: TextStyle(color: Colors.grey),
+                controller: _provinsi,
+                cursorColor: colorses.dasar,
+                decoration: InputDecoration(
+                  hintText: "Provinsi",
+                  enabled: false,
+                  border: InputBorder.none,
+                ),
               ),
-              child: StreamBuilder(
-                  stream: blocMember.resProvinsi,
-                  builder: (context, AsyncSnapshot<GetProvinsiModel> snapshot) {
-                    if (snapshot.hasData) {
-                      return new DropdownButton<ResultProv>(
-                        isExpanded: true,
-                        items: snapshot.data.data.map((ResultProv value) {
-                          return new DropdownMenuItem<ResultProv>(
-                            value: value,
-                            child: Container(
-                                width: 140.0,
-                                child: new Text(
-                                  value.namaProvinsi,
-                                  style: TextStyle(fontSize: 14.0),
-                                )),
-                          );
-                        }).toList(),
-                        value: _provinsi == null
-                            ? null
-                            : snapshot.data.data[_provinsi],
-                        hint: Text(
-                          "Pilih Provinsi",
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            _provinsi = snapshot.data.data.indexOf(value);
-                            _selectedProvinsi = value.idProvinsi;
-                            blocMember.getKota(_selectedProvinsi);
-                            _kotaInt = 0;
-                          });
-                        },
-                      );
-                    }
-                    return Container(
-                      child: Center(child: Text("loading..")),
-                    );
-                  }),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -320,51 +286,19 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 2, color: colorses.dasar),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 2, color: colorses.dasar),
+                  color: Colors.grey[200]),
+              child: TextField(
+                style: TextStyle(color: Colors.grey),
+                controller: _kota,
+                cursorColor: colorses.dasar,
+                decoration: InputDecoration(
+                  hintText: "Kota",
+                  enabled: false,
+                  border: InputBorder.none,
+                ),
               ),
-              child: StreamBuilder(
-                  stream: blocMember.resKota,
-                  builder: (context, AsyncSnapshot<GetKotaModel> snapshot) {
-                    if (snapshot.hasData) {
-                      return new DropdownButton<ResultKota>(
-                        isExpanded: true,
-                        items: snapshot.data.data.map((ResultKota value) {
-                          return new DropdownMenuItem<ResultKota>(
-                            value: value,
-                            child: Container(
-                                width: 140.0,
-                                child: new Text(
-                                  value.namaKabupaten,
-                                  style: TextStyle(fontSize: 14.0),
-                                )),
-                          );
-                        }).toList(),
-                        value: _kotaInt == null
-                            ? null
-                            : snapshot.data.data[_kotaInt],
-                        hint: Text(
-                          "Pilih Kota",
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            _kotaInt = snapshot.data.data.indexOf(value);
-                            _selectedKota = value.idKabupaten;
-                            blocMember.getKecamatan(_selectedKota);
-                            _kecInt = 0;
-                            // itemsKot.clear();
-                          });
-                        },
-                      );
-                    }
-                    return Container(
-                      child: Center(
-                          child: Text("Pilih Provinsi terlebih dahulu....")),
-                    );
-                  }),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -372,51 +306,19 @@ class _EditProfilState extends State<EditProfil> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 2, color: colorses.dasar),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 2, color: colorses.dasar),
+                  color: Colors.grey[200]),
+              child: TextField(
+                style: TextStyle(color: Colors.grey),
+                controller: _kecamatan,
+                cursorColor: colorses.dasar,
+                decoration: InputDecoration(
+                  hintText: "Kecamatan",
+                  enabled: false,
+                  border: InputBorder.none,
+                ),
               ),
-              child: StreamBuilder(
-                  stream: blocMember.resKecamatan,
-                  builder:
-                      (context, AsyncSnapshot<GetKecamatanModel> snapshot) {
-                    if (snapshot.hasData) {
-                      return new DropdownButton<ResultKec>(
-                        isExpanded: true,
-                        items: snapshot.data.data.map((ResultKec value) {
-                          return new DropdownMenuItem<ResultKec>(
-                            value: value,
-                            child: Container(
-                                width: 140.0,
-                                child: new Text(
-                                  value.namaKecamatan,
-                                  style: TextStyle(fontSize: 14.0),
-                                )),
-                          );
-                        }).toList(),
-                        value: _kecInt == null
-                            ? null
-                            : snapshot.data.data[_kecInt],
-                        hint: Text(
-                          "Pilih Kecamatan",
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            _kecInt = snapshot.data.data.indexOf(value);
-                            _selectedKec = value.idKecamatan;
-                            // blocMember.getKota(_selectedProvinsi);
-                            // itemsKot.clear();
-                          });
-                        },
-                      );
-                    }
-                    return Container(
-                      child:
-                          Center(child: Text("Pilih Kota terlebih dahulu..")),
-                    );
-                  }),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -432,9 +334,7 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "No Telp",
                   border: InputBorder.none,
-                  errorText: _noTelp.text.length < 3 && _validate
-                      ? 'No Telp harus diisi !'
-                      : null,
+                  errorText: _noTelp.text.length < 3 && _validate ? 'No Telp harus diisi !' : null,
                 ),
               ),
             ),
@@ -452,83 +352,77 @@ class _EditProfilState extends State<EditProfil> {
                 decoration: InputDecoration(
                   hintText: "Alamat",
                   border: InputBorder.none,
-                  errorText: _alamat.text.length < 3 && _validate
-                      ? 'Alamat harus diisi !'
-                      : null,
+                  errorText: _alamat.text.length < 3 && _validate ? 'Alamat harus diisi !' : null,
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                _controller = _scaffoldKey.currentState
-                    .showBottomSheet((BuildContext context) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 5.0,
-                          ),
-                        ]),
-                    child: Column(
-                      children: <Widget>[
-                        SafeArea(
-                          child: Container(
-                            height: 50,
-                            padding: EdgeInsets.only(top: 0),
-                            width: MediaQuery.of(context).size.width,
-                            decoration:
-                                BoxDecoration(color: Colors.white, boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 8.0,
-                              ),
-                            ]),
-                            child: Center(child: Text("Pilih Ekspedisi")),
-                          ),
-                        ),
-                        Expanded(
-                            child: Container(
-                                margin: EdgeInsets.only(top: 1),
-                                width: MediaQuery.of(context).size.width,
-                                color: Colors.white,
-                                child: bottomSheetEkspedisi())),
-                      ],
-                    ),
-                  );
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 2, color: colorses.dasar),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Ekspedisi"),
-                    Text(
-                      "$namaEkspedisi",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                      color: Colors.grey,
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     _controller = _scaffoldKey.currentState!.showBottomSheet((BuildContext context) {
+            //       return Container(
+            //         height: MediaQuery.of(context).size.height,
+            //         decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            //             boxShadow: [
+            //               BoxShadow(
+            //                 color: Colors.grey,
+            //                 blurRadius: 5.0,
+            //               ),
+            //             ]),
+            //         child: Column(
+            //           children: <Widget>[
+            //             SafeArea(
+            //               child: Container(
+            //                 height: 50,
+            //                 padding: EdgeInsets.only(top: 0),
+            //                 width: MediaQuery.of(context).size.width,
+            //                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
+            //                   BoxShadow(
+            //                     color: Colors.grey,
+            //                     blurRadius: 8.0,
+            //                   ),
+            //                 ]),
+            //                 child: Center(child: Text("Pilih Ekspedisi")),
+            //               ),
+            //             ),
+            //             Expanded(
+            //                 child: Container(
+            //                     margin: EdgeInsets.only(top: 1),
+            //                     width: MediaQuery.of(context).size.width,
+            //                     color: Colors.white,
+            //                     child: bottomSheetEkspedisi())),
+            //           ],
+            //         ),
+            //       );
+            //     });
+            //   },
+            //   child: Container(
+            //     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+            //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+            //     width: MediaQuery.of(context).size.width * 0.8,
+            //     height: 50,
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(10),
+            //       border: Border.all(width: 2, color: colorses.dasar),
+            //     ),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         Text("Ekspedisi"),
+            //         Text(
+            //           "$namaEkspedisi",
+            //           overflow: TextOverflow.ellipsis,
+            //           style: TextStyle(color: Colors.grey),
+            //         ),
+            //         Icon(
+            //           Icons.arrow_forward_ios,
+            //           size: 14,
+            //           color: Colors.grey,
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             InkWell(
               onTap: () => _onSave(),
               child: Container(
@@ -553,35 +447,36 @@ class _EditProfilState extends State<EditProfil> {
     );
   }
 
-  Widget bottomSheetEkspedisi() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 24, right: 24),
-        child: Container(
-            //height: MediaQuery.of(context).size.height / 3,
-            color: Colors.white,
-            child: ListView.builder(
-                // physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: ekspedisi.length,
-                itemBuilder: (BuildContext context, int i) {
-                  return CheckboxListTile(
-                    title: Text(ekspedisi[i].namaKurir),
-                    value: _isChecked[i],
-                    onChanged: (val) {
-                      setState(() {});
-                      _controller.setState(
-                        () {
-                          _isChecked[i] = val;
-                          if (val == true) {
-                            namaEkspedisi.add(ekspedisi[i].idKurir);
-                          } else {
-                            namaEkspedisi.remove("");
-                          }
-                          namaEkspedisi.removeWhere((value) => value == "");
-                        },
-                      );
-                    },
-                  );
-                })));
-  }
+  // Widget bottomSheetEkspedisi() {
+  //   return Padding(
+  //       padding: const EdgeInsets.only(top: 8.0, left: 24, right: 24),
+  //       child: Container(
+  //           //height: MediaQuery.of(context).size.height / 3,
+  //           color: Colors.white,
+  //           child: ListView.builder(
+  //               // physics: NeverScrollableScrollPhysics(),
+  //               shrinkWrap: true,
+  //               itemCount: ekspedisi.length,
+  //               itemBuilder: (BuildContext context, int i) {
+  //                 return CheckboxListTile(
+  //                   title: Text(ekspedisi[i].namaKurir),
+  //                   value: _isChecked[i],
+  //                   onChanged: (val) {
+  //                     _controller.setState(
+  //                       () {
+  //                         _isChecked[i] = val;
+  //                         if (_isChecked[i] == true) {
+  //                           namaEkspedisi.add(ekspedisi[i].idKurir);
+  //                         } else {
+  //                           namaEkspedisi.remove("");
+  //                           namaEkspedisi[i] = "";
+  //                         }
+  //                         namaEkspedisi.removeWhere((value) => value == "");
+  //                       },
+  //                     );
+  //                     setState(() {});
+  //                   },
+  //                 );
+  //               })));
+  // }
 }

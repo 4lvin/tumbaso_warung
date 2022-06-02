@@ -14,11 +14,11 @@ class LengkapiProfil extends StatefulWidget {
   LengkapiProfil(
       {this.email, this.token, this.kdUser, this.nama, this.kdPasmak});
 
-  String email;
-  String token;
-  String kdUser;
-  String nama;
-  String kdPasmak;
+  String? email;
+  String? token;
+  String? kdUser;
+  String? nama;
+  String? kdPasmak;
 
   @override
   _LengkapiProfilState createState() => _LengkapiProfilState();
@@ -30,27 +30,27 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
   TextEditingController _namaToko = TextEditingController();
   TextEditingController _noTelp = TextEditingController();
   TextEditingController _agen = TextEditingController();
-  int _provinsi;
-  String _selectedProvinsi;
+  int? _provinsi;
+  String? _selectedProvinsi;
   bool _validate = false;
   List<DropdownMenuItem> itemsKot = [];
-  int _kotaInt;
-  int _kecInt;
-  String _selectedKec;
+  int? _kotaInt;
+  int? _kecInt;
+  String? _selectedKec;
   var longitude;
   var latitude;
-  Position positionStream;
+  Position? positionStream;
 
   // String _kota;
-  String _selectedKota;
+  String? _selectedKota;
 
   currentPosition() async {
     positionStream = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     if (mounted) {
       setState(() {
-        longitude = positionStream.longitude;
-        latitude = positionStream.latitude;
+        longitude = positionStream!.longitude;
+        latitude = positionStream!.latitude;
       });
       print(longitude);
     }
@@ -62,11 +62,11 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
     currentPosition();
     print(longitude);
     blocMember.resKota.listen((data) {
-      for (int i = 0; i < data.data.length; i++) {
+      for (int i = 0; i < data.data!.length; i++) {
         itemsKot.add(new DropdownMenuItem(
-          child: new Text(data.data[i].namaKabupaten,
+          child: new Text(data.data?[i].namaKabupaten??"",
               style: TextStyle(fontSize: 14.0)),
-          value: data.data[i].namaKabupaten,
+          value: data.data?[i].namaKabupaten,
         ));
       }
     });
@@ -154,20 +154,20 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                   if (snapshot.hasData) {
                     return new DropdownButton<ResultProv>(
                       isExpanded: true,
-                      items: snapshot.data.data.map((ResultProv value) {
+                      items: snapshot.data!.data!.map((ResultProv value) {
                         return new DropdownMenuItem<ResultProv>(
                           value: value,
                           child: Container(
                               width: 140.0,
                               child: new Text(
-                                value.namaProvinsi,
+                                value.namaProvinsi??"",
                                 style: TextStyle(fontSize: 14.0),
                               )),
                         );
                       }).toList(),
                       value: _provinsi == null
                           ? null
-                          : snapshot.data.data[_provinsi],
+                          : snapshot.data!.data![_provinsi??0],
                       hint: Text(
                         "Pilih Provinsi",
                         style: TextStyle(fontSize: 14.0),
@@ -176,22 +176,18 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                         setState(() {
                           FocusScope.of(context)
                               .requestFocus(new FocusNode());
-                          _provinsi = snapshot.data.data.indexOf(value);
+                          _provinsi = snapshot.data!.data!.indexOf(value!);
                           _selectedProvinsi = value.idProvinsi;
-                          blocMember.getKota(_selectedProvinsi);
+                          blocMember.getKota(_selectedProvinsi!);
                           _kotaInt = 0;
                         });
                       },
                     );
                   }
-                  return DropdownButton(
-                    items: [],
-                    isExpanded: true,
-                    hint: Text(
+                  return Text(
                       "loading . . .",
                       style: TextStyle(fontSize: 14.0),
-                    ),
-                  );
+                    );
                 }),
           ),
           Container(
@@ -209,20 +205,20 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                   if (snapshot.hasData) {
                     return new DropdownButton<ResultKota>(
                       isExpanded: true,
-                      items: snapshot.data.data.map((ResultKota value) {
+                      items: snapshot.data!.data!.map((ResultKota value) {
                         return new DropdownMenuItem<ResultKota>(
                           value: value,
                           child: Container(
                               width: 140.0,
                               child: new Text(
-                                value.namaKabupaten,
+                                value.namaKabupaten??"",
                                 style: TextStyle(fontSize: 14.0),
                               )),
                         );
                       }).toList(),
                       value: _kotaInt == null
                           ? null
-                          : snapshot.data.data[_kotaInt],
+                          : snapshot.data!.data![_kotaInt!],
                       hint: Text(
                         "Pilih Kota",
                         style: TextStyle(fontSize: 14.0),
@@ -231,23 +227,19 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                         setState(() {
                           FocusScope.of(context)
                               .requestFocus(new FocusNode());
-                          _kotaInt = snapshot.data.data.indexOf(value);
+                          _kotaInt = snapshot.data!.data!.indexOf(value!);
                           _selectedKota = value.idKabupaten;
-                          blocMember.getKecamatan(_selectedKota);
+                          blocMember.getKecamatan(_selectedKota!);
                           _kecInt = 0;
                           // itemsKot.clear();
                         });
                       },
                     );
                   }
-                  return DropdownButton(
-                    items: [],
-                    isExpanded: true,
-                    hint: Text(
+                  return Text(
                       "Pilih Provinsi dulu",
                       style: TextStyle(fontSize: 14.0),
-                    ),
-                  );
+                    );
                 }),
           ),
           Container(
@@ -266,20 +258,20 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                   if (snapshot.hasData) {
                     return new DropdownButton<ResultKec>(
                       isExpanded: true,
-                      items: snapshot.data.data.map((ResultKec value) {
+                      items: snapshot.data!.data!.map((ResultKec value) {
                         return new DropdownMenuItem<ResultKec>(
                           value: value,
                           child: Container(
                               width: 140.0,
                               child: new Text(
-                                value.namaKecamatan,
+                                value.namaKecamatan??"",
                                 style: TextStyle(fontSize: 14.0),
                               )),
                         );
                       }).toList(),
                       value: _kecInt == null
                           ? null
-                          : snapshot.data.data[_kecInt],
+                          : snapshot.data!.data![_kecInt!],
                       hint: Text(
                         "Pilih Kecamatan",
                         style: TextStyle(fontSize: 14.0),
@@ -288,7 +280,7 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                         setState(() {
                           FocusScope.of(context)
                               .requestFocus(new FocusNode());
-                          _kecInt = snapshot.data.data.indexOf(value);
+                          _kecInt = snapshot.data!.data!.indexOf(value!);
                           _selectedKec = value.idKecamatan;
                           // blocMember.getKota(_selectedProvinsi);
                           // itemsKot.clear();
@@ -296,13 +288,9 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
                       },
                     );
                   }
-                  return DropdownButton(
-                    items: [],
-                    isExpanded: true,
-                    hint: Text(
+                  return Text(
                       "Pilih Kota dulu",
                       style: TextStyle(fontSize: 14.0),
-                    ),
                   );
                 }),
           ),
@@ -386,35 +374,35 @@ class _LengkapiProfilState extends State<LengkapiProfil> {
               } else {
                 Dialogs.showLoading(context, "Loading...");
                 blocMember.lengkapiProfil(
-                    widget.email,
+                    widget.email!,
                     _nama.text,
                     _namaToko.text,
-                    _selectedProvinsi,
-                    _selectedKota,
-                    _selectedKec,
+                    _selectedProvinsi!,
+                    _selectedKota!,
+                    _selectedKec!,
                     _alamat.text,
                     longitude.toString(),
                     latitude.toString(),
                     _noTelp.text,
                     "",
-                    widget.token,
+                    widget.token!,
                     _agen.text);
                 blocMember.resUpdateProfil.listen((event) {
-                  if (event.status) {
+                  if (event.status!) {
                     Dialogs.dismiss(context);
                     Future.delayed(Duration(seconds: 1)).then((value) {
-                      setToken(widget.token);
-                      setEmail(widget.email);
+                      setToken(widget.token!);
+                      setEmail(widget.email!);
                       setNama(_nama.text);
-                      setKdUser(widget.kdUser);
-                      setKdPasmak(widget.kdPasmak);
+                      setKdUser(widget.kdUser!);
+                      // setKdPasmak(widget.kdPasmak);
                       Navigator.pushReplacementNamed(
                           context, '/controllerPage');
                     });
                   } else {
                     Dialogs.dismiss(context);
-                    Toast.show(event.message, context,
-                        duration: 3, gravity: Toast.BOTTOM);
+                    Toast.show(event.message!,
+                        duration: 3, gravity: Toast.bottom);
                   }
                 });
               }

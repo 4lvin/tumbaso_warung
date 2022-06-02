@@ -34,37 +34,37 @@ class MemberBloc {
   final _updateProfilFetcher = PublishSubject<ResLengkapiProfilModel>();
   final _getProfilFetcher = PublishSubject<GetProfilModel>();
 
-  PublishSubject<ResLoginModel> get resLogin => _loginFetcher.stream;
+  Stream<ResLoginModel> get resLogin => _loginFetcher.stream;
 
-  PublishSubject<GetStatusModel> get getStatus => _statusFetcher.stream;
+  Stream<GetStatusModel> get getStatus => _statusFetcher.stream;
 
-  PublishSubject<ResUpdateStatusTokoModel> get resStatusToko =>
+  Stream<ResUpdateStatusTokoModel> get resStatusToko =>
       _updateStatusTokoFetcher.stream;
 
-  PublishSubject<GetProdukModel> get listProduk => _getProdukFetcher.stream;
+  Stream<GetProdukModel> get listProduk => _getProdukFetcher.stream;
 
-  PublishSubject<ResUpdateStatusProdukModel> get resUpdateStatusProduk =>
+  Stream<ResUpdateStatusProdukModel> get resUpdateStatusProduk =>
       _updateStatusProdukFetcher.stream;
 
-  PublishSubject<GetSetoranModel> get listSetoran => _getSetoranFetcher.stream;
+  Stream<GetSetoranModel> get listSetoran => _getSetoranFetcher.stream;
 
-  PublishSubject<GetTransaksiModel> get listTransaksi =>
+  Stream<GetTransaksiModel> get listTransaksi =>
       _getTransaksiFetcher.stream;
 
-  PublishSubject<GetProvinsiModel> get resProvinsi => _provinsiFetcher.stream;
+  Stream<GetProvinsiModel> get resProvinsi => _provinsiFetcher.stream;
 
-  PublishSubject<GetKotaModel> get resKota => _kotaFetcher.stream;
+  Stream<GetKotaModel> get resKota => _kotaFetcher.stream;
 
-  PublishSubject<GetKecamatanModel> get resKecamatan =>
+  Stream<GetKecamatanModel> get resKecamatan =>
       _kecamatanFetcher.stream;
 
-  PublishSubject<GetLoginWithGmailModel> get resLoginGmail =>
+  Stream<GetLoginWithGmailModel> get resLoginGmail =>
       _loginGmailFetcher.stream;
 
-  PublishSubject<ResLengkapiProfilModel> get resUpdateProfil =>
+  Stream<ResLengkapiProfilModel> get resUpdateProfil =>
       _updateProfilFetcher.stream;
 
-  PublishSubject<GetProfilModel> get resGetrofil => _getProfilFetcher.stream;
+  Stream<GetProfilModel> get resGetrofil => _getProfilFetcher.stream;
 
   getSubkategori(String idKategori) async {
     ResSubkategoriModel getSubkategori =
@@ -94,7 +94,7 @@ class MemberBloc {
           await _repository.getProduk(username, idPenjual, token);
       _getProdukFetcher.sink.add(getProdukModel);
     } catch (error) {
-      _getProdukFetcher.sink.add(error);
+      // _getProdukFetcher.sink.add(error);
     }
   }
 
@@ -150,7 +150,7 @@ class MemberBloc {
       GetProvinsiModel getProvinsiModel = await _repository.getProvinsi();
       _provinsiFetcher.sink.add(getProvinsiModel);
     } catch (error) {
-      _provinsiFetcher.sink.add(error);
+      // _provinsiFetcher.sink.add(error);
     }
   }
 
@@ -159,7 +159,7 @@ class MemberBloc {
       GetKotaModel getKotaModel = await _repository.getKota(kodeProv);
       _kotaFetcher.sink.add(getKotaModel);
     } catch (error) {
-      _kotaFetcher.sink.add(error);
+      // _kotaFetcher.sink.add(error);
     }
   }
 
@@ -169,7 +169,7 @@ class MemberBloc {
           await _repository.getKecamatan(kodeKota);
       _kecamatanFetcher.sink.add(getKecamatanModel);
     } catch (error) {
-      _kecamatanFetcher.sink.add(error);
+      // _kecamatanFetcher.sink.add(error);
     }
   }
 
@@ -179,7 +179,7 @@ class MemberBloc {
           await _repository.loginWIthGmail(email, foto, nama, token);
       _loginGmailFetcher.sink.add(getLoginWithGmailModel);
     } catch (error) {
-      _loginGmailFetcher.sink.add(error);
+      // _loginGmailFetcher.sink.add(error);
     }
   }
 
@@ -215,16 +215,17 @@ class MemberBloc {
               agen);
       _updateProfilFetcher.sink.add(resLengkapiProfilModel);
     } catch (error) {
-      _updateProfilFetcher.sink.add(error);
+      // _updateProfilFetcher.sink.add(error);
     }
   }
 
-  getProfil() async {
+  getProfil(String email,
+      String token) async {
     try {
-      GetProfilModel getProfilModel = await _repository.getProfil();
+      GetProfilModel getProfilModel = await _repository.getProfil(email, token);
       _getProfilFetcher.sink.add(getProfilModel);
     } catch (error) {
-      _getProfilFetcher.sink.add(error);
+      // _getProfilFetcher.sink.add(error);
     }
   }
 

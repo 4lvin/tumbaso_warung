@@ -11,9 +11,9 @@ class ResUpdateStatusTokoModel {
     this.message,
   });
 
-  bool status;
-  Data data;
-  String message;
+  bool? status;
+  Data? data;
+  String? message;
 
   factory ResUpdateStatusTokoModel.fromRawJson(String str) => ResUpdateStatusTokoModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class ResUpdateStatusTokoModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data!.toJson(),
     "message": message,
   };
 }
@@ -37,7 +37,7 @@ class Data {
     this.username,
   });
 
-  String username;
+  String? username;
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
 

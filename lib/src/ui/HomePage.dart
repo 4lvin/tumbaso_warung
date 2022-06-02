@@ -18,8 +18,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
-  String nama;
-  String kurir;
+  String? nama;
+  String? kurir;
 
   getSetoran() {
     getKdUser().then((kduser) {
@@ -35,13 +35,16 @@ class _HomePageState extends State<HomePage> {
           nama = value;
         });
     });
-    getKdUser();
 
-    blocMember.getProfil();
+    getToken().then((token){
+      getEmail().then((email){
+        blocMember.getProfil(email,token);
+      });
+    });
     blocMember.resGetrofil.listen((event) {
       if (mounted)
         setState(() {
-          kurir = event.data[0].pilihanKurir;
+          kurir = event.data?[0].pilihanKurir;
         });
     });
     super.initState();
@@ -142,54 +145,54 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      print(kurir);
-                      kurir == null
-                          ? Toast.show("Data belum siap, silahkan tunggu sebentar!", context, duration: 3, gravity: Toast.BOTTOM)
-                          : Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  duration: Duration(milliseconds: 200),
-                                  child: ProdukBarang(kurir: kurir)));
-                    },
-                    child: Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: colorses.orange, width: 3),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 3,
-                              offset: Offset(3, 5), // Shadow position
-                            ),
-                          ]),
-                      child: Center(
-                        child: Container(
-                          height: 70,
-                          width: 70,
-                          child: Image.asset(
-                            "assets/ic-menu-barang.png",
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    "Barang",
-                    style: TextStyle(fontSize: 16),
-                  )
-                ],
-              )
+              // Column(
+              //   children: [
+                  // InkWell(
+                  //   onTap: () {
+                  //     print(kurir);
+                  //     kurir == null || kurir == ""
+                  //         ? Toast.show("Data belum siap, silahkan tunggu sebentar!", context, duration: 3, gravity: Toast.BOTTOM)
+                  //         : Navigator.push(
+                  //             context,
+                  //             PageTransition(
+                  //                 type: PageTransitionType.rightToLeft,
+                  //                 duration: Duration(milliseconds: 200),
+                  //                 child: ProdukBarang(kurir: kurir)));
+                  //   },
+                  //   child: Container(
+                  //     width: 130,
+                  //     height: 130,
+                  //     decoration: BoxDecoration(
+                  //         color: Colors.white,
+                  //         borderRadius: BorderRadius.circular(20),
+                  //         border: Border.all(color: colorses.orange, width: 3),
+                  //         boxShadow: [
+                  //           BoxShadow(
+                  //             color: Colors.grey,
+                  //             blurRadius: 3,
+                  //             offset: Offset(3, 5), // Shadow position
+                  //           ),
+                  //         ]),
+                  //     child: Center(
+                  //       child: Container(
+                  //         height: 70,
+                  //         width: 70,
+                  //         child: Image.asset(
+                  //           "assets/ic-menu-barang.png",
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 12,
+                  // ),
+                  // Text(
+                  //   "Barang",
+                  //   style: TextStyle(fontSize: 16),
+                  // )
+                // ],
+              // )
             ],
           ),
           Expanded(
@@ -199,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                   if (snapshot.hasData) {
                     return ListView.builder(
                         shrinkWrap: true,
-                        itemCount: snapshot.data.data.length,
+                        itemCount: snapshot.data!.data!.length,
                         itemBuilder: (BuildContext context, int i) {
                           return Card(
                             elevation: 5.0,
@@ -215,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                                       Text('Setoran',
                                           style: TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
                                       SizedBox(height: 5),
-                                      Text(formatCurrency.format(snapshot.data.data[i].setorPenjual),
+                                      Text(formatCurrency.format(snapshot.data!.data?[i].setorPenjual),
                                           style: TextStyle(color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold)),
                                     ],
                                   ),
@@ -227,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                               style:
                                                   TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
                                           SizedBox(height: 5),
-                                          Text(formatCurrency.format(snapshot.data.data[i].tunggakanSetor),
+                                          Text(formatCurrency.format(snapshot.data!.data?[i].tunggakanSetor),
                                               style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold)),
                                         ],
                                       ),
@@ -249,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         });
                   } else if (snapshot.hasError) {
-                    return Text(snapshot.error);
+                    return Text(snapshot.error.toString());
                   } else {
                     return SizedBox();
                   }

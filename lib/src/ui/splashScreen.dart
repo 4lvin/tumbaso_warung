@@ -17,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  String _token;
+  String? _token;
 
   _authCheckSession() async {
     try {
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print('connected');
       }
     } on SocketException catch (_) {
-      Toast.show("Cek Internet Anda", context, duration: 7, gravity: Toast.BOTTOM);
+      Toast.show("Cek Internet Anda", duration: 7, gravity: Toast.bottom);
     }
   }
 

@@ -12,18 +12,18 @@ class NewProductPage extends StatefulWidget {
 }
 
 class _NewProductPageState extends State<NewProductPage> {
-  PickedFile imageFile;
+  PickedFile? imageFile;
 
-  String kategori;
+  String? kategori;
 
   // ignore: non_constant_identifier_names
-  String sub_kategori;
+  String? sub_kategori;
   var nama = TextEditingController();
   var harga = TextEditingController();
   var berat = TextEditingController();
   var deskripsi = TextEditingController();
   var potongan = TextEditingController();
-  String gambar_1;
+  String? gambar_1;
 
   List<Map<String, dynamic>> _listKategori = [
     {"id_kategori": "1", "nama_kategori": "Makanan"},
@@ -31,10 +31,10 @@ class _NewProductPageState extends State<NewProductPage> {
     {"id_kategori": "3", "nama_kategori": "Hobi"},
     {"id_kategori": "4", "nama_kategori": "Pakaian"}
   ];
-  ResSubkategoriModel _listSubkategori;
+  ResSubkategoriModel? _listSubkategori;
 
   Future getImage(int type) async {
-    PickedFile pickedImage =
+    PickedFile? pickedImage =
         await ImagePicker().getImage(source: type == 1 ? ImageSource.camera : ImageSource.gallery, imageQuality: 50);
     return pickedImage;
   }
@@ -121,7 +121,7 @@ class _NewProductPageState extends State<NewProductPage> {
                         onChanged: (value) {
                           getSubkategori(value);
                           setState(() {
-                            kategori = value;
+                            kategori = value.toString();
                           });
                         },
                       ),
@@ -142,21 +142,21 @@ class _NewProductPageState extends State<NewProductPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
+                      child: DropdownButton<String>(
                         isExpanded: true,
                         hint: Text("Pilih Subkategori"),
                         value: sub_kategori,
                         items: _listSubkategori == null
                             ? []
-                            : _listSubkategori.data.map((value) {
+                            : _listSubkategori!.data!.map((value) {
                                 return DropdownMenuItem(
-                                  child: Text(value.namaSubkategori),
+                                  child: Text(value.namaSubkategori!),
                                   value: value.idSubkategori,
                                 );
                               }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            sub_kategori = value;
+                            sub_kategori = value.toString();
                           });
                         },
                       ),
@@ -287,17 +287,17 @@ class _NewProductPageState extends State<NewProductPage> {
                         ),
                       ),
                       onPressed: () {
-                        File file = imageFile != null ? File(imageFile.path) : null;
+                        File? file = imageFile != null ? File(imageFile!.path) : null;
                         if (kategori == null || sub_kategori == null || harga.text == "" || nama.text == "") {
-                          Toast.show("Lengkapi Data anda", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                          Toast.show("Lengkapi Data anda", duration: Toast.lengthLong, gravity: Toast.bottom);
                           return;
                         }
                         blocMember
                             .simpanProduct(
-                                file, kategori, sub_kategori, nama.text, harga.text, berat.text, deskripsi.text, potongan.text)
+                                file!, kategori!, sub_kategori!, nama.text, harga.text, berat.text, deskripsi.text, potongan.text)
                             .then((value) {
                           if (value != 200) {
-                            Toast.show("Berhasil Menyimpan Data", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                            Toast.show("Berhasil Menyimpan Data", duration: Toast.lengthLong, gravity: Toast.bottom);
                           } else {
                             Navigator.of(context).pushNamedAndRemoveUntil('/controllerPage', (route) => false);
                           }
@@ -417,7 +417,7 @@ class _NewProductPageState extends State<NewProductPage> {
             ),
             image: DecorationImage(
               image: FileImage(
-                File(imageFile.path),
+                File(imageFile!.path),
               ),
               fit: BoxFit.cover,
             ),

@@ -11,9 +11,9 @@ class GetKotaModel {
     this.message,
   });
 
-  bool status;
-  List<ResultKota> data;
-  String message;
+  bool? status;
+  List<ResultKota>? data;
+  String? message;
 
   factory GetKotaModel.fromRawJson(String str) => GetKotaModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetKotaModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -39,9 +39,9 @@ class ResultKota {
     this.namaKabupaten,
   });
 
-  String idKabupaten;
-  String provinsiId;
-  String namaKabupaten;
+  String? idKabupaten;
+  String? provinsiId;
+  String? namaKabupaten;
 
   factory ResultKota.fromRawJson(String str) => ResultKota.fromJson(json.decode(str));
 

@@ -5,27 +5,20 @@ import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({this.selected});
-  int selected;
+  int? selected;
   @override
   _HistoryPageState createState() => _HistoryPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage>
-    with SingleTickerProviderStateMixin {
-  TabController controller;
+class _HistoryPageState extends State<HistoryPage>{
 
   @override
   void initState() {
-    controller = new TabController(
-        length: 2,
-        vsync: this,
-        initialIndex: widget.selected == null ? 0 : widget.selected);
     super.initState();
   }
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
   }
 
@@ -35,27 +28,8 @@ class _HistoryPageState extends State<HistoryPage>
       appBar: new AppBar(
         backgroundColor: colorses.dasar,
         title: new Text("Riwayat"),
-        bottom: new TabBar(
-          controller: controller,
-          indicatorColor: Colors.white,
-          labelStyle: TextStyle(fontSize: 20),
-          tabs: <Widget>[
-            new Tab(
-              text: "Makanan",
-            ),
-            new Tab(
-              text: "Barang",
-            )
-          ],
-        ),
       ),
-      body: new TabBarView(
-        controller: controller,
-        children: <Widget>[
-          new HistoryMaem(),
-          new HistoryBarang(),
-        ],
-      ),
+      body: new HistoryMaem(),
     );
   }
 }

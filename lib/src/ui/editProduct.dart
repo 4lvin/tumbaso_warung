@@ -17,18 +17,18 @@ class EditProductPage extends StatefulWidget {
 }
 
 class _EditProductPageState extends State<EditProductPage> {
-  PickedFile imageFile;
+  PickedFile? imageFile;
 
-  String kategori;
+  String? kategori;
 
   // ignore: non_constant_identifier_names
-  String sub_kategori;
+  String? sub_kategori;
   var nama = TextEditingController();
   var harga = TextEditingController();
   var berat = TextEditingController();
   var deskripsi = TextEditingController();
   var potongan = TextEditingController();
-  String gambar_1;
+  String? gambar_1;
 
   List<Map<String, dynamic>> _listKategori = [
     {"id_kategori": "1", "nama_kategori": "Makanan"},
@@ -36,10 +36,10 @@ class _EditProductPageState extends State<EditProductPage> {
     {"id_kategori": "3", "nama_kategori": "Hobi"},
     {"id_kategori": "4", "nama_kategori": "Pakaian"}
   ];
-  ResSubkategoriModel _listSubkategori;
+  ResSubkategoriModel? _listSubkategori;
 
   Future getImage(int type) async {
-    PickedFile pickedImage = await ImagePicker().getImage(
+    PickedFile? pickedImage = await ImagePicker().getImage(
         source: type == 1 ? ImageSource.camera : ImageSource.gallery,
         imageQuality: 50);
     return pickedImage;
@@ -90,26 +90,26 @@ class _EditProductPageState extends State<EditProductPage> {
             padding: EdgeInsets.all(10.0),
             child: Column(
               children: [
-                Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 4,
-                          blurRadius: 4,
-                          offset: Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      image: DecorationImage(
-                          image: imageFile == null
-                              ? NetworkImage(
-                                  "${globalMaem}/assets/foto_produk/${widget.produk.gambar.gambar1}")
-                              : FileImage(File(imageFile.path)),
-                          fit: BoxFit.cover)),
-                ),
+                // Container(
+                //   height: 150,
+                //   width: 150,
+                //   decoration: BoxDecoration(
+                //       boxShadow: [
+                //         BoxShadow(
+                //           color: Colors.grey.withOpacity(0.3),
+                //           spreadRadius: 4,
+                //           blurRadius: 4,
+                //           offset: Offset(0, 2), // changes position of shadow
+                //         ),
+                //       ],
+                //       borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                //       image: DecorationImage(
+                //           image: imageFile == null
+                //               ? NetworkImage(
+                //                   "${globalMaem}/assets/foto_produk/${widget.produk.gambar.gambar1}")
+                //               : FileImage(File(imageFile.path)),
+                //           fit: BoxFit.cover)),
+                // ),
                 Center(
                   child: Container(
                     padding: EdgeInsets.only(top: 2.0),
@@ -175,7 +175,7 @@ class _EditProductPageState extends State<EditProductPage> {
                       onChanged: (value) {
                         getSubkategori(value, null);
                         setState(() {
-                          kategori = value;
+                          kategori = value.toString();
                         });
                       },
                     ),
@@ -192,14 +192,14 @@ class _EditProductPageState extends State<EditProductPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
+                    child: DropdownButton<String>(
                       hint: Text("Pilih Subkategori"),
                       value: sub_kategori,
                       items: _listSubkategori == null
                           ? []
-                          : _listSubkategori.data.map((value) {
+                          : _listSubkategori!.data!.map((value) {
                               return DropdownMenuItem(
-                                child: Text(value.namaSubkategori),
+                                child: Text(value.namaSubkategori!),
                                 value: value.idSubkategori,
                               );
                             }).toList(),
@@ -309,11 +309,11 @@ class _EditProductPageState extends State<EditProductPage> {
                 SizedBox(height: 20.0),
                 InkWell(
                   onTap: () {
-                    File file = imageFile != null ? File(imageFile.path) : null;
+                    File? file = imageFile != null ? File(imageFile!.path) : null;
                     String _idproduk = widget.produk.idProduk;
                     if (sub_kategori == null || harga.text == "") {
-                      Toast.show("Lengkapi Data anda", context,
-                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      Toast.show("Lengkapi Data anda",
+                          duration: Toast.lengthLong, gravity: Toast.bottom);
                       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       //     content: const Text('Lengkapi Data anda'),
                       //     duration: const Duration(seconds: 3)));
@@ -321,10 +321,10 @@ class _EditProductPageState extends State<EditProductPage> {
                     }
                     blocMember
                         .updateProduct(
-                            file,
+                            file!,
                             _idproduk,
-                            kategori,
-                            sub_kategori,
+                            kategori!,
+                            sub_kategori!,
                             nama.text,
                             harga.text,
                             berat.text,
@@ -332,8 +332,8 @@ class _EditProductPageState extends State<EditProductPage> {
                             potongan.text)
                         .then((value) {
                       if (value != 200) {
-                        Toast.show("Berhasil Menyimpan Data", context,
-                            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        Toast.show("Berhasil Menyimpan Data",
+                            duration: Toast.lengthLong, gravity: Toast.bottom);
                         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         //     content: const Text('Berhasil Menyimpan Data'),
                         //     duration: const Duration(seconds: 3)));

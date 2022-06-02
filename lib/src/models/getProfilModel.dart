@@ -11,9 +11,9 @@ class GetProfilModel {
     this.message,
   });
 
-  bool status;
-  List<Datum> data;
-  String message;
+  bool? status;
+  List<DatumProfil>? data;
+  String? message;
 
   factory GetProfilModel.fromRawJson(String str) => GetProfilModel.fromJson(json.decode(str));
 
@@ -21,19 +21,19 @@ class GetProfilModel {
 
   factory GetProfilModel.fromJson(Map<String, dynamic> json) => GetProfilModel(
     status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<DatumProfil>.from(json["data"].map((x) => DatumProfil.fromJson(x))),
     message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
 
-class Datum {
-  Datum({
+class DatumProfil {
+  DatumProfil({
     this.idPenjual,
     this.idPenjualMakmur,
     this.email,
@@ -50,26 +50,26 @@ class Datum {
     this.pilihanKurir,
   });
 
-  String idPenjual;
-  String idPenjualMakmur;
-  String email;
-  String nama;
-  String username;
-  String alamat;
-  String namaToko;
-  String latitude;
-  String longitude;
-  String telepone;
-  String provinsiId;
-  String kotaId;
-  String kecamatanId;
-  String pilihanKurir;
+  String? idPenjual;
+  String? idPenjualMakmur;
+  String? email;
+  String? nama;
+  String? username;
+  String? alamat;
+  String? namaToko;
+  String? latitude;
+  String? longitude;
+  String? telepone;
+  String? provinsiId;
+  String? kotaId;
+  String? kecamatanId;
+  String? pilihanKurir;
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+  factory DatumProfil.fromRawJson(String str) => DatumProfil.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory DatumProfil.fromJson(Map<String, dynamic> json) => DatumProfil(
     idPenjual: json["id_penjual"],
     idPenjualMakmur: json["id_penjual_makmur"],
     email: json["email"],

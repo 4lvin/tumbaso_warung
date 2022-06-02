@@ -29,13 +29,12 @@ import 'package:tumbaso_warung/src/resources/globalApi.dart';
 
 class ApiProviders {
   String url = "${globalMaem}/restapi";
-  String url2 = "${globalBarang}/restapi";
 
   Future getSubkategori(String idKategori) async {
     var body = jsonEncode({'id_kategori': idKategori});
     try {
       final checkid = await client
-          .post("$url/produk/get_subkategori",
+          .post(Uri.parse("https://tumbasonline.com/restapi/produk/get_subkategori"),
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
@@ -63,7 +62,7 @@ class ApiProviders {
         jsonEncode({'username': username, 'password': password, "token": ""});
     try {
       final checkid = await client
-          .post("$url/penjual/login",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/login"),
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
@@ -90,7 +89,7 @@ class ApiProviders {
     var body = jsonEncode({'id_penjual': idPenjual});
     try {
       final checkid = await client
-          .post("$url/penjual/get_penjual",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_penjual"),
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
@@ -117,7 +116,7 @@ class ApiProviders {
     var body = jsonEncode({'email': username, 'status': status});
     try {
       final checkid = await client
-          .post("$url/penjual/put_status_toko",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/put_status_toko"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -148,7 +147,7 @@ class ApiProviders {
     var body = jsonEncode({'email': username, 'penjual_id': idPenjual});
     try {
       final checkid = await client
-          .post("$url/penjual/get_produk_penjual",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_produk_penjual"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -179,7 +178,7 @@ class ApiProviders {
     var body = jsonEncode({'id_penjual': idPenjual});
     try {
       final checkid = await client
-          .post("$url/penjual/get_setor",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_setor"),
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
@@ -202,16 +201,16 @@ class ApiProviders {
 
   Future getTransaksi(String username, String history) async {
     var body = jsonEncode({'username': username, 'history': history});
-    String _token;
+    String? _token;
     await getToken().then((value) {
       _token = value;
     });
     try {
       final checkid = await client
-          .post("$url/penjual/get_transaksi",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_transaksi"),
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": _token
+                "Authorization": _token!
               },
               body: body)
           .timeout(const Duration(seconds: 13));
@@ -241,7 +240,7 @@ class ApiProviders {
         {'email': username, 'id_produk': idProduk, 'status': status});
     try {
       final checkid = await client
-          .post("$url/penjual/put_status_produk",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/put_status_produk"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -277,8 +276,8 @@ class ApiProviders {
       String berat,
       String deskripsi,
       String potongan) async {
-    String _token;
-    String _username;
+    String? _token;
+    String? _username;
     await getToken().then((value) {
       _token = value;
     });
@@ -288,9 +287,9 @@ class ApiProviders {
     try {
       var uri = Uri.parse("$url/penjual/create_produk");
       var request = new client.MultipartRequest("POST", uri);
-      request.headers['authorization'] = _token;
+      request.headers['authorization'] = _token!;
 
-      request.fields['email'] = _username;
+      request.fields['email'] = _username!;
       request.fields['kategori_id'] = kategori;
       request.fields['subkategori_id'] = subkategori;
       request.fields['nama_produk'] = nama;
@@ -311,7 +310,7 @@ class ApiProviders {
       } else {
         request.fields['file'] = "";
       }
-      int statusResponse;
+      int? statusResponse;
       await request
           .send()
           .then((result) async {
@@ -346,8 +345,8 @@ class ApiProviders {
       String berat,
       String deskripsi,
       String potongan) async {
-    String _token;
-    String _username;
+    String? _token;
+    String? _username;
     await getToken().then((value) {
       _token = value;
     });
@@ -357,9 +356,9 @@ class ApiProviders {
     try {
       var uri = Uri.parse("$url/penjual/update_produk");
       var request = new client.MultipartRequest("POST", uri);
-      request.headers['authorization'] = _token;
+      request.headers['authorization'] = _token!;
 
-      request.fields['email'] = _username;
+      request.fields['email'] = _username!;
       request.fields['id_produk'] = _idproduk;
       request.fields['kategori_id'] = kategori;
       request.fields['subkategori_id'] = subkategori;
@@ -381,7 +380,7 @@ class ApiProviders {
       } else {
         request.fields['file'] = "";
       }
-      int statusResponse;
+      int? statusResponse;
       await request
           .send()
           .then((result) async {
@@ -407,11 +406,11 @@ class ApiProviders {
 
   Future getProvinsi() async {
     try {
-      final prov = await client.post("$url/umum/get_provinsi", headers: {
+      final provinsi = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_provinsi"), headers: {
         "Content-Type": "application/json"
-      }).timeout(const Duration(seconds: 11));
-      if (prov.statusCode == 200) {
-        return GetProvinsiModel.fromJson(json.decode(prov.body));
+      }).timeout(const Duration(seconds: 15));
+      if (provinsi.statusCode == 200) {
+        return GetProvinsiModel.fromJson(json.decode(provinsi.body));
       } else {
         throw Exception('Failed to load Login');
       }
@@ -431,11 +430,11 @@ class ApiProviders {
   Future getKota(String kodeProv) async {
     try {
       var body = jsonEncode({'id_provinsi': kodeProv});
-      final data = await client.post("$url/umum/get_kabupaten",
+      final data = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_kabupaten"),
           body: body,
           headers: {
             "Content-Type": "application/json"
-          }).timeout(const Duration(seconds: 11));
+          }).timeout(const Duration(seconds: 15));
       if (data.statusCode == 200) {
         return GetKotaModel.fromJson(json.decode(data.body));
       } else {
@@ -457,11 +456,11 @@ class ApiProviders {
   Future getKecamatan(String kodeKota) async {
     try {
       var body = jsonEncode({'id_kabupaten': kodeKota});
-      final data = await client.post("$url/umum/get_kecamatan",
+      final data = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_kecamatan"),
           body: body,
           headers: {
             "Content-Type": "application/json"
-          }).timeout(const Duration(seconds: 11));
+          }).timeout(const Duration(seconds: 15));
       print(data.body);
       if (data.statusCode == 200) {
         return GetKecamatanModel.fromJson(json.decode(data.body));
@@ -487,7 +486,7 @@ class ApiProviders {
         {'email': email, 'foto': foto, 'nama': nama, 'token': token});
     try {
       final checkId = await client
-          .post("$url/penjual/login_gmail",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/login_gmail"),
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (checkId.statusCode == 200) {
@@ -540,7 +539,7 @@ class ApiProviders {
     });
     try {
       final checkId = await client
-          .post("$url/penjual/ubah_profil",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/ubah_profil"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -569,7 +568,7 @@ class ApiProviders {
 
   Future getKategoriBarang() async {
     try {
-      final prov = await client.post("$url2/umum/get_kategori_produk",
+      final prov = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_kategori_produk"),
           headers: {
             "Content-Type": "application/json"
           }).timeout(const Duration(seconds: 11));
@@ -597,7 +596,7 @@ class ApiProviders {
     });
     try {
       final prov = await client
-          .post("$url2/umum/get_subkategori_produk",
+          .post(Uri.parse("https://tumbasonline.com/restapi/umum/get_subkategori_produk"),
               headers: {"Content-Type": "application/json"}, body: body)
           .timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
@@ -618,432 +617,24 @@ class ApiProviders {
     }
   }
 
-  Future getBarang() async {
-    String _idPenjual;
-    String _token;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getKdPasmak().then((value) {
-      _idPenjual = value;
-    });
+  Future getProfil(String email,
+  String token) async {
     var body = jsonEncode({
-      'id_penjual': _idPenjual,
-    });
-    try {
-      final barang = await client
-          .post("$url2/produk/get_produk",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": _token
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (barang.statusCode == 200) {
-        return GetBarangModel.fromJson(json.decode(barang.body));
-      } else {
-        throw Exception('Failed to load Login');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future simpanProdukBarang(
-      File file,
-      String kategori,
-      String subkategori,
-      String nama,
-      String harga,
-      String satuan,
-      String berat,
-      String deskripsi,
-      String keterangan,
-      String minimum,
-      String stok) async {
-    String _token;
-    String _username;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      _username = value;
-    });
-    try {
-      var uri = Uri.parse("$url2/penjual/create_produk");
-      var request = new client.MultipartRequest("POST", uri);
-      request.headers['authorization'] = _token;
-
-      request.fields['email'] = _username;
-      request.fields['kategori_id'] = kategori;
-      request.fields['subkategori_id'] = subkategori;
-      request.fields['nama_produk'] = nama;
-      request.fields['harga'] = harga;
-      request.fields['satuan'] = satuan;
-      request.fields['berat'] = berat;
-      request.fields['deskripsi'] = deskripsi;
-      request.fields['keterangan'] = keterangan;
-      request.fields['minimum'] = minimum;
-      request.fields['stok'] = stok;
-      request.fields['fee_produk'] = "0";
-
-      if (file != null) {
-        request.files.add(client.MultipartFile(
-            "file",
-            // ignore: deprecated_member_use
-            client.ByteStream(DelegatingStream.typed(file.openRead())),
-            await file.length(),
-            filename: path.basename(file.path)));
-      } else {
-        request.fields['file'] = "";
-      }
-      int statusResponse;
-      await request
-          .send()
-          .then((result) async {
-            await client.Response.fromStream(result).then((response) {
-              print(response.statusCode);
-              statusResponse = response.statusCode;
-            });
-          })
-          .catchError((err) => print('error : ' + err.toString()))
-          .whenComplete(() {});
-      return statusResponse;
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future editProdukBarang(
-      File file,
-      String id_barang,
-      String kategori,
-      String subkategori,
-      String nama,
-      String harga,
-      String satuan,
-      String berat,
-      String deskripsi,
-      String keterangan,
-      String minimum,
-      String stok) async {
-    String _token;
-    String _username;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      _username = value;
-    });
-    try {
-      var uri = Uri.parse("$url2/penjual/update_produk");
-      var request = new client.MultipartRequest("POST", uri);
-      request.headers['authorization'] = _token;
-
-      request.fields['email'] = _username;
-      request.fields['id_produk'] = id_barang;
-      request.fields['kategori_id'] = kategori;
-      request.fields['subkategori_id'] = subkategori;
-      request.fields['nama_produk'] = nama;
-      request.fields['harga'] = harga;
-      request.fields['satuan'] = satuan;
-      request.fields['berat'] = berat;
-      request.fields['deskripsi'] = deskripsi;
-      request.fields['keterangan'] = keterangan;
-      request.fields['minimum'] = minimum;
-      request.fields['stok'] = stok;
-      request.fields['fee_produk'] = "0";
-
-      if (file != null) {
-        request.files.add(client.MultipartFile(
-            "file",
-            // ignore: deprecated_member_use
-            client.ByteStream(DelegatingStream.typed(file.openRead())),
-            await file.length(),
-            filename: path.basename(file.path)));
-      } else {
-        request.fields['file'] = "";
-      }
-      int statusResponse;
-      await request
-          .send()
-          .then((result) async {
-            await client.Response.fromStream(result).then((response) {
-              print(response.statusCode);
-              statusResponse = response.statusCode;
-            });
-          })
-          .catchError((err) => print('error : ' + err.toString()))
-          .whenComplete(() {});
-      return statusResponse;
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future updateStatusBarang(String idProduk, String status) async {
-    String email;
-    String _token;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      email = value;
-    });
-    var body =
-        jsonEncode({'email': email, 'id_produk': idProduk, 'status': status});
-    try {
-      final checkid = await client
-          .post("$url2/penjual/update_status_produk",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": _token
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (checkid.statusCode == 200) {
-        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
-      } else if (checkid.statusCode == 404) {
-        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
-      } else {
-        throw Exception('Failure response');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future getProfil() async {
-    String _email;
-    String _token;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      _email = value;
-    });
-    var body = jsonEncode({
-      'email': _email,
+      'email': email,
     });
     try {
       final prov = await client
-          .post("$url/penjual/get_profil",
+          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_profil"),
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": _token
+                "Authorization": token
               },
               body: body)
-          .timeout(const Duration(seconds: 11));
+          .timeout(const Duration(seconds: 15));
       if (prov.statusCode == 200) {
         return GetProfilModel.fromJson(json.decode(prov.body));
       } else {
         throw Exception('Failed to load Login');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future getEkspedisi() async {
-    try {
-      final prov = await client.post("$url2/umum/get_kurir", headers: {
-        "Content-Type": "application/json"
-      }).timeout(const Duration(seconds: 11));
-      if (prov.statusCode == 200) {
-        return GetEkspedisiModel.fromJson(json.decode(prov.body));
-      } else {
-        throw Exception('Failed to load Login');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future getTransaksiBarang(String status) async {
-    String email;
-    String _token;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      email = value;
-    });
-    var body = jsonEncode({
-      'email': email,
-      'status': status,
-    });
-    try {
-      final barang = await client
-          .post("$url2/penjual/get_transaksi",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": _token
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (barang.statusCode == 200) {
-        // print(barang.body);
-        return GetTransaksiBarangModel.fromJson(json.decode(barang.body));
-      } else {
-        throw Exception('Failed to load Login');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future updateStatusTransaksiBarang(String idPenjualan, String status) async {
-    String email;
-    String _token;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      email = value;
-    });
-    var body = jsonEncode(
-        {'email': email, 'id_transaksi': idPenjualan, 'status': status});
-    try {
-      final checkid = await client
-          .post("$url2/penjual/update_transaksi",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": _token
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (checkid.statusCode == 200) {
-        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
-      } else if (checkid.statusCode == 404) {
-        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
-      } else {
-        throw Exception('Failure response');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future inputResi(String idPenjualan, String noResi) async {
-    String email;
-    String _token;
-    await getToken().then((value) {
-      _token = value;
-    });
-    await getEmail().then((value) {
-      email = value;
-    });
-    var body = jsonEncode(
-        {'email': email, 'id_transaksi': idPenjualan, 'no_resi': noResi});
-    try {
-      final checkid = await client
-          .post("$url2/penjual/update_resi",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": _token
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (checkid.statusCode == 200) {
-        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
-      } else if (checkid.statusCode == 404) {
-        return ResLengkapiProfilModel.fromJson(json.decode(checkid.body));
-      } else {
-        throw Exception('Failure response');
-      }
-    } on SocketException catch (e) {
-      throw Exception(e.toString());
-    } on HttpException {
-      {
-        throw Exception("tidak menemukan post");
-      }
-    } on FormatException {
-      throw Exception("request salah");
-    } on TimeoutException catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future cekResi(String kodeTransaksi) async {
-    var body = jsonEncode({'kode_transaksi': kodeTransaksi});
-    try {
-      final checkid = await client
-          .post("$url2/umum/get_resi",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: body)
-          .timeout(const Duration(seconds: 11));
-      if (checkid.statusCode == 200) {
-        return CekResiModel.fromJson(checkid.body);
-      } else if (checkid.statusCode == 404) {
-        return CekResiModel.fromJson(checkid.body);
-      } else {
-        throw Exception('Failure response');
       }
     } on SocketException catch (e) {
       throw Exception(e.toString());

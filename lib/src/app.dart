@@ -19,7 +19,7 @@ class App extends StatelessWidget {
         '/controllerPage': (BuildContext context) => new ControllerPage(),
         '/login': (BuildContext context) => new LoginPage(),
         '/lengkapiProfil': (BuildContext context) => new LengkapiProfil(),
-        '/produkBarang': (BuildContext context) => new ProdukBarang(),
+        // '/produkBarang': (BuildContext context) => new ProdukBarang(),
       },
     );
   }

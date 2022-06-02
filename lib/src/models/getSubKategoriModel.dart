@@ -11,9 +11,9 @@ class GetSubKategoriBarangModel {
     this.message,
   });
 
-  bool status;
-  List<Datum> data;
-  String message;
+  bool? status;
+  List<Datum>? data;
+  String? message;
 
   factory GetSubKategoriBarangModel.fromRawJson(String str) => GetSubKategoriBarangModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetSubKategoriBarangModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -39,9 +39,9 @@ class Datum {
     this.namaSubkategori,
   });
 
-  String idSubkategori;
-  String idKategori;
-  String namaSubkategori;
+  String? idSubkategori;
+  String? idKategori;
+  String? namaSubkategori;
 
   factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
 

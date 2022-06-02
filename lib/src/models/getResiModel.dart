@@ -11,9 +11,9 @@ class CekResiModel {
     this.message,
   });
 
-  bool status;
-  List<Datum> data;
-  String message;
+  bool? status;
+  List<Datum>? data;
+  String? message;
 
   factory CekResiModel.fromJson(String str) =>
       CekResiModel.fromMap(json.decode(str));
@@ -28,7 +28,7 @@ class CekResiModel {
 
   Map<String, dynamic> toMap() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toMap())),
+        "data": List<dynamic>.from(data!.map((x) => x.toMap())),
         "message": message,
       };
 }
@@ -40,9 +40,9 @@ class Datum {
     this.destinasi,
   });
 
-  String status;
-  DateTime tanggal;
-  String destinasi;
+  String? status;
+  DateTime? tanggal;
+  String? destinasi;
 
   factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
 
@@ -56,7 +56,7 @@ class Datum {
 
   Map<String, dynamic> toMap() => {
         "status": status,
-        "tanggal": tanggal.toIso8601String(),
+        "tanggal": tanggal!.toIso8601String(),
         "Destinasi": destinasi,
       };
 }

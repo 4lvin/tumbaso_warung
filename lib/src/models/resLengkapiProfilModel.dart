@@ -10,8 +10,8 @@ class ResLengkapiProfilModel {
     this.message,
   });
 
-  bool status;
-  String message;
+  bool? status;
+  String? message;
 
   factory ResLengkapiProfilModel.fromRawJson(String str) => ResLengkapiProfilModel.fromJson(json.decode(str));
 

@@ -11,9 +11,9 @@ class GetTransaksiBarangModel {
     this.message,
   });
 
-  bool status;
-  List<TransaksiBarangDatum> data;
-  String message;
+  bool? status;
+  List<TransaksiBarangDatum>? data;
+  String? message;
 
   factory GetTransaksiBarangModel.fromRawJson(String str) =>
       GetTransaksiBarangModel.fromJson(json.decode(str));
@@ -30,7 +30,7 @@ class GetTransaksiBarangModel {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
         "message": message,
       };
 }
@@ -51,18 +51,18 @@ class TransaksiBarangDatum {
     this.waktuTransaksi,
   });
 
-  String idPenjualan;
-  String kodeTransaksi;
-  String idPembeli;
-  Pembeli pembeli;
-  String idPenjual;
+  String? idPenjualan;
+  String? kodeTransaksi;
+  String? idPembeli;
+  Pembeli? pembeli;
+  String? idPenjual;
   dynamic noResi;
-  String kurir;
-  String ongkir;
-  String keterangan;
-  String proses;
-  List<PemesananDetail> pemesananDetail;
-  DateTime waktuTransaksi;
+  String? kurir;
+  String? ongkir;
+  String? keterangan;
+  String? proses;
+  List<PemesananDetail>? pemesananDetail;
+  DateTime? waktuTransaksi;
 
   factory TransaksiBarangDatum.fromRawJson(String str) =>
       TransaksiBarangDatum.fromJson(json.decode(str));
@@ -90,7 +90,7 @@ class TransaksiBarangDatum {
         "id_penjualan": idPenjualan,
         "kode_transaksi": kodeTransaksi,
         "id_pembeli": idPembeli,
-        "pembeli": pembeli.toJson(),
+        "pembeli": pembeli!.toJson(),
         "id_penjual": idPenjual,
         "no_resi": noResi,
         "kurir": kurir,
@@ -98,8 +98,8 @@ class TransaksiBarangDatum {
         "keterangan": keterangan,
         "proses": proses,
         "pemesanan_detail":
-            List<dynamic>.from(pemesananDetail.map((x) => x.toJson())),
-        "waktu_transaksi": waktuTransaksi.toIso8601String(),
+            List<dynamic>.from(pemesananDetail!.map((x) => x.toJson())),
+        "waktu_transaksi": waktuTransaksi!.toIso8601String(),
       };
 }
 
@@ -110,9 +110,9 @@ class Pembeli {
     this.alamatLengkap,
   });
 
-  String namaLengkap;
-  String email;
-  String alamatLengkap;
+  String? namaLengkap;
+  String? email;
+  String? alamatLengkap;
 
   factory Pembeli.fromRawJson(String str) => Pembeli.fromJson(json.decode(str));
 
@@ -140,11 +140,11 @@ class PemesananDetail {
     this.potongan,
   });
 
-  int idProduk;
-  String namaProduk;
-  int qty;
-  int harga;
-  int potongan;
+  int? idProduk;
+  String? namaProduk;
+  int? qty;
+  int? harga;
+  int? potongan;
 
   factory PemesananDetail.fromRawJson(String str) =>
       PemesananDetail.fromJson(json.decode(str));

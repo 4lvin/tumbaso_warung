@@ -16,8 +16,8 @@ class FileUploadModel {
     this.foto,
   });
 
-  bool status;
-  String foto;
+  bool? status;
+  String? foto;
 
   factory FileUploadModel.fromJson(Map<String, dynamic> json) =>
       FileUploadModel(

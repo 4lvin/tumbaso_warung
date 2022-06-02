@@ -19,11 +19,11 @@ class _ProdukMaemState extends State<ProdukMaem> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<bool> onOff = [];
-  String status;
+  String? status;
   bool onOffw = false;
-  String nama;
-  String token;
-  String username;
+  String? nama;
+  String? token;
+  String? username;
 
   String _image() {
     String link = "assets/close.png";
@@ -67,7 +67,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
       });
     });
     blocMember.getStatus.listen((event) {
-      if (event.data[0].aktif == "1") {
+      if (event.data?[0].aktif == "1") {
         if (mounted)
           setState(() {
             status = "ada";
@@ -97,7 +97,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
       });
     });
     blocMember.getStatus.listen((event) {
-      if (event.data[0].aktif == "1") {
+      if (event.data?[0].aktif == "1") {
         if (mounted)
           setState(() {
             status = "ada";
@@ -130,7 +130,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
       });
     });
     blocMember.getStatus.listen((event) {
-      if (event.data[0].aktif == "1") {
+      if (event.data?[0].aktif == "1") {
         if (mounted)
           setState(() {
             status = "ada";
@@ -195,18 +195,18 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   InkWell(
                     onTap: () {
                       if (onOffw) {
-                        blocMember.updateStatusToko(username, "1", token);
+                        blocMember.updateStatusToko(username!, "1", token!);
                         blocMember.resStatusToko.listen((event) {
-                          if (event.status) {
+                          if (event.status!) {
                             setState(() {
                               onOffw = false;
                             });
                           }
                         });
                       } else {
-                        blocMember.updateStatusToko(username, "0", token);
+                        blocMember.updateStatusToko(username!, "0", token!);
                         blocMember.resStatusToko.listen((event) {
-                          if (event.status) {
+                          if (event.status!) {
                             setState(() {
                               onOffw = true;
                             });
@@ -233,7 +233,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   stream: blocMember.listProduk,
                   builder: (context, AsyncSnapshot<GetProdukModel> snapshot) {
                     if (snapshot.hasData) {
-                      return snapshot.data.data.isNotEmpty
+                      return snapshot.data!.data!.isNotEmpty
                           ? SmartRefresher(
                               enablePullDown: true,
                               enablePullUp: false,
@@ -244,17 +244,17 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               child: ListView.builder(
                                   // physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: snapshot.data.data.length,
+                                  itemCount: snapshot.data!.data!.length,
                                   itemBuilder: (BuildContext context, int i) {
                                     // var formatDate = DateFormat('d MMM yyyy').format(snapshot.data.data[i].waktu);
                                     // var formatTime = DateFormat().add_jm().format(snapshot.data.data[i].waktu);
-                                    if (snapshot.data.data[i].aktif == "1") {
+                                    if (snapshot.data!.data?[i].aktif == "1") {
                                       onOff.add(false);
                                     } else {
                                       onOff.add(true);
                                     }
                                     return buildItems(
-                                        size, snapshot.data.data[i]);
+                                        size, snapshot.data!.data![i]);
                                   }),
                             )
                           : Padding(
@@ -277,7 +277,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               ),
                             );
                     } else if (snapshot.hasError) {
-                      return Text(snapshot.error);
+                      return Text(snapshot.error.toString());
                     } else {
                       return Center(
                         child: new CircularProgressIndicator(
@@ -339,22 +339,22 @@ class _ProdukMaemState extends State<ProdukMaem> {
         children: [
           Stack(
             children: [
-              Container(
-                width: 80,
-                height: 80,
-                margin: EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: '${globalMaem}/assets/foto_produk/${makanan.gambar.gambar1}' !=
-                            '${globalMaem}/assets/foto_produk/no_image.png'
-                        ? NetworkImage(
-                            '${globalMaem}/assets/foto_produk/${makanan.gambar.gambar1}')
-                        : AssetImage('assets/baru2.png'),
-                  ),
-                ),
-              ),
+              // Container(
+              //   width: 80,
+              //   height: 80,
+              //   margin: EdgeInsets.only(right: 10),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10),
+              //     image: DecorationImage(
+              //       fit: BoxFit.cover,
+              //       image: '${globalMaem}/assets/foto_produk/${makanan.gambar.gambar1}' !=
+              //               '${globalMaem}/assets/foto_produk/no_image.png'
+              //           ? NetworkImage(
+              //               '${globalMaem}/assets/foto_produk/${makanan.gambar.gambar1}')
+              //           : AssetImage('assets/baru2.png'),
+              //     ),
+              //   ),
+              // ),
               makanan.aktif == "0"
                   ? Align(
                       alignment: Alignment.center,
@@ -386,7 +386,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      makanan.namaProduk,
+                      makanan.namaProduk??"",
                       style: TextStyle(
                           fontSize: 16,
                           color: makanan.aktif == "1"
@@ -394,7 +394,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               : Colors.grey),
                     ),
                     Text(
-                      makanan.deskripsi,
+                      makanan.deskripsi??"",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
@@ -447,11 +447,11 @@ class _ProdukMaemState extends State<ProdukMaem> {
                       getEmail().then((user) {
                         getToken().then((token) {
                           blocMember.updateStatusProduk(
-                              user, makanan.idProduk, "0", token);
+                              user, makanan.idProduk!, "0", token);
                         });
                       });
                       blocMember.resUpdateStatusProduk.listen((event) {
-                        if (event.status) {
+                        if (event.status!) {
                           getToken().then((token) {
                             getEmail().then((username) {
                               getKdUser().then((kduser) {
@@ -460,20 +460,20 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               });
                             });
                           });
-                          Toast.show("Produk di set habis!", context,
-                              duration: Toast.LENGTH_LONG,
-                              gravity: Toast.BOTTOM);
+                          Toast.show("Produk di set habis!",
+                              duration: Toast.lengthLong,
+                              gravity: Toast.bottom);
                         }
                       });
                     } else {
                       getEmail().then((user) {
                         getToken().then((token) {
                           blocMember.updateStatusProduk(
-                              user, makanan.idProduk, "1", token);
+                              user, makanan.idProduk!, "1", token);
                         });
                       });
                       blocMember.resUpdateStatusProduk.listen((event) {
-                        if (event.status) {
+                        if (event.status!) {
                           getToken().then((token) {
                             getEmail().then((username) {
                               getKdUser().then((kduser) {
@@ -482,9 +482,9 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               });
                             });
                           });
-                          Toast.show("Produk di set ada!", context,
-                              duration: Toast.LENGTH_LONG,
-                              gravity: Toast.BOTTOM);
+                          Toast.show("Produk di set ada!",
+                              duration: Toast.lengthLong,
+                              gravity: Toast.bottom);
                         }
                       });
                     }

@@ -11,9 +11,9 @@ class GetProvinsiModel {
     this.message,
   });
 
-  bool status;
-  List<ResultProv> data;
-  String message;
+  bool? status;
+  List<ResultProv>? data;
+  String? message;
 
   factory GetProvinsiModel.fromRawJson(String str) => GetProvinsiModel.fromJson(json.decode(str));
 
@@ -27,7 +27,7 @@ class GetProvinsiModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -38,8 +38,8 @@ class ResultProv {
     this.namaProvinsi,
   });
 
-  String idProvinsi;
-  String namaProvinsi;
+  String? idProvinsi;
+  String? namaProvinsi;
 
   factory ResultProv.fromRawJson(String str) => ResultProv.fromJson(json.decode(str));
 

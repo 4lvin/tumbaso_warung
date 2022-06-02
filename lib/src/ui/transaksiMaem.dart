@@ -12,7 +12,7 @@ import 'package:tumbaso_warung/src/ui/utils/colorses.dart';
 import 'package:tumbaso_warung/src/ui/utils/timeago.dart';
 
 class TransaksiMaem extends StatefulWidget {
-  const TransaksiMaem({Key key}) : super(key: key);
+  const TransaksiMaem({Key? key}) : super(key: key);
 
   @override
   _TransaksiMaemState createState() => _TransaksiMaemState();
@@ -63,10 +63,6 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Transaksi Makanan',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
           SizedBox(height: 10),
           Container(
             width: size.width,
@@ -75,7 +71,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
               stream: blocMember.listTransaksi,
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.data.isEmpty) {
+                  if (snapshot.data!.data!.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 18.0),
                       child: Center(
@@ -106,9 +102,9 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
                       onRefresh: _onRefresh,
                       onLoading: _onLoading,
                       child: ListView.builder(
-                        itemCount: snapshot.data.data.length,
+                        itemCount: snapshot.data!.data!.length,
                         itemBuilder: (context, index) =>
-                            buildItem(context, size, snapshot.data.data[index]),
+                            buildItem(context, size, snapshot.data!.data![index]),
                       ),
                     );
                   }
@@ -126,8 +122,8 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
   }
 
   Widget buildItem(BuildContext context, Size size, Datum transaksi) {
-    int count = transaksi.produk.length;
-    int status = int.parse(transaksi.status.idStatusPesanan);
+    int count = transaksi.produk!.length;
+    int status = int.parse(transaksi.status!.idStatusPesanan!);
     // String date = TimeConvert.timeAgo(transaksi.waktuTransaksi);
 
     String textStatus = '';
@@ -211,7 +207,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
 
   // dialog Detail Pesanan
 
-  Future<Object> trackingPesanan(Size size) {
+  Future<Object?> trackingPesanan(Size size) {
     return showGeneralDialog(
       barrierLabel: "tracking",
       barrierDismissible: true,
@@ -390,16 +386,16 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
     );
   }
 
-  Future<Object> detailPesanan(
+  Future<Object?> detailPesanan(
       BuildContext context, Size size, int status, Datum transaksi) {
     int dProduk = 3;
-    if (transaksi.produk.length < 3) {
-      dProduk = transaksi.produk.length;
+    if (transaksi.produk!.length < 3) {
+      dProduk = transaksi.produk!.length;
     }
 
     int total = 0;
-    transaksi.produk.forEach((prod) {
-      total += prod.harga;
+    transaksi.produk!.forEach((prod) {
+      total += prod.harga!;
     });
 
     return showGeneralDialog(
@@ -469,11 +465,11 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            transaksi.pelanggan.namaPelanggan,
+                            transaksi.pelanggan!.namaPelanggan??"",
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            '${transaksi.produk.length} menu | ${transaksi.kodeTransaksi}',
+                            '${transaksi.produk!.length} menu | ${transaksi.kodeTransaksi}',
                             style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                           SizedBox(height: 20),
@@ -497,7 +493,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
                                   ),
                                   SizedBox(height: 6),
                                   Text(
-                                    transaksi.detailPengiriman.kurir,
+                                    transaksi.detailPengiriman!.kurir??"",
                                     style: TextStyle(fontSize: 10),
                                   ),
                                 ],
@@ -514,7 +510,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
                     height: (60.0 * dProduk),
                     child: ListView(
                       padding: EdgeInsets.zero,
-                      children: transaksi.produk
+                      children: transaksi.produk!
                           .map((e) => detailPesananItem(size, e))
                           .toList(),
                     ),
@@ -635,7 +631,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: Colors.grey[300]),
+                          bottom: BorderSide(color: Colors.grey),
                         ),
                       ),
                       child: Text(
@@ -651,13 +647,13 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16.0),
                           borderSide: BorderSide(
-                            color: Colors.grey[300],
+                            color: Colors.grey,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16.0),
                           borderSide: BorderSide(
-                            color: Colors.grey[300],
+                            color: Colors.grey,
                           ),
                         ),
                       ),
@@ -689,11 +685,11 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
   }
 
   Widget detailPesananItem(Size size, Produk pesanan) {
-    int harga = pesanan.harga * int.parse(pesanan.qty);
+    int harga = pesanan.harga! * int.parse(pesanan.qty!);
     String image =
         'https://images.unsplash.com/photo-1624032545726-9d770c3615e7?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDJ8Sjl5clBhSFhSUVl8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60';
     if (image != '') {
-      image = '${globalMaem}/assets/foto_produk/' + pesanan.gambar1;
+      image = '${globalMaem}/assets/foto_produk/' + pesanan.gambar1!;
     }
 
     return Container(
@@ -725,7 +721,7 @@ class _TransaksiMaemState extends State<TransaksiMaem> {
           Container(
             // width: 160,
             child: Text(
-              pesanan.namaProduk,
+              pesanan.namaProduk!,
               style: TextStyle(fontSize: 14),
             ),
           ),

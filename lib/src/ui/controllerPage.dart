@@ -11,17 +11,17 @@ import 'package:tumbaso_warung/src/ui/warung.dart';
 // ignore: must_be_immutable
 class ControllerPage extends StatefulWidget {
   ControllerPage({this.selected});
-  int selected;
+  int? selected;
   @override
   _ControllerPageState createState() => _ControllerPageState();
 }
 
 class _ControllerPageState extends State<ControllerPage> {
-  int _selectedIndex;
+  int? _selectedIndex;
   bool _selectedTransakasi = false;
-  String tipe;
+  String? tipe;
   final PageStorageBucket bucket = PageStorageBucket();
-  DateTime currentBackPressTime;
+  DateTime? currentBackPressTime;
 
   final List<Widget> _widgetOptions = [
     HomePage(),
@@ -40,10 +40,10 @@ class _ControllerPageState extends State<ControllerPage> {
   Future<bool> _onWillPop() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
       currentBackPressTime = now;
-      Toast.show("Tekan sekali lagi untuk keluar", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      Toast.show("Tekan sekali lagi untuk keluar",
+          duration: Toast.lengthLong, gravity: Toast.bottom);
       return Future.value(false);
     }
     return Future.value(true);
@@ -70,8 +70,8 @@ class _ControllerPageState extends State<ControllerPage> {
           child: PageStorage(
             bucket: bucket,
             child: _selectedTransakasi
-                ? _widgetOptions2[_selectedIndex]
-                : _widgetOptions[_selectedIndex],
+                ? _widgetOptions2[_selectedIndex!]
+                : _widgetOptions[_selectedIndex!],
           ),
           onWillPop: _onWillPop),
       bottomNavigationBar: FloatingNavbar(
