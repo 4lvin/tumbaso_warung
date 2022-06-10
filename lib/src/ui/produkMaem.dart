@@ -129,6 +129,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
         });
       });
     });
+    // print(token);
     blocMember.getStatus.listen((event) {
       if (event.data?[0].aktif == "1") {
         if (mounted)
@@ -143,6 +144,12 @@ class _ProdukMaemState extends State<ProdukMaem> {
       }
     });
     super.initState();
+    getToken().then((value) {
+      setState(() {
+        token = value;
+      });
+    });
+    print(token);
   }
 
   @override
@@ -325,7 +332,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
   Widget buildItems(Size size, Datum makanan) {
     return Container(
       width: size.width,
-      height: size.height * 0.12,
+      height: size.height * 0.14,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border(
@@ -386,7 +393,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      makanan.namaProduk??"",
+                      makanan.namaProduk ?? "",
                       style: TextStyle(
                           fontSize: 16,
                           color: makanan.aktif == "1"
@@ -394,7 +401,7 @@ class _ProdukMaemState extends State<ProdukMaem> {
                               : Colors.grey),
                     ),
                     Text(
-                      makanan.deskripsi??"",
+                      makanan.deskripsi ?? "",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),

@@ -15,28 +15,29 @@ class ResLoginModel {
   Data? data;
   String? message;
 
-  factory ResLoginModel.fromRawJson(String str) => ResLoginModel.fromJson(json.decode(str));
+  factory ResLoginModel.fromRawJson(String str) =>
+      ResLoginModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory ResLoginModel.fromJson(Map<String, dynamic> json) => ResLoginModel(
-    status: json["status"],
-    data: Data.fromJson(json["data"]),
-    message: json["message"],
-  );
+        status: json["status"],
+        data: Data.fromJson(json["data"]),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": data!.toJson(),
-    "message": message,
-  };
+        "status": status,
+        "data": data!.toJson(),
+        "message": message,
+      };
 }
 
 class Data {
   Data({
     this.idToken,
     this.idPenjual,
-    this.username,
+    this.email,
     this.namaLengkap,
     this.telepone,
     this.longitude,
@@ -45,7 +46,7 @@ class Data {
 
   String? idToken;
   String? idPenjual;
-  String? username;
+  String? email;
   String? namaLengkap;
   String? telepone;
   String? longitude;
@@ -56,22 +57,22 @@ class Data {
   String toRawJson() => json.encode(toJson());
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    idToken: json["id_token"],
-    idPenjual: json["id_penjual"],
-    username: json["username"],
-    namaLengkap: json["nama_lengkap"],
-    telepone: json["telepone"],
-    longitude: json["longitude"],
-    latitude: json["latitude"],
-  );
+        idToken: json["id_token"],
+        idPenjual: json["id_penjual"],
+        email: json["email"],
+        namaLengkap: json["nama_lengkap"],
+        telepone: json["telepone"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_token": idToken,
-    "id_penjual": idPenjual,
-    "username": username,
-    "nama_lengkap": namaLengkap,
-    "telepone": telepone,
-    "longitude": longitude,
-    "latitude": latitude,
-  };
+        "id_token": idToken,
+        "id_penjual": idPenjual,
+        "email": email,
+        "nama_lengkap": namaLengkap,
+        "telepone": telepone,
+        "longitude": longitude,
+        "latitude": latitude,
+      };
 }

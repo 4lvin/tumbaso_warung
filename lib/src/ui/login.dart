@@ -19,9 +19,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool passwordVisible = true;
-  // bool _validate = false;
-  // var _username = TextEditingController();
-  // var _password = TextEditingController();
+  bool _validate = false;
+  var _username = TextEditingController();
+  var _password = TextEditingController();
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
   // FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
@@ -35,8 +35,7 @@ class _LoginPageState extends State<LoginPage> {
     UserCredential signIn =
         await signIntoFirebase(googleSignInAccount!).catchError((onError) {
       Dialogs.dismiss(context);
-      Toast.show(onError.toString(),
-          duration: 3, gravity: Toast.bottom);
+      Toast.show(onError.toString(), duration: 3, gravity: Toast.bottom);
     });
     blocMember.loginGmail(signIn.user!.email!, signIn.user!.photoURL!,
         signIn.user!.displayName!, tokenUser!);
@@ -88,220 +87,238 @@ class _LoginPageState extends State<LoginPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height - 150,
-                decoration: BoxDecoration(
-                    color: colorses.dasar,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.elliptical(180.0, 50.0),
-                        bottomLeft: Radius.elliptical(180.0, 50.0))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SafeArea(
-                      child: Container(
-                        height: 150,
-                        margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 7),
-                        width: MediaQuery.of(context).size.width,
-                        child: SvgPicture.asset("assets/warung.svg",
-                            semanticsLabel: 'Acme Logo'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      "Aplikasi untuk warung atau toko",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      "di tumbas online dan pasmak",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height/5,),
-                    Text("Bekerjasama dengan :",style: TextStyle(color: Colors.white),),
-                    SizedBox(height: 10,),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      child: SvgPicture.asset("assets/pasmak.svg",
-                          semanticsLabel: 'pasmak'),
-                    ),
-                  ],
-                ),
-              ),
-              // Container(
-              //   margin: EdgeInsets.symmetric(vertical: 10),
-              //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              //   width: MediaQuery.of(context).size.width * 0.8,
-              //   decoration: BoxDecoration(
-              //     color: Colors.amber[200],
-              //     borderRadius: BorderRadius.circular(29),
-              //   ),
-              //   child: TextField(
-              //     controller: _username,
-              //     cursorColor: colorses.dasar,
-              //     decoration: InputDecoration(
-              //       hintText: "Username",
-              //       icon: Icon(
-              //         Icons.person,
-              //         color: colorses.dasar,
-              //       ),
-              //       border: InputBorder.none,
-              //       errorText: _username.text.length < 3 && _validate
-              //           ? 'Username harus diisi !'
-              //           : null,
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   margin: EdgeInsets.symmetric(vertical: 10),
-              //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              //   width: MediaQuery.of(context).size.width * 0.8,
-              //   decoration: BoxDecoration(
-              //     color: Colors.amber[200],
-              //     borderRadius: BorderRadius.circular(29),
-              //   ),
-              //   child: TextField(
-              //     obscureText: passwordVisible,
-              //     controller: _password,
-              //     cursorColor: colorses.dasar,
-              //     decoration: InputDecoration(
-              //       hintText: "Password",
-              //       icon: Icon(
-              //         Icons.lock,
-              //         color: colorses.dasar,
-              //       ),
-              //       suffixIcon: IconButton(
-              //         icon: Icon(passwordVisible ? Icons.visibility_off : Icons.visibility,),
-              //         color: colorses.dasar,
-              //         onPressed: (){
-              //           this.setState(() {
-              //             passwordVisible = !passwordVisible;
-              //           });
-              //         },
-              //       ),
-              //       errorText: _password.text.length < 3 && _validate
-              //           ? 'Password harus diisi !'
-              //           : null,
-              //       border: InputBorder.none,
-              //     ),
-              //     // onChanged: (value){
-              //     //   FocusScope.of(context).requestFocus(new FocusNode());
-              //     // },
-              //   ),
-              // ),
-              // SizedBox(height: 12,),
-              // InkWell(
-              //   onTap: (){
-              //     if(_username.text.isEmpty || _password.text.isEmpty){
-              //       setState(() {
-              //         _validate= true;
-              //       });
-              //     } else {
-              //       Dialogs.showLoading(context, "Loading");
-              //       blocMember.login(_username.text, _password.text);
-              //       blocMember.resLogin.listen((value) {
-              //         if(value.status){
-              //           Dialogs.dismiss(context);
-              //           setToken(value.data.idToken);
-              //           setKdUser(value.data.idPenjual);
-              //           setNama(value.data.namaLengkap);
-              //           setUsername(value.data.username);
-              //           Navigator.of(context).pushNamedAndRemoveUntil('/controllerPage', (route) => false);
-              //         } else{
-              //           Dialogs.dismiss(context);
-              //           Toast.show("User atau Password salah", context,
-              //               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-              //         }
-              //       });
-              //     }
-              //   },
-              //   child: Container(
-              //     margin: EdgeInsets.symmetric(vertical: 10),
-              //     height: 50,
-              //     width: MediaQuery.of(context).size.width * 0.8,
-              //       decoration: BoxDecoration(
-              //         color: colorses.dasar,
-              //         borderRadius: BorderRadius.circular(29),
-              //       ),
-              //       child: Center(child: Text("LOGIN",style: TextStyle(color: Colors.white),))
-              //   ),
-              // ),
-              //
-              // Text("----- Atau -----"),
-              SizedBox(
-                height: 12,
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 12),
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(18),
-                                topLeft: Radius.circular(18)),
-                            color: Colors.grey[200],
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 3,
-                                offset: Offset(3, 5), // Shadow position
-                              ),
-                            ]),
-                        child: Image.asset(
-                          "assets/google.png",
-                          scale: 7,
-                        )),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => LengkapiProfil()),
-                        // );
-                        _signIn();
-                      },
-                      child: Container(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width / 2,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(18),
-                              topRight: Radius.circular(18)),
-                          color: colorses.orange,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 3,
-                              offset: Offset(3, 5), // Shadow position
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Login dengan google",
-                            style: TextStyle(color: Colors.white),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height - 300,
+                    decoration: BoxDecoration(
+                        color: colorses.dasar,
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.elliptical(180.0, 50.0),
+                            bottomLeft: Radius.elliptical(180.0, 50.0))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SafeArea(
+                          child: Container(
+                            height: 110,
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height / 7),
+                            width: MediaQuery.of(context).size.width,
+                            child: SvgPicture.asset("assets/warung.svg",
+                                semanticsLabel: 'Acme Logo'),
                           ),
                         ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          "Aplikasi untuk warung atau toko",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "di tumbas online",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                        // SizedBox(
+                        //   height: MediaQuery.of(context).size.height / 5,
+                        // ),
+                        // Text("Bekerjasama dengan :",style: TextStyle(color: Colors.white),),
+                        // SizedBox(height: 10,),
+                        // Container(
+                        //   width: 50,
+                        //   height: 50,
+                        //   child: SvgPicture.asset("assets/pasmak.svg",
+                        //       semanticsLabel: 'pasmak'),
+                        // ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.amber[200],
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                    child: TextField(
+                      controller: _username,
+                      cursorColor: colorses.dasar,
+                      decoration: InputDecoration(
+                        hintText: "Username",
+                        icon: Icon(
+                          Icons.person,
+                          color: colorses.dasar,
+                        ),
+                        border: InputBorder.none,
+                        errorText: _username.text.length < 3 && _validate
+                            ? 'Username harus diisi !'
+                            : null,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.amber[200],
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                    child: TextField(
+                      obscureText: passwordVisible,
+                      controller: _password,
+                      cursorColor: colorses.dasar,
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        icon: Icon(
+                          Icons.lock,
+                          color: colorses.dasar,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            passwordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          color: colorses.dasar,
+                          onPressed: () {
+                            this.setState(() {
+                              passwordVisible = !passwordVisible;
+                            });
+                          },
+                        ),
+                        errorText: _password.text.length < 3 && _validate
+                            ? 'Password harus diisi !'
+                            : null,
+                        border: InputBorder.none,
+                      ),
+                      // onChanged: (value){
+                      //   FocusScope.of(context).requestFocus(new FocusNode());
+                      // },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (_username.text.isEmpty || _password.text.isEmpty) {
+                        setState(() {
+                          _validate = true;
+                        });
+                      } else {
+                        Dialogs.showLoading(context, "Loading");
+                        blocMember.login(_username.text, _password.text);
+                        blocMember.resLogin.listen((value) {
+                          if (value.status!) {
+                            Dialogs.dismiss(context);
+                            setToken(value.data!.idToken!);
+                            setKdUser(value.data!.idPenjual!);
+                            setEmail(value.data!.email!);
+                            setNama(value.data!.namaLengkap!);
+                            // setUsername(value.data!.username!);
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/controllerPage', (route) => false);
+                          } else {
+                            Dialogs.dismiss(context);
+                            Toast.show("User atau Password salah",
+                                textStyle: context, duration: 1, gravity: 0);
+                          }
+                        });
+                      }
+                    },
+                    child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: colorses.dasar,
+                          borderRadius: BorderRadius.circular(29),
+                        ),
+                        child: Center(
+                            child: Text(
+                          "LOGIN",
+                          style: TextStyle(color: Colors.white),
+                        ))),
+                  ),
+                  Text("----- Atau -----"),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 12),
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(18),
+                                    topLeft: Radius.circular(18)),
+                                color: Colors.grey[200],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 3,
+                                    offset: Offset(3, 5), // Shadow position
+                                  ),
+                                ]),
+                            child: Image.asset(
+                              "assets/google.png",
+                              scale: 7,
+                            )),
+                        InkWell(
+                          onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => LengkapiProfil()),
+                            // );
+                            _signIn();
+                          },
+                          child: Container(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width / 2,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(18),
+                                  topRight: Radius.circular(18)),
+                              color: colorses.orange,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 3,
+                                  offset: Offset(3, 5), // Shadow position
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Login dengan google",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

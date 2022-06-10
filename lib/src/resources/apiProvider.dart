@@ -34,8 +34,11 @@ class ApiProviders {
     var body = jsonEncode({'id_kategori': idKategori});
     try {
       final checkid = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/produk/get_subkategori"),
-              headers: {"Content-Type": "application/json"}, body: body)
+          .post(
+              Uri.parse(
+                  "https://tumbasonline.com/restapi/produk/get_subkategori"),
+              headers: {"Content-Type": "application/json"},
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return ResSubkategoriModel.fromJson(json.decode(checkid.body));
@@ -57,9 +60,8 @@ class ApiProviders {
     }
   }
 
-  Future login(String username, String password) async {
-    var body =
-        jsonEncode({'username': username, 'password': password, "token": ""});
+  Future login(String email, String password) async {
+    var body = jsonEncode({'email': email, 'password': password, "token": ""});
     try {
       final checkid = await client
           .post(Uri.parse("https://tumbasonline.com/restapi/penjual/login"),
@@ -89,8 +91,10 @@ class ApiProviders {
     var body = jsonEncode({'id_penjual': idPenjual});
     try {
       final checkid = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_penjual"),
-              headers: {"Content-Type": "application/json"}, body: body)
+          .post(
+              Uri.parse("https://tumbasonline.com/restapi/penjual/get_penjual"),
+              headers: {"Content-Type": "application/json"},
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (checkid.statusCode == 200) {
         return GetStatusModel.fromJson(json.decode(checkid.body));
@@ -116,7 +120,9 @@ class ApiProviders {
     var body = jsonEncode({'email': username, 'status': status});
     try {
       final checkid = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/put_status_toko"),
+          .post(
+              Uri.parse(
+                  "https://tumbasonline.com/restapi/penjual/put_status_toko"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -147,7 +153,9 @@ class ApiProviders {
     var body = jsonEncode({'email': username, 'penjual_id': idPenjual});
     try {
       final checkid = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_produk_penjual"),
+          .post(
+              Uri.parse(
+                  "https://tumbasonline.com/restapi/penjual/get_produk_penjual"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -207,7 +215,9 @@ class ApiProviders {
     });
     try {
       final checkid = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_transaksi"),
+          .post(
+              Uri.parse(
+                  "https://tumbasonline.com/restapi/penjual/get_transaksi"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": _token!
@@ -240,7 +250,9 @@ class ApiProviders {
         {'email': username, 'id_produk': idProduk, 'status': status});
     try {
       final checkid = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/put_status_produk"),
+          .post(
+              Uri.parse(
+                  "https://tumbasonline.com/restapi/penjual/put_status_produk"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -406,9 +418,11 @@ class ApiProviders {
 
   Future getProvinsi() async {
     try {
-      final provinsi = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_provinsi"), headers: {
-        "Content-Type": "application/json"
-      }).timeout(const Duration(seconds: 15));
+      final provinsi = await client.post(
+          Uri.parse("https://tumbasonline.com/restapi/umum/get_provinsi"),
+          headers: {
+            "Content-Type": "application/json"
+          }).timeout(const Duration(seconds: 15));
       if (provinsi.statusCode == 200) {
         return GetProvinsiModel.fromJson(json.decode(provinsi.body));
       } else {
@@ -430,7 +444,8 @@ class ApiProviders {
   Future getKota(String kodeProv) async {
     try {
       var body = jsonEncode({'id_provinsi': kodeProv});
-      final data = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_kabupaten"),
+      final data = await client.post(
+          Uri.parse("https://tumbasonline.com/restapi/umum/get_kabupaten"),
           body: body,
           headers: {
             "Content-Type": "application/json"
@@ -456,7 +471,8 @@ class ApiProviders {
   Future getKecamatan(String kodeKota) async {
     try {
       var body = jsonEncode({'id_kabupaten': kodeKota});
-      final data = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_kecamatan"),
+      final data = await client.post(
+          Uri.parse("https://tumbasonline.com/restapi/umum/get_kecamatan"),
           body: body,
           headers: {
             "Content-Type": "application/json"
@@ -486,8 +502,10 @@ class ApiProviders {
         {'email': email, 'foto': foto, 'nama': nama, 'token': token});
     try {
       final checkId = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/login_gmail"),
-              headers: {"Content-Type": "application/json"}, body: body)
+          .post(
+              Uri.parse("https://tumbasonline.com/restapi/penjual/login_gmail"),
+              headers: {"Content-Type": "application/json"},
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (checkId.statusCode == 200) {
         return GetLoginWithGmailModel.fromJson(json.decode(checkId.body));
@@ -539,7 +557,8 @@ class ApiProviders {
     });
     try {
       final checkId = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/ubah_profil"),
+          .post(
+              Uri.parse("https://tumbasonline.com/restapi/penjual/ubah_profil"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -568,7 +587,9 @@ class ApiProviders {
 
   Future getKategoriBarang() async {
     try {
-      final prov = await client.post(Uri.parse("https://tumbasonline.com/restapi/umum/get_kategori_produk"),
+      final prov = await client.post(
+          Uri.parse(
+              "https://tumbasonline.com/restapi/umum/get_kategori_produk"),
           headers: {
             "Content-Type": "application/json"
           }).timeout(const Duration(seconds: 11));
@@ -596,8 +617,11 @@ class ApiProviders {
     });
     try {
       final prov = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/umum/get_subkategori_produk"),
-              headers: {"Content-Type": "application/json"}, body: body)
+          .post(
+              Uri.parse(
+                  "https://tumbasonline.com/restapi/umum/get_subkategori_produk"),
+              headers: {"Content-Type": "application/json"},
+              body: body)
           .timeout(const Duration(seconds: 11));
       if (prov.statusCode == 200) {
         return GetSubKategoriBarangModel.fromJson(json.decode(prov.body));
@@ -617,14 +641,14 @@ class ApiProviders {
     }
   }
 
-  Future getProfil(String email,
-  String token) async {
+  Future getProfil(String email, String token) async {
     var body = jsonEncode({
       'email': email,
     });
     try {
       final prov = await client
-          .post(Uri.parse("https://tumbasonline.com/restapi/penjual/get_profil"),
+          .post(
+              Uri.parse("https://tumbasonline.com/restapi/penjual/get_profil"),
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": token

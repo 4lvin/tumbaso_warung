@@ -48,18 +48,15 @@ class MemberBloc {
 
   Stream<GetSetoranModel> get listSetoran => _getSetoranFetcher.stream;
 
-  Stream<GetTransaksiModel> get listTransaksi =>
-      _getTransaksiFetcher.stream;
+  Stream<GetTransaksiModel> get listTransaksi => _getTransaksiFetcher.stream;
 
   Stream<GetProvinsiModel> get resProvinsi => _provinsiFetcher.stream;
 
   Stream<GetKotaModel> get resKota => _kotaFetcher.stream;
 
-  Stream<GetKecamatanModel> get resKecamatan =>
-      _kecamatanFetcher.stream;
+  Stream<GetKecamatanModel> get resKecamatan => _kecamatanFetcher.stream;
 
-  Stream<GetLoginWithGmailModel> get resLoginGmail =>
-      _loginGmailFetcher.stream;
+  Stream<GetLoginWithGmailModel> get resLoginGmail => _loginGmailFetcher.stream;
 
   Stream<ResLengkapiProfilModel> get resUpdateProfil =>
       _updateProfilFetcher.stream;
@@ -72,8 +69,8 @@ class MemberBloc {
     return getSubkategori;
   }
 
-  login(String username, String password) async {
-    ResLoginModel getResLogin = await _repository.login(username, password);
+  login(String email, String password) async {
+    ResLoginModel getResLogin = await _repository.login(email, password);
     _loginFetcher.sink.add(getResLogin);
   }
 
@@ -219,8 +216,7 @@ class MemberBloc {
     }
   }
 
-  getProfil(String email,
-      String token) async {
+  getProfil(String email, String token) async {
     try {
       GetProfilModel getProfilModel = await _repository.getProfil(email, token);
       _getProfilFetcher.sink.add(getProfilModel);

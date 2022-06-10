@@ -36,9 +36,9 @@ class _HomePageState extends State<HomePage> {
         });
     });
 
-    getToken().then((token){
-      getEmail().then((email){
-        blocMember.getProfil(email,token);
+    getToken().then((token) {
+      getEmail().then((email) {
+        blocMember.getProfil(email, token);
       });
     });
     blocMember.resGetrofil.listen((event) {
@@ -66,9 +66,13 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: colorses.dasar,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(31), bottomRight: Radius.circular(31)),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(31),
+                  bottomRight: Radius.circular(31)),
               gradient: LinearGradient(
-                  begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [colorses.dasar, colorses.dasar]),
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [colorses.dasar, colorses.dasar]),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,8 +94,11 @@ class _HomePageState extends State<HomePage> {
                   height: 8,
                 ),
                 Text(
-                  "Hallo $nama",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+                  nama == null ? "Hallo User" : "Hallo $nama",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white),
                 ),
               ],
             ),
@@ -109,7 +116,9 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft, duration: Duration(milliseconds: 200), child: ProdukMaem()));
+                              type: PageTransitionType.rightToLeft,
+                              duration: Duration(milliseconds: 200),
+                              child: ProdukMaem()));
                     },
                     child: Container(
                       width: 130,
@@ -147,51 +156,51 @@ class _HomePageState extends State<HomePage> {
               ),
               // Column(
               //   children: [
-                  // InkWell(
-                  //   onTap: () {
-                  //     print(kurir);
-                  //     kurir == null || kurir == ""
-                  //         ? Toast.show("Data belum siap, silahkan tunggu sebentar!", context, duration: 3, gravity: Toast.BOTTOM)
-                  //         : Navigator.push(
-                  //             context,
-                  //             PageTransition(
-                  //                 type: PageTransitionType.rightToLeft,
-                  //                 duration: Duration(milliseconds: 200),
-                  //                 child: ProdukBarang(kurir: kurir)));
-                  //   },
-                  //   child: Container(
-                  //     width: 130,
-                  //     height: 130,
-                  //     decoration: BoxDecoration(
-                  //         color: Colors.white,
-                  //         borderRadius: BorderRadius.circular(20),
-                  //         border: Border.all(color: colorses.orange, width: 3),
-                  //         boxShadow: [
-                  //           BoxShadow(
-                  //             color: Colors.grey,
-                  //             blurRadius: 3,
-                  //             offset: Offset(3, 5), // Shadow position
-                  //           ),
-                  //         ]),
-                  //     child: Center(
-                  //       child: Container(
-                  //         height: 70,
-                  //         width: 70,
-                  //         child: Image.asset(
-                  //           "assets/ic-menu-barang.png",
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 12,
-                  // ),
-                  // Text(
-                  //   "Barang",
-                  //   style: TextStyle(fontSize: 16),
-                  // )
-                // ],
+              // InkWell(
+              //   onTap: () {
+              //     print(kurir);
+              //     kurir == null || kurir == ""
+              //         ? Toast.show("Data belum siap, silahkan tunggu sebentar!", context, duration: 3, gravity: Toast.BOTTOM)
+              //         : Navigator.push(
+              //             context,
+              //             PageTransition(
+              //                 type: PageTransitionType.rightToLeft,
+              //                 duration: Duration(milliseconds: 200),
+              //                 child: ProdukBarang(kurir: kurir)));
+              //   },
+              //   child: Container(
+              //     width: 130,
+              //     height: 130,
+              //     decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         borderRadius: BorderRadius.circular(20),
+              //         border: Border.all(color: colorses.orange, width: 3),
+              //         boxShadow: [
+              //           BoxShadow(
+              //             color: Colors.grey,
+              //             blurRadius: 3,
+              //             offset: Offset(3, 5), // Shadow position
+              //           ),
+              //         ]),
+              //     child: Center(
+              //       child: Container(
+              //         height: 70,
+              //         width: 70,
+              //         child: Image.asset(
+              //           "assets/ic-menu-barang.png",
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 12,
+              // ),
+              // Text(
+              //   "Barang",
+              //   style: TextStyle(fontSize: 16),
+              // )
+              // ],
               // )
             ],
           ),
@@ -209,17 +218,27 @@ class _HomePageState extends State<HomePage> {
                             shadowColor: Colors.green,
                             color: Colors.green[50],
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5.0, vertical: 10.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Column(
                                     children: [
                                       Text('Setoran',
-                                          style: TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400)),
                                       SizedBox(height: 5),
-                                      Text(formatCurrency.format(snapshot.data!.data?[i].setorPenjual),
-                                          style: TextStyle(color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold)),
+                                      Text(
+                                          formatCurrency.format(snapshot
+                                              .data!.data?[i].setorPenjual),
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   Row(
@@ -227,11 +246,20 @@ class _HomePageState extends State<HomePage> {
                                       Column(
                                         children: [
                                           Text('Tunggakan',
-                                              style:
-                                                  TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w400)),
+                                              style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400)),
                                           SizedBox(height: 5),
-                                          Text(formatCurrency.format(snapshot.data!.data?[i].tunggakanSetor),
-                                              style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold)),
+                                          Text(
+                                              formatCurrency.format(snapshot
+                                                  .data!
+                                                  .data?[i]
+                                                  .tunggakanSetor),
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold)),
                                         ],
                                       ),
                                       IconButton(
