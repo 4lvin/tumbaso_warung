@@ -255,69 +255,69 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(color: Colors.white),
                         ))),
                   ),
-                  Text("----- Atau -----"),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 12),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(18),
-                                    topLeft: Radius.circular(18)),
-                                color: Colors.grey[200],
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(3, 5), // Shadow position
-                                  ),
-                                ]),
-                            child: Image.asset(
-                              "assets/google.png",
-                              scale: 7,
-                            )),
-                        InkWell(
-                          onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => LengkapiProfil()),
-                            // );
-                            _signIn();
-                          },
-                          child: Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width / 2,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(18),
-                                  topRight: Radius.circular(18)),
-                              color: colorses.orange,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 3,
-                                  offset: Offset(3, 5), // Shadow position
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Login dengan google",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Text("----- Atau -----"),
+                  // SizedBox(
+                  //   height: 12,
+                  // ),
+                  // Container(
+                  //   margin: EdgeInsets.only(top: 12),
+                  //   width: MediaQuery.of(context).size.width,
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: <Widget>[
+                  //       Container(
+                  //           height: 40,
+                  //           decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.only(
+                  //                   bottomLeft: Radius.circular(18),
+                  //                   topLeft: Radius.circular(18)),
+                  //               color: Colors.grey[200],
+                  //               boxShadow: [
+                  //                 BoxShadow(
+                  //                   color: Colors.grey,
+                  //                   blurRadius: 3,
+                  //                   offset: Offset(3, 5), // Shadow position
+                  //                 ),
+                  //               ]),
+                  //           child: Image.asset(
+                  //             "assets/google.png",
+                  //             scale: 7,
+                  //           )),
+                  //       InkWell(
+                  //         onTap: () {
+                  //           // Navigator.push(
+                  //           //   context,
+                  //           //   MaterialPageRoute(builder: (context) => LengkapiProfil()),
+                  //           // );
+                  //           _signIn();
+                  //         },
+                  //         child: Container(
+                  //           height: 40,
+                  //           width: MediaQuery.of(context).size.width / 2,
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.only(
+                  //                 bottomRight: Radius.circular(18),
+                  //                 topRight: Radius.circular(18)),
+                  //             color: colorses.orange,
+                  //             boxShadow: [
+                  //               BoxShadow(
+                  //                 color: Colors.grey,
+                  //                 blurRadius: 3,
+                  //                 offset: Offset(3, 5), // Shadow position
+                  //               ),
+                  //             ],
+                  //           ),
+                  //           child: Center(
+                  //             child: Text(
+                  //               "Login dengan google",
+                  //               style: TextStyle(color: Colors.white),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ],
