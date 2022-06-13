@@ -19,12 +19,6 @@ class _WarungPageState extends State<WarungPage> {
   String? nama;
   String? email;
 
-  getSetoran() {
-    getKdUser().then((kduser) {
-      blocMember.getSetoranProduct(kduser);
-    });
-  }
-
   @override
   void initState() {
     getEmail().then((value) {
@@ -38,6 +32,10 @@ class _WarungPageState extends State<WarungPage> {
         setState(() {
           nama = value;
         });
+    });
+
+    getKdUser().then((kduser) {
+      blocMember.getSetoranProduct(kduser);
     });
 
     super.initState();
@@ -198,6 +196,114 @@ class _WarungPageState extends State<WarungPage> {
                 //     ],
                 //   ),
                 // ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 45, right: 45),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(top: 5, left: 5, right: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white),
+                          height: 80,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Setoran Penjual',
+                                style: TextStyle(
+                                    color: colorses.dasar,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              StreamBuilder(
+                                  stream: blocMember.listSetoran,
+                                  builder: (context,
+                                      AsyncSnapshot<GetSetoranModel> snapshot) {
+                                    if (snapshot.hasData) {
+                                      return snapshot.data!.data!.isEmpty
+                                          ? Text(
+                                              "-",
+                                              style: TextStyle(
+                                                  color: colorses.dasar,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          : Text(
+                                              snapshot
+                                                  .data!.data![0].setorPenjual!
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: colorses.dasar,
+                                                  fontWeight: FontWeight.w500),
+                                            );
+                                    } else {
+                                      return Text(
+                                        "-",
+                                        style: TextStyle(
+                                            color: colorses.dasar,
+                                            fontWeight: FontWeight.w500),
+                                      );
+                                    }
+                                  }),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 5, left: 5, right: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white),
+                          height: 80,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Tunggakan Setoran\n Penjual',
+                                style: TextStyle(
+                                    color: colorses.dasar,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              StreamBuilder(
+                                  stream: blocMember.listSetoran,
+                                  builder: (context,
+                                      AsyncSnapshot<GetSetoranModel> snapshot) {
+                                    if (snapshot.hasData) {
+                                      return snapshot.data!.data!.isEmpty
+                                          ? Text(
+                                              "-",
+                                              style: TextStyle(
+                                                  color: colorses.dasar,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          : Text(
+                                              snapshot.data!.data![0]
+                                                  .tunggakanSetor!
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: colorses.dasar,
+                                                  fontWeight: FontWeight.w500),
+                                            );
+                                    } else {
+                                      return Text(
+                                        "-",
+                                        style: TextStyle(
+                                            color: colorses.dasar,
+                                            fontWeight: FontWeight.w500),
+                                      );
+                                    }
+                                  }),
+                            ],
+                          ),
+                        ),
+                      ]),
+                ),
                 SizedBox(
                   height: 50,
                 ),
